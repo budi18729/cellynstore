@@ -63,8 +63,6 @@ def build_info_embed(service_name: str, info: dict, color: int = 0x5865F2) -> "d
     """
     from utils.config import STORE_NAME
 
-    THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
-
     embed = discord.Embed(
         title=f"ℹ️  INFO — {service_name.upper()}",
         color=color,
