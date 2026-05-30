@@ -10,6 +10,34 @@ from utils.transcript import generate as generate_transcript
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
 
+def _layanan_label(kategori: str) -> str:
+    """Tentukan label `layanan` untuk transaction_log dari kategori tiket.
+
+    Tiket cog `lainnya` bisa berisi:
+      - 1 kategori produk (mis. "REMINI")        -> "lainnya:editing"
+      - "Custom Order"                            -> "lainnya:custom"
+      - beberapa kategori dari cart ("A, B")      -> grup gabungan, atau
+                                                     "lainnya:mixed" bila beda grup
+    Label di-prefix "lainnya:" + nama grup (lowercase) supaya laporan omzet
+    per-layanan di admin panel akurat dan tidak tertukar layanan lain.
+    """
+    from cogs.lainnya_catalog import group_of
+
+    kategori = (kategori or "").strip()
+    if not kategori:
+        return "lainnya"
+    if kategori.lower() == "custom order":
+        return "lainnya:custom"
+
+    # Pisah multi-kategori hasil cart ("REMINI, CAPCUT").
+    cats = [c.strip() for c in kategori.split(",") if c.strip()]
+    groups = {group_of(c) for c in cats}
+    if len(groups) == 1:
+        grup = next(iter(groups))
+        return f"lainnya:{grup.lower()}"
+    return "lainnya:mixed"
+
+
 class OrdersAdmin(commands.Cog):
     """Shared !done dan !cancel untuk tiket order (lainnya / Cloud Phone & Nitro)"""
 
@@ -59,9 +87,9 @@ class OrdersAdmin(commands.Cog):
         except Exception as e:
             print(f"[Orders] Transcript error: {e}")
 
-        # Data transaksi (single item — Cloud Phone / Nitro / Custom Order)
+        # Data transaksi (single item, custom order, atau multi-kategori dari cart)
         kategori = ticket.get("category", "")
-        layanan = "nitro" if "NITRO" in kategori.upper() else "cloudphone"
+        layanan = _layanan_label(kategori)
         nominal = ticket.get("harga", 0)
         item_str = ticket.get("item_name", "-")
 
