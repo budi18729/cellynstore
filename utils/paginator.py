@@ -38,6 +38,23 @@ _NOOP_VALUE = "__paginator_noop__"
 OnSelect = Callable[[discord.Interaction, str], Awaitable[None]]
 SelectFactory = Callable[[List[discord.SelectOption]], discord.ui.Select]
 
+# Batas panjang label sebuah SelectOption menurut Discord.
+MAX_LABEL_LEN = 100
+
+
+def with_price(name: str, price_str: str, sep: str = " — ", max_len: int = MAX_LABEL_LEN) -> str:
+    """
+    Gabungkan nama produk + harga menjadi satu label Select, contoh:
+    ``86 Diamond — Rp 15.000``.
+
+    Bila gabungannya melewati batas 100 karakter, bagian NAMA yang dipotong
+    sehingga harga selalu tetap terlihat.
+    """
+    suffix = f"{sep}{price_str}"
+    if len(name) + len(suffix) > max_len:
+        name = name[: max(0, max_len - len(suffix))]
+    return f"{name}{suffix}"
+
 
 class _PageSelect(discord.ui.Select):
     """Select internal yang hanya menampilkan opsi untuk halaman aktif."""

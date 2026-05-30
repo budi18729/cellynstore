@@ -16,7 +16,7 @@ from utils.config import (
 
 from utils.db import get_conn
 from utils.store_hours import is_store_open
-from utils.paginator import PaginatedSelectView
+from utils.paginator import PaginatedSelectView, with_price
 from utils.counter import next_ticket_number
 
 from utils.transcript import generate as generate_transcript
@@ -347,7 +347,7 @@ class CategoryButton(discord.ui.Button):
 
         options = [
 
-            discord.SelectOption(label=p["name"], description=f"Rp {p['harga']:,}", value=str(p["id"]))
+            discord.SelectOption(label=with_price(p["name"], f"Rp {p['harga']:,}"), description=p["category"], value=str(p["id"]))
 
             for p in items
 
@@ -484,7 +484,7 @@ class CategorySelect(discord.ui.Select):
 
         product_options = [
 
-            discord.SelectOption(label=p["name"], description=f"Rp {p['harga']:,}", value=str(p["id"]))
+            discord.SelectOption(label=with_price(p["name"], f"Rp {p['harga']:,}"), description=p["category"], value=str(p["id"]))
 
             for p in items
 

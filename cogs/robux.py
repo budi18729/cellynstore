@@ -15,7 +15,7 @@ from utils.robux_stock import (
     add_available as add_robux_stock_available,
 )
 from utils.store_hours import is_store_open
-from utils.paginator import PaginatedSelectView
+from utils.paginator import PaginatedSelectView, with_price
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -118,8 +118,8 @@ class CategoryButton(discord.ui.Button):
         for item in items:
             harga_str = harga(item["robux"], rate)
             options.append(discord.SelectOption(
-                label=f"{item['name']}",
-                description=f"{item['robux']} Robux — {harga_str}",
+                label=with_price(item["name"], harga_str),
+                description=f"{item['robux']} Robux",
                 value=str(item["id"]),
             ))
         if not options:

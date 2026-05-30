@@ -8,7 +8,7 @@ from utils.counter import next_ticket_number
 from utils.transcript import generate as generate_transcript
 from utils.db import get_conn
 from utils.store_hours import is_store_open
-from utils.paginator import PaginatedSelectView
+from utils.paginator import PaginatedSelectView, with_price
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -278,7 +278,9 @@ def _build_product_options(game: dict) -> list:
     products = _load_products(game["code"])
     return [
         discord.SelectOption(
-            label=p["label"][:100], description=f"Rp {p['harga']:,}", value=str(p["id"])
+            label=with_price(p["label"], f"Rp {p['harga']:,}"),
+            description=game["name"],
+            value=str(p["id"]),
         ) for p in products
     ]
 
