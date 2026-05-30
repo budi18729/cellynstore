@@ -36,12 +36,8 @@ def _init_tables():
             added_at   TEXT NOT NULL
         )
     ''')
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS bot_state (
-            key   TEXT PRIMARY KEY,
-            value TEXT
-        )
-    ''')
+    # Catatan: tabel bot_state sudah dibuat di utils/db.py init_db() yang dipanggil
+    # main.init_database() sebelum cog di-load, jadi tidak perlu dibuat ulang di sini.
     conn.commit()
     conn.close()
 
@@ -196,16 +192,28 @@ class TopSpender(commands.Cog):
 
         entitled_ids = {s['user_id'] for s in spenders[:TOP_SPENDER_TOP_N]}
 
-        for member in guild.members:
-            has_role    = top_role in member.roles
-            should_have = member.id in entitled_ids
-            try:
-                if should_have and not has_role:
-                    await member.add_roles(top_role, reason="Top Spender update")
-                elif not should_have and has_role:
+        # Hanya proses anggota yang relevan, bukan iterasi seluruh guild.members:
+        #  - yang SAAT INI punya role (kandidat dicabut), via top_role.members
+        #  - yang BERHAK punya role (kandidat ditambah), via entitled_ids
+        current_holder_ids = {m.id for m in top_role.members}
+
+        # Cabut role dari yang tidak lagi berhak.
+        for member in top_role.members:
+            if member.id not in entitled_ids:
+                try:
                     await member.remove_roles(top_role, reason="Top Spender update")
+                except Exception as e:
+                    print(f"[TopSpender] Role remove error {member.id}: {e}")
+
+        # Tambahkan role ke yang berhak tapi belum punya.
+        for uid in entitled_ids - current_holder_ids:
+            member = guild.get_member(uid)
+            if member is None:
+                continue
+            try:
+                await member.add_roles(top_role, reason="Top Spender update")
             except Exception as e:
-                print(f"[TopSpender] Role error {member.id}: {e}")
+                print(f"[TopSpender] Role add error {uid}: {e}")
 
     # ── Build embed ───────────────────────────
     def _build_embed(self, spenders: list[dict], month_name: str,
