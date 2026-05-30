@@ -242,6 +242,17 @@ def init_db():
             durasi_detik INTEGER DEFAULT 0
         )
     ''')
+
+    # Kolom nomor tiket global (utils.counter) untuk tabel tiket yang belum punya.
+    # Dipakai penamaan channel & embed yang seragam.
+    for table in ('lainnya_tickets', 'robux_tickets', 'vilog_tickets',
+                  'ml_tickets', 'jb_tickets'):
+        try:
+            c.execute(f'ALTER TABLE {table} ADD COLUMN ticket_number INTEGER')
+        except Exception as e:
+            if 'duplicate column' not in str(e).lower():
+                print(f"[DB] Migration {table} ticket_number: {e}")
+
     conn.commit()
     conn.close()
     print("[DB] Database diinisialisasi.")

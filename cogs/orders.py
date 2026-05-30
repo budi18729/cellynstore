@@ -5,6 +5,7 @@ from discord.ext import commands
 from utils.config import ADMIN_ROLE_ID, LOG_CHANNEL_ID, STORE_NAME, TRANSCRIPT_CHANNEL_ID
 from utils.counter import next_ticket_number
 from utils.transcript import generate as generate_transcript
+from utils import ticket_ui
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -60,7 +61,7 @@ class OrdersAdmin(commands.Cog):
             return
 
         member = ctx.guild.get_member(ticket["user_id"])
-        nomor = next_ticket_number()
+        nomor = ticket.get("ticket_number") or next_ticket_number()
         closed_at = datetime.datetime.now(datetime.timezone.utc)
         opened_at_dt = datetime.datetime.fromisoformat(ticket["opened_at"])
         if opened_at_dt.tzinfo is None:
@@ -95,18 +96,16 @@ class OrdersAdmin(commands.Cog):
         # Log embed
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            log_embed = discord.Embed(
-                title=f"ORDER SUKSES — #{nomor:04d}",
-                color=0x5865F2,
-                timestamp=closed_at
+            log_embed = ticket_ui.success_log_embed(
+                "lainnya", nomor,
+                subtitle=f"Layanan Lainnya — {kategori}",
+                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
+                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
+                item=item_str,
+                total=f"Rp {nominal:,}",
+                payment=ticket.get("payment_method", "QRIS"),
+                extra_fields=[("Kategori", kategori, True)],
             )
-            log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-            log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
-            log_embed.add_field(name="Kategori", value=kategori, inline=True)
-            log_embed.add_field(name="Item", value=item_str, inline=True)
-            log_embed.add_field(name="Harga", value=f"Rp {nominal:,}", inline=True)
-            log_embed.add_field(name="Metode", value=ticket.get("payment_method", "-"), inline=True)
-            log_embed.set_footer(text=STORE_NAME)
             await log_ch.send(embed=log_embed)
 
         # Transaction log

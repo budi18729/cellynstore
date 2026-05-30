@@ -1,4 +1,5 @@
 import time
+import asyncio
 import discord
 import datetime
 from discord.ext import commands, tasks
@@ -15,6 +16,8 @@ from utils.robux_stock import (
 )
 from utils.store_hours import is_store_open
 from utils.paginator import PaginatedSelectView, with_price
+from utils.counter import next_ticket_number
+from utils import ticket_ui
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -235,6 +238,7 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
 
     total_robux = sum(i["robux"] for i in cart)
     total_harga = total_robux * rate
+    ticket_number = next_ticket_number()
 
     ticket_category = guild.get_channel(TICKET_CATEGORY_ID)
     admin_role = guild.get_role(ADMIN_ROLE_ID)
@@ -247,7 +251,8 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
         overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
 
     channel = await guild.create_text_channel(
-        name=f"robux-{member.name}", category=ticket_category, overwrites=overwrites
+        name=ticket_ui.channel_name("robux", ticket_number, member.name),
+        category=ticket_category, overwrites=overwrites
     )
 
     items_label = ", ".join(i["name"] for i in cart)
@@ -259,6 +264,7 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
         "rate": rate,
         "total": total_harga,
         "channel_id": channel.id,
+        "ticket_number": ticket_number,
         "opened_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "last_activity": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     }
@@ -270,20 +276,18 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
         f"• **{i['name']}** — {i['robux']} Robux — Rp {i['robux']*rate:,}"
         for i in cart
     )
-    embed = discord.Embed(
-        title=f"ROBUX STORE — {STORE_NAME}",
-        color=0xE91E63,
-        timestamp=datetime.datetime.now(datetime.timezone.utc)
+    embed = ticket_ui.open_ticket_embed(
+        "robux", ticket_number, member,
+        item=items_text,
+        total=f"Rp {total_harga:,}",
+        payment="QRIS",
+        extra_fields=[
+            ("Total Robux", f"{total_robux} Robux", True),
+            ("Rate", f"Rp {rate:,}/Robux", True),
+            ("Catatan", "Setelah pembayaran dikonfirmasi, admin dan member masuk game untuk proses gift item.", False),
+            ("Peringatan", "Tiket yang tidak aktif selama 2 jam akan otomatis ditutup dan transaksi dianggap batal.", False),
+        ],
     )
-    embed.add_field(name="Member", value=member.mention, inline=True)
-    embed.add_field(name="Item", value=items_text, inline=False)
-    embed.add_field(name="Total Robux", value=f"{total_robux} Robux", inline=True)
-    embed.add_field(name="Rate", value=f"Rp {rate:,}/Robux", inline=True)
-    embed.add_field(name="Total Tagihan", value=f"Rp {total_harga:,}", inline=True)
-    embed.add_field(name="Cara Bayar", value="Pembayaran via **QRIS** — scan QR di bawah lalu kirim bukti transfer.", inline=False)
-    embed.add_field(name="Catatan", value="Setelah pembayaran dikonfirmasi, admin dan member masuk game untuk proses gift item.", inline=False)
-    embed.add_field(name="Peringatan", value="Tiket yang tidak aktif selama 2 jam akan otomatis ditutup dan transaksi dianggap batal.", inline=False)
-    embed.set_footer(text=f"{STORE_NAME} • Rate dapat berubah sewaktu-waktu")
 
     await channel.send(
         content=f"Halo {member.mention}! Tiket pembelian item Robux telah dibuat.{' ' + admin_role.mention if admin_role else ''}",
@@ -434,6 +438,7 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
 
         await interaction.response.send_message("Membuat tiket...", ephemeral=True)
 
+        ticket_number = next_ticket_number()
         ticket_category = guild.get_channel(TICKET_CATEGORY_ID)
         admin_role = guild.get_role(ADMIN_ROLE_ID)
         overwrites = {
@@ -445,7 +450,8 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
             overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
 
         channel = await guild.create_text_channel(
-            name=f"robux-{member.name}", category=ticket_category, overwrites=overwrites
+            name=ticket_ui.channel_name("robux", ticket_number, member.name),
+            category=ticket_category, overwrites=overwrites
         )
 
         item_label = f"[Custom] {self.item.value.strip()}"
@@ -457,27 +463,26 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
             "rate": rate,
             "total": total,
             "channel_id": channel.id,
+            "ticket_number": ticket_number,
             "opened_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "last_activity": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         }
         cog.active_tickets[channel.id] = ticket
         save_robux_ticket(ticket)
 
-        embed = discord.Embed(
-            title=f"ROBUX STORE — CUSTOM ORDER — {STORE_NAME}",
-            color=0xE91E63,
-            timestamp=datetime.datetime.now(datetime.timezone.utc)
+        embed = ticket_ui.open_ticket_embed(
+            "robux", ticket_number, member,
+            item=f"[Custom] {self.item.value.strip()}",
+            total=f"Rp {total:,}",
+            payment="QRIS",
+            extra_fields=[
+                ("Game / Map", self.game.value.strip(), True),
+                ("Username Roblox", self.username.value.strip(), True),
+                ("Jumlah Robux", f"{robux} Robux", True),
+                ("Rate", f"Rp {rate:,}/Robux", True),
+                ("Peringatan", "Tiket yang tidak aktif selama 2 jam akan otomatis ditutup.", False),
+            ],
         )
-        embed.add_field(name="Member", value=member.mention, inline=True)
-        embed.add_field(name="Game / Map", value=self.game.value.strip(), inline=True)
-        embed.add_field(name="Username Roblox", value=self.username.value.strip(), inline=True)
-        embed.add_field(name="Item", value=self.item.value.strip(), inline=True)
-        embed.add_field(name="Jumlah Robux", value=f"{robux} Robux", inline=True)
-        embed.add_field(name="Rate", value=f"Rp {rate:,}/Robux", inline=True)
-        embed.add_field(name="Total Tagihan", value=f"Rp {total:,}", inline=True)
-        embed.add_field(name="Cara Bayar", value="Pembayaran via **QRIS** — scan QR di bawah lalu kirim bukti transfer.", inline=False)
-        embed.add_field(name="Peringatan", value="Tiket yang tidak aktif selama 2 jam akan otomatis ditutup.", inline=False)
-        embed.set_footer(text=f"{STORE_NAME} • Rate dapat berubah sewaktu-waktu")
 
         await channel.send(
             content=f"Halo {member.mention}! Custom order kamu telah dibuat.{' ' + admin_role.mention if admin_role else ''}",
@@ -575,7 +580,6 @@ class RobuxStore(commands.Cog):
                             "Tiket ini otomatis ditutup karena tidak ada aktivitas selama 2 jam. "
                             "Transaksi dianggap batal. Channel akan dihapus dalam 10 detik."
                         )
-                        import asyncio
                         await asyncio.sleep(10)
                         await channel.delete()
                     except Exception:
@@ -790,7 +794,7 @@ class RobuxStore(commands.Cog):
         f"{durasi_secs // 3600}j {(durasi_secs % 3600) // 60}m {durasi_secs % 60}d"
 
         from utils.counter import next_ticket_number
-        nomor = next_ticket_number()
+        nomor = ticket.get("ticket_number") or next_ticket_number()
 
         # Transcript
         from utils.transcript import generate as generate_transcript
@@ -809,19 +813,16 @@ class RobuxStore(commands.Cog):
         # Log transaksi
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            log_embed = discord.Embed(
-                title=f"ROBUX STORE SUKSES — #{nomor:04d}",
-                description="Item berhasil diberikan. Terima kasih telah berbelanja di Cellyn Store!",
-                color=0xE91E63,
-                timestamp=datetime.datetime.now(datetime.timezone.utc)
+            log_embed = ticket_ui.success_log_embed(
+                "robux", nomor,
+                subtitle="Robux — Pembelian Item",
+                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
+                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
+                item=f"{ticket['item_name']} ({ticket['robux']} Robux)",
+                total=f"Rp {ticket['total']:,}",
+                payment=ticket.get("payment_method", "QRIS"),
+                extra_fields=[("Rate", f"Rp {ticket['rate']:,}/Robux", True)],
             )
-            log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-            log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
-            log_embed.add_field(name="Item", value=f"{ticket['item_name']} ({ticket['robux']} Robux)", inline=False)
-            log_embed.add_field(name="Rate", value=f"Rp {ticket['rate']:,}/Robux", inline=False)
-            log_embed.add_field(name="Total", value=f"Rp {ticket['total']:,}", inline=False)
-            log_embed.add_field(name="Metode Pembayaran", value=ticket.get("payment_method", "-"), inline=False)
-            log_embed.set_footer(text=f"{STORE_NAME}")
             await log_ch.send(embed=log_embed)
 
         await ctx.channel.send(

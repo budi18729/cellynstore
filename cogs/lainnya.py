@@ -17,6 +17,8 @@ from utils.config import (
 from utils.db import get_conn
 from utils.store_hours import is_store_open
 from utils.paginator import PaginatedSelectView, with_price
+from utils.counter import next_ticket_number
+from utils import ticket_ui
 
 
 # Data katalog produk "lainnya" (PRODUCTS, CATEGORY_INFO, grup, dst).
@@ -742,8 +744,9 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
     if admin_role:
         overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
 
+    ticket_number = next_ticket_number()
     channel = await guild.create_text_channel(
-        name=f"order-{member.name}",
+        name=ticket_ui.channel_name("lainnya", ticket_number, member.name),
         category=cat_channel,
         overwrites=overwrites,
     )
@@ -757,6 +760,7 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
         "category": product["category"],
         "harga": product["harga"],
         "payment_method": "QRIS",
+        "ticket_number": ticket_number,
         "admin_id": None,
         "embed_message_id": None,
         "opened_at": now,
@@ -767,28 +771,15 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
     cog.active_tickets[channel.id] = ticket
     save_lainnya_ticket(ticket)
 
-    embed = discord.Embed(
-        title=f"ORDER {product['category']} — {STORE_NAME}",
-        color=COLOR_LAINNYA,
-        timestamp=datetime.datetime.now(datetime.timezone.utc),
-    )
-    embed.add_field(name="Member", value=member.mention, inline=True)
-    embed.add_field(name="Item", value=product["name"], inline=True)
-    embed.add_field(name="Harga", value=f"Rp {product['harga']:,}", inline=True)
-
-    # Inject deskripsi + S&K kategori (dari lainnya_category_info / get_category_info).
     info = load_category_info(product["category"])
-    if info.get("description"):
-        embed.add_field(name="📋 Deskripsi", value=info["description"][:1024], inline=False)
-    if info.get("terms"):
-        embed.add_field(name="📜 Syarat & Ketentuan", value=info["terms"][:1024], inline=False)
-
-    embed.add_field(
-        name="Metode Bayar",
-        value=f"**QRIS** — silakan bayar **Rp {product['harga']:,}** lalu kirim bukti transfer di sini.",
-        inline=False,
+    embed = ticket_ui.open_ticket_embed(
+        "lainnya", ticket_number, member,
+        item=product["name"],
+        total=f"Rp {product['harga']:,}",
+        payment="QRIS",
+        description=info.get("description") or None,
+        terms=info.get("terms") or None,
     )
-    embed.set_footer(text=STORE_NAME)
 
     admin_mention = admin_role.mention if admin_role else ""
     msg = await channel.send(
@@ -873,8 +864,9 @@ async def _create_custom_ticket(interaction, cog, member, guild, item_name, qty_
     if admin_role:
         overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
 
+    ticket_number = next_ticket_number()
     channel = await guild.create_text_channel(
-        name=f"custom-{member.name}",
+        name=ticket_ui.channel_name("lainnya", ticket_number, member.name),
         category=cat_channel,
         overwrites=overwrites
     )
@@ -884,26 +876,24 @@ async def _create_custom_ticket(interaction, cog, member, guild, item_name, qty_
         "channel_id": channel.id, "user_id": member.id, "item_id": None,
         "item_name": f"{item_name} (Qty: {qty_int})", "category": "Custom Order",
         "harga": budget_int, "payment_method": "QRIS", "admin_id": None,
+        "ticket_number": ticket_number,
         "embed_message_id": None, "opened_at": now, "last_activity": now,
         "warned": 0, "warn_message_id": None,
     }
     cog.active_tickets[channel.id] = ticket
     save_lainnya_ticket(ticket)
 
-    embed = discord.Embed(
-        title=f"CUSTOM ORDER — {STORE_NAME}",
-        color=0x00FF00,
-        timestamp=datetime.datetime.now(datetime.timezone.utc)
-    )
-    embed.add_field(name="Member",    value=member.mention,       inline=True)
-    embed.add_field(name="Item",      value=item_name,            inline=True)
-    embed.add_field(name="Quantity",  value=str(qty_int),         inline=True)
-    embed.add_field(name="Budget",    value=f"Rp {budget_int:,}", inline=True)
+    _extra = [("Quantity", str(qty_int), True)]
     if notes_value:
-        embed.add_field(name="Catatan", value=notes_value, inline=False)
-    embed.add_field(name="Metode Bayar", value="**QRIS**", inline=False)
-    embed.add_field(name="Status", value="Admin akan mengkonfirmasi ketersediaan & harga. Pembayaran via QRIS.", inline=False)
-    embed.set_footer(text=STORE_NAME)
+        _extra.append(("Catatan", notes_value, False))
+    _extra.append(("Status", "Admin akan mengkonfirmasi ketersediaan & harga. Pembayaran via QRIS.", False))
+    embed = ticket_ui.open_ticket_embed(
+        "lainnya", ticket_number, member,
+        item=item_name,
+        total=f"Rp {budget_int:,}",
+        payment="QRIS",
+        extra_fields=_extra,
+    )
 
     admin_mention = admin_role.mention if admin_role else ""
     msg = await channel.send(
@@ -1155,9 +1145,11 @@ async def _create_lainnya_ticket(interaction: discord.Interaction, cart: list):
 
 
 
+    ticket_number = next_ticket_number()
+
     channel = await guild.create_text_channel(
 
-        name=f"order-{member.name}", category=cat_channel, overwrites=overwrites
+        name=ticket_ui.channel_name("lainnya", ticket_number, member.name), category=cat_channel, overwrites=overwrites
 
     )
 
@@ -1174,6 +1166,8 @@ async def _create_lainnya_ticket(interaction: discord.Interaction, cart: list):
         "category": categories_label, "harga": total,
 
         "payment_method": "QRIS", "admin_id": None,
+
+        "ticket_number": ticket_number,
 
         "embed_message_id": None,
 
@@ -1195,27 +1189,13 @@ async def _create_lainnya_ticket(interaction: discord.Interaction, cart: list):
 
     )
 
-    embed = discord.Embed(
-
-        title=f"ORDER {categories_label} — {STORE_NAME}",
-
-        color=COLOR_LAINNYA,
-
-        timestamp=datetime.datetime.now(datetime.timezone.utc)
-
+    embed = ticket_ui.open_ticket_embed(
+        "lainnya", ticket_number, member,
+        item=items_text,
+        total=f"Rp {total:,}",
+        payment="QRIS",
+        extra_fields=[("Catatan", "Setelah pembayaran dikonfirmasi, admin akan memproses pesanan.", False)],
     )
-
-    embed.add_field(name="Member", value=member.mention, inline=True)
-
-    embed.add_field(name="Item", value=items_text, inline=False)
-
-    embed.add_field(name="Total Harga", value=f"Rp {total:,}", inline=True)
-
-    embed.add_field(name="Metode Bayar", value=f"**QRIS** — silakan bayar **Rp {total:,}** lalu kirim bukti transfer di sini.", inline=False)
-
-    embed.add_field(name="Catatan", value="Setelah pembayaran dikonfirmasi, admin akan memproses pesanan.", inline=False)
-
-    embed.set_footer(text=STORE_NAME)
 
 
 
