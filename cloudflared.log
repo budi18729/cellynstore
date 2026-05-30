@@ -1,0 +1,963 @@
+2026-05-25T08:53:48Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T08:53:48Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T08:54:20Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T08:54:20Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T08:54:24Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T08:54:24Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T08:54:24Z INF |  https://grass-manual-other-striking.trycloudflare.com                                     |
+2026-05-25T08:54:24Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T08:54:24Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T08:54:24Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T08:54:24Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T08:54:24Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T08:54:24Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T08:54:24Z INF Generated Connector ID: 77895ead-6188-4ac7-befb-a5618c192521
+2026-05-25T08:54:24Z INF Initial protocol quic
+2026-05-25T08:54:24Z INF ICMP proxy will use 172.18.0.15 as source for IPv4
+2026-05-25T08:54:24Z INF ICMP proxy will use fdba:17c8:6c94::e in zone eth0 as source for IPv6
+2026-05-25T08:54:24Z INF ICMP proxy will use 172.18.0.15 as source for IPv4
+2026-05-25T08:54:24Z INF ICMP proxy will use fdba:17c8:6c94::e in zone eth0 as source for IPv6
+2026-05-25T08:54:24Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T08:54:24Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.13
+2026-05-25T09:59:15Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T09:59:15Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T10:04:41Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T10:04:41Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T10:05:17Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T10:05:17Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T10:12:21Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T10:12:21Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T10:12:24Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T10:12:24Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T10:12:24Z INF |  https://arise-roll-apply-scholars.trycloudflare.com                                       |
+2026-05-25T10:12:24Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T10:12:24Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T10:12:24Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T10:12:24Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T10:12:24Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T10:12:24Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T10:12:24Z INF Generated Connector ID: 658003fc-8faf-4324-82fc-7037a49dff69
+2026-05-25T10:12:24Z INF Initial protocol quic
+2026-05-25T10:12:24Z INF ICMP proxy will use 172.18.0.15 as source for IPv4
+2026-05-25T10:12:24Z INF ICMP proxy will use fdba:17c8:6c94::e in zone eth0 as source for IPv6
+2026-05-25T10:12:24Z INF ICMP proxy will use 172.18.0.15 as source for IPv4
+2026-05-25T10:12:24Z INF ICMP proxy will use fdba:17c8:6c94::e in zone eth0 as source for IPv6
+2026-05-25T10:12:24Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T10:12:24Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T10:12:24Z INF Registered tunnel connection connIndex=0 connection=9094d7ae-0752-4823-b63e-712bc27b3f27 event=0 ip=198.41.200.73 location=iad14 protocol=quic
+2026-05-25T10:18:36Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-25T10:18:36Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T10:18:36Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T10:18:36Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T10:18:36Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T10:18:36Z ERR Connection terminated connIndex=0
+2026-05-25T10:18:36Z ERR no more connections active and exiting
+2026-05-25T10:18:36Z INF Tunnel server stopped
+2026-05-25T10:18:36Z INF Metrics server stopped
+2026-05-25T10:21:22Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T10:21:22Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T10:21:27Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T10:21:27Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T10:21:27Z INF |  https://choose-drinks-perl-based.trycloudflare.com                                        |
+2026-05-25T10:21:27Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T10:21:27Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T10:21:27Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T10:21:27Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T10:21:27Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T10:21:27Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T10:21:27Z INF Generated Connector ID: e57fd19a-3b93-48ae-b7f9-8cd002096053
+2026-05-25T10:21:27Z INF Initial protocol quic
+2026-05-25T10:21:27Z INF ICMP proxy will use 172.18.0.15 as source for IPv4
+2026-05-25T10:21:27Z INF ICMP proxy will use fdba:17c8:6c94::e in zone eth0 as source for IPv6
+2026-05-25T10:21:27Z INF ICMP proxy will use 172.18.0.15 as source for IPv4
+2026-05-25T10:21:27Z INF ICMP proxy will use fdba:17c8:6c94::e in zone eth0 as source for IPv6
+2026-05-25T10:21:27Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T10:21:27Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-05-25T10:21:27Z INF Registered tunnel connection connIndex=0 connection=51c3f39f-f6f8-4031-a296-d4252d153b2b event=0 ip=198.41.192.57 location=iad03 protocol=quic
+2026-05-25T10:26:28Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-25T10:26:28Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.57
+2026-05-25T10:26:28Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-05-25T10:26:28Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-05-25T10:26:28Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.57
+2026-05-25T10:26:28Z ERR Connection terminated connIndex=0
+2026-05-25T10:26:28Z ERR no more connections active and exiting
+2026-05-25T10:26:28Z INF Tunnel server stopped
+2026-05-25T10:26:28Z INF Metrics server stopped
+2026-05-25T16:31:50Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T16:31:50Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T16:31:54Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T16:31:54Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T16:31:54Z INF |  https://oxford-dish-terminals-mental.trycloudflare.com                                    |
+2026-05-25T16:31:54Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T16:31:54Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T16:31:54Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T16:31:54Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T16:31:54Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T16:31:54Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T16:31:54Z INF Generated Connector ID: bfe6277a-2328-449c-972d-4d24aae7cbb3
+2026-05-25T16:31:54Z INF Initial protocol quic
+2026-05-25T16:31:54Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T16:31:54Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T16:31:54Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T16:31:54Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T16:31:54Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T16:31:54Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.33
+2026-05-25T16:31:54Z INF Registered tunnel connection connIndex=0 connection=0e78087b-5a30-481c-82bd-cf8bb8b05862 event=0 ip=198.41.200.33 location=iad19 protocol=quic
+2026-05-25T21:34:36Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-25T21:34:36Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.33
+2026-05-25T21:34:36Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.33
+2026-05-25T21:34:36Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.33
+2026-05-25T21:34:36Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.33
+2026-05-25T21:34:36Z ERR Connection terminated connIndex=0
+2026-05-25T21:34:36Z ERR no more connections active and exiting
+2026-05-25T21:34:36Z INF Tunnel server stopped
+2026-05-25T21:34:36Z INF Metrics server stopped
+2026-05-25T21:46:10Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T21:46:10Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T21:46:16Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T21:46:16Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T21:46:16Z INF |  https://ipaq-fragrances-pipeline-formats.trycloudflare.com                                |
+2026-05-25T21:46:16Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T21:46:16Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T21:46:16Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T21:46:16Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T21:46:16Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T21:46:16Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T21:46:16Z INF Generated Connector ID: 3be93730-286e-4881-9c82-c5668aef461e
+2026-05-25T21:46:16Z INF Initial protocol quic
+2026-05-25T21:46:16Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T21:46:16Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T21:46:16Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T21:46:16Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T21:46:16Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T21:46:16Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T21:46:16Z INF Registered tunnel connection connIndex=0 connection=cea6076c-d87e-4d1c-aed6-55b4cf09724a event=0 ip=198.41.200.73 location=iad05 protocol=quic
+2026-05-25T21:56:14Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-25T21:56:14Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T21:56:14Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T21:56:14Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T21:56:14Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.73
+2026-05-25T21:56:14Z ERR Connection terminated connIndex=0
+2026-05-25T21:56:14Z ERR no more connections active and exiting
+2026-05-25T21:56:14Z INF Tunnel server stopped
+2026-05-25T21:56:14Z INF Metrics server stopped
+2026-05-25T21:59:09Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T21:59:09Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T21:59:12Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T21:59:12Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T21:59:12Z INF |  https://advocacy-intensive-comfort-punk.trycloudflare.com                                 |
+2026-05-25T21:59:12Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T21:59:12Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T21:59:12Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T21:59:12Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T21:59:12Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T21:59:12Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T21:59:12Z INF Generated Connector ID: fc83a9ac-b512-41e5-8cab-878ca5463f9e
+2026-05-25T21:59:12Z INF Initial protocol quic
+2026-05-25T21:59:12Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T21:59:12Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T21:59:12Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T21:59:12Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T21:59:12Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T21:59:12Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.53
+2026-05-25T21:59:12Z INF Registered tunnel connection connIndex=0 connection=76c9bac5-9d4f-42cb-9080-98906690962d event=0 ip=198.41.200.53 location=iad20 protocol=quic
+2026-05-25T22:00:23Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-25T22:00:23Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.53
+2026-05-25T22:00:23Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.53
+2026-05-25T22:00:23Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.53
+2026-05-25T22:00:23Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.53
+2026-05-25T22:00:23Z ERR Connection terminated connIndex=0
+2026-05-25T22:00:23Z ERR no more connections active and exiting
+2026-05-25T22:00:23Z INF Tunnel server stopped
+2026-05-25T22:00:23Z INF Metrics server stopped
+2026-05-25T22:01:22Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T22:01:22Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T22:01:26Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T22:01:26Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T22:01:26Z INF |  https://reserved-investing-vacuum-posting.trycloudflare.com                               |
+2026-05-25T22:01:26Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T22:01:26Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T22:01:26Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T22:01:26Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T22:01:26Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T22:01:26Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T22:01:26Z INF Generated Connector ID: 5c9e51d8-dd04-4eed-9f6c-8f7f1519c73c
+2026-05-25T22:01:26Z INF Initial protocol quic
+2026-05-25T22:01:26Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T22:01:26Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T22:01:26Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T22:01:26Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T22:01:26Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T22:01:26Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.77
+2026-05-25T22:01:27Z INF Registered tunnel connection connIndex=0 connection=cc170286-deca-4c44-9826-88a80f319af2 event=0 ip=198.41.192.77 location=iad02 protocol=quic
+2026-05-25T22:15:33Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-25T22:15:34Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.77
+2026-05-25T22:15:34Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.77
+2026-05-25T22:15:34Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.77
+2026-05-25T22:15:34Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.77
+2026-05-25T22:15:34Z ERR Connection terminated connIndex=0
+2026-05-25T22:15:34Z ERR no more connections active and exiting
+2026-05-25T22:15:34Z INF Tunnel server stopped
+2026-05-25T22:15:34Z INF Metrics server stopped
+2026-05-25T22:16:07Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-25T22:16:07Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-25T22:16:10Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T22:16:10Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-25T22:16:10Z INF |  https://temp-arrives-calling-concentrate.trycloudflare.com                                |
+2026-05-25T22:16:10Z INF +--------------------------------------------------------------------------------------------+
+2026-05-25T22:16:10Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-25T22:16:10Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-25T22:16:10Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-25T22:16:10Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-25T22:16:10Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-25T22:16:10Z INF Generated Connector ID: 522e18aa-d9ca-49e3-8454-eedee8713bbf
+2026-05-25T22:16:10Z INF Initial protocol quic
+2026-05-25T22:16:10Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T22:16:10Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T22:16:10Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-25T22:16:10Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-25T22:16:10Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-25T22:16:10Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.57
+2026-05-25T22:16:10Z INF Registered tunnel connection connIndex=0 connection=1960e72e-6897-42f6-8332-1d6b9a4c781a event=0 ip=198.41.192.57 location=iad02 protocol=quic
+2026-05-26T13:16:27Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T13:16:28Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.57
+2026-05-26T13:16:28Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-05-26T13:16:28Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.57
+2026-05-26T13:16:28Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.57
+2026-05-26T13:16:28Z ERR Connection terminated connIndex=0
+2026-05-26T13:16:28Z ERR no more connections active and exiting
+2026-05-26T13:16:28Z INF Tunnel server stopped
+2026-05-26T13:16:28Z INF Metrics server stopped
+2026-05-26T13:17:17Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T13:17:17Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T13:17:21Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T13:17:21Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T13:17:21Z INF |  https://ten-required-waterproof-consciousness.trycloudflare.com                           |
+2026-05-26T13:17:21Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T13:17:21Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T13:17:21Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T13:17:21Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T13:17:21Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T13:17:21Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T13:17:21Z INF Generated Connector ID: f0b6c6dd-5284-40fc-a828-a548f474f1d1
+2026-05-26T13:17:21Z INF Initial protocol quic
+2026-05-26T13:17:21Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T13:17:21Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T13:17:21Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T13:17:21Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T13:17:21Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T13:17:21Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.193
+2026-05-26T13:17:21Z INF Registered tunnel connection connIndex=0 connection=0b8071e8-3da4-45a5-86ee-42b50ff4504b event=0 ip=198.41.200.193 location=iad20 protocol=quic
+2026-05-26T20:33:49Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T20:33:49Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.193
+2026-05-26T20:33:49Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.193
+2026-05-26T20:33:49Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.193
+2026-05-26T20:33:49Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.193
+2026-05-26T20:33:49Z ERR Connection terminated connIndex=0
+2026-05-26T20:33:49Z ERR no more connections active and exiting
+2026-05-26T20:33:49Z INF Tunnel server stopped
+2026-05-26T20:33:49Z INF Metrics server stopped
+2026-05-26T20:34:26Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T20:34:26Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T20:34:31Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T20:34:31Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T20:34:31Z INF |  https://relying-ion-seemed-printers.trycloudflare.com                                     |
+2026-05-26T20:34:31Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T20:34:31Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T20:34:31Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T20:34:31Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T20:34:31Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T20:34:31Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T20:34:31Z INF Generated Connector ID: 294dd055-371a-48cb-b169-27251f2122b4
+2026-05-26T20:34:31Z INF Initial protocol quic
+2026-05-26T20:34:31Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T20:34:31Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T20:34:31Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T20:34:31Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T20:34:31Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T20:34:31Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.233
+2026-05-26T20:34:31Z INF Registered tunnel connection connIndex=0 connection=80a07d5a-9444-4c90-8aa9-3daa7d8b8652 event=0 ip=198.41.200.233 location=iad08 protocol=quic
+2026-05-26T20:42:07Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T20:42:07Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.233
+2026-05-26T20:42:07Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.233
+2026-05-26T20:42:07Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.233
+2026-05-26T20:42:07Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.233
+2026-05-26T20:42:07Z ERR Connection terminated connIndex=0
+2026-05-26T20:42:07Z ERR no more connections active and exiting
+2026-05-26T20:42:07Z INF Tunnel server stopped
+2026-05-26T20:42:07Z INF Metrics server stopped
+2026-05-26T20:42:41Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T20:42:41Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T20:42:45Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T20:42:45Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T20:42:45Z INF |  https://prompt-cadillac-tomatoes-pump.trycloudflare.com                                   |
+2026-05-26T20:42:45Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T20:42:45Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T20:42:45Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T20:42:45Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T20:42:45Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T20:42:45Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T20:42:45Z INF Generated Connector ID: 2d9c3e73-d7da-4041-8576-b1c6744ca8c8
+2026-05-26T20:42:45Z INF Initial protocol quic
+2026-05-26T20:42:45Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T20:42:45Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T20:42:45Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T20:42:45Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T20:42:45Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T20:42:45Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.13
+2026-05-26T20:42:45Z INF Registered tunnel connection connIndex=0 connection=0ab94a90-e4f2-4085-b832-8cfdc09a1ae6 event=0 ip=198.41.200.13 location=iad11 protocol=quic
+2026-05-26T20:49:34Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T20:49:34Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.13
+2026-05-26T20:49:34Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.13
+2026-05-26T20:49:34Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.13
+2026-05-26T20:49:34Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.13
+2026-05-26T20:49:34Z ERR Connection terminated connIndex=0
+2026-05-26T20:49:34Z ERR no more connections active and exiting
+2026-05-26T20:49:34Z INF Tunnel server stopped
+2026-05-26T20:49:34Z INF Metrics server stopped
+2026-05-26T20:50:10Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T20:50:10Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T20:50:16Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T20:50:16Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T20:50:16Z INF |  https://closed-secretariat-debut-fingers.trycloudflare.com                                |
+2026-05-26T20:50:16Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T20:50:16Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T20:50:16Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T20:50:16Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T20:50:16Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T20:50:16Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T20:50:16Z INF Generated Connector ID: a732ea2e-7304-4fe8-8d51-7e46724fb7a4
+2026-05-26T20:50:16Z INF Initial protocol quic
+2026-05-26T20:50:16Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T20:50:16Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T20:50:16Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T20:50:16Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T20:50:16Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T20:50:16Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.43
+2026-05-26T20:50:16Z INF Registered tunnel connection connIndex=0 connection=49b271d6-d2c8-429c-bf8b-4a76c75462bc event=0 ip=198.41.200.43 location=iad07 protocol=quic
+2026-05-26T21:21:08Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T21:21:08Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.43
+2026-05-26T21:21:08Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.43
+2026-05-26T21:21:08Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.43
+2026-05-26T21:21:08Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.43
+2026-05-26T21:21:08Z ERR Connection terminated connIndex=0
+2026-05-26T21:21:08Z ERR no more connections active and exiting
+2026-05-26T21:21:08Z INF Tunnel server stopped
+2026-05-26T21:21:08Z INF Metrics server stopped
+2026-05-26T21:21:40Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T21:21:40Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T21:21:45Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T21:21:45Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T21:21:45Z INF |  https://despite-editorial-equipment-quarters.trycloudflare.com                            |
+2026-05-26T21:21:45Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T21:21:45Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T21:21:45Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T21:21:45Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T21:21:45Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T21:21:45Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T21:21:45Z INF Generated Connector ID: 4fa3a4e5-96e5-4899-bc70-6e2abf446154
+2026-05-26T21:21:45Z INF Initial protocol quic
+2026-05-26T21:21:45Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T21:21:45Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T21:21:45Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T21:21:45Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T21:21:45Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T21:21:45Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.27
+2026-05-26T21:21:45Z INF Registered tunnel connection connIndex=0 connection=31e6e426-1e49-46de-8095-2bb73807ba28 event=0 ip=198.41.192.27 location=iad16 protocol=quic
+2026-05-26T21:26:30Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T21:26:30Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.27
+2026-05-26T21:26:30Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.27
+2026-05-26T21:26:30Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.27
+2026-05-26T21:26:30Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.27
+2026-05-26T21:26:30Z ERR Connection terminated connIndex=0
+2026-05-26T21:26:30Z ERR no more connections active and exiting
+2026-05-26T21:26:30Z INF Tunnel server stopped
+2026-05-26T21:26:30Z INF Metrics server stopped
+2026-05-26T21:27:09Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T21:27:09Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T21:27:13Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T21:27:13Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T21:27:13Z INF |  https://usr-stations-secrets-buyers.trycloudflare.com                                     |
+2026-05-26T21:27:13Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T21:27:13Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T21:27:13Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T21:27:13Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T21:27:13Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T21:27:13Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T21:27:13Z INF Generated Connector ID: f2de8ba9-98ef-41ed-bf4d-08a8ef3eae62
+2026-05-26T21:27:14Z INF Initial protocol quic
+2026-05-26T21:27:14Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T21:27:14Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T21:27:14Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T21:27:14Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T21:27:14Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T21:27:14Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.7
+2026-05-26T21:27:14Z INF Registered tunnel connection connIndex=0 connection=11ddcc4b-0d7b-4a6d-8e45-89d04719bd85 event=0 ip=198.41.192.7 location=iad10 protocol=quic
+2026-05-26T21:29:16Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T21:29:16Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.7
+2026-05-26T21:29:16Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.7
+2026-05-26T21:29:16Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.7
+2026-05-26T21:29:16Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.7
+2026-05-26T21:29:16Z ERR Connection terminated connIndex=0
+2026-05-26T21:29:16Z ERR no more connections active and exiting
+2026-05-26T21:29:16Z INF Tunnel server stopped
+2026-05-26T21:29:16Z INF Metrics server stopped
+2026-05-26T21:29:51Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T21:29:51Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T21:29:56Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T21:29:56Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T21:29:56Z INF |  https://tax-discretion-timing-louise.trycloudflare.com                                    |
+2026-05-26T21:29:56Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T21:29:56Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T21:29:56Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T21:29:56Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T21:29:56Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T21:29:56Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T21:29:56Z INF Generated Connector ID: e5872602-ac14-4ca4-b25f-a41d0ab32548
+2026-05-26T21:29:56Z INF Initial protocol quic
+2026-05-26T21:29:56Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T21:29:56Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T21:29:56Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T21:29:56Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T21:29:56Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T21:29:56Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.23
+2026-05-26T21:29:56Z INF Registered tunnel connection connIndex=0 connection=691f5dd4-fcd2-47fd-a460-782f33115c2d event=0 ip=198.41.200.23 location=iad11 protocol=quic
+2026-05-26T22:23:49Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-26T22:23:49Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.23
+2026-05-26T22:23:49Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.23
+2026-05-26T22:23:49Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.23
+2026-05-26T22:23:49Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.23
+2026-05-26T22:23:49Z ERR Connection terminated connIndex=0
+2026-05-26T22:23:49Z ERR no more connections active and exiting
+2026-05-26T22:23:49Z INF Tunnel server stopped
+2026-05-26T22:23:49Z INF Metrics server stopped
+2026-05-26T22:24:23Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-26T22:24:23Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-26T22:24:27Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T22:24:27Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-26T22:24:27Z INF |  https://timothy-exposure-attach-virgin.trycloudflare.com                                  |
+2026-05-26T22:24:27Z INF +--------------------------------------------------------------------------------------------+
+2026-05-26T22:24:27Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-26T22:24:27Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-26T22:24:27Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-26T22:24:27Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-26T22:24:27Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-26T22:24:27Z INF Generated Connector ID: cb26bf6e-5fd1-4b59-889b-4711fd2165ab
+2026-05-26T22:24:27Z INF Initial protocol quic
+2026-05-26T22:24:27Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T22:24:27Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T22:24:27Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-26T22:24:27Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-26T22:24:27Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-26T22:24:27Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.67
+2026-05-26T22:24:28Z INF Registered tunnel connection connIndex=0 connection=4378a70e-cefc-4e99-9c60-c63f901acec9 event=0 ip=198.41.192.67 location=iad03 protocol=quic
+2026-05-27T06:46:10Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-27T06:46:11Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.67
+2026-05-27T06:46:11Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.67
+2026-05-27T06:46:11Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.67
+2026-05-27T06:46:11Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.67
+2026-05-27T06:46:11Z ERR Connection terminated connIndex=0
+2026-05-27T06:46:11Z ERR no more connections active and exiting
+2026-05-27T06:46:11Z INF Tunnel server stopped
+2026-05-27T06:46:11Z INF Metrics server stopped
+2026-05-27T06:46:46Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-27T06:46:46Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-27T06:46:50Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T06:46:50Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-27T06:46:50Z INF |  https://copyrights-minneapolis-endangered-quarter.trycloudflare.com                       |
+2026-05-27T06:46:50Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T06:46:50Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-27T06:46:50Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-27T06:46:50Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-27T06:46:50Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-27T06:46:50Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-27T06:46:50Z INF Generated Connector ID: ae6917b3-11ed-4a3f-a78d-6ca0c05717c4
+2026-05-27T06:46:50Z INF Initial protocol quic
+2026-05-27T06:46:50Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T06:46:50Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T06:46:50Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T06:46:50Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T06:46:50Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-27T06:46:50Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.233
+2026-05-27T06:46:50Z INF Registered tunnel connection connIndex=0 connection=994cbc4d-ed1d-4720-b0a7-e8e9e02632ce event=0 ip=198.41.200.233 location=iad12 protocol=quic
+2026-05-27T16:56:22Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-27T16:56:22Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.233
+2026-05-27T16:56:22Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.233
+2026-05-27T16:56:22Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.233
+2026-05-27T16:56:22Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.233
+2026-05-27T16:56:22Z ERR Connection terminated connIndex=0
+2026-05-27T16:56:22Z ERR no more connections active and exiting
+2026-05-27T16:56:22Z INF Tunnel server stopped
+2026-05-27T16:56:22Z INF Metrics server stopped
+2026-05-27T16:56:52Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-27T16:56:52Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-27T16:56:56Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T16:56:56Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-27T16:56:56Z INF |  https://language-rick-cups-justice.trycloudflare.com                                      |
+2026-05-27T16:56:56Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T16:56:56Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-27T16:56:56Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-27T16:56:56Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-27T16:56:56Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-27T16:56:56Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-27T16:56:56Z INF Generated Connector ID: a4c833ec-b09e-4fca-bb86-32d6de885a98
+2026-05-27T16:56:56Z INF Initial protocol quic
+2026-05-27T16:56:56Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T16:56:56Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T16:56:56Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T16:56:56Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T16:56:56Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-27T16:56:56Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.23
+2026-05-27T16:56:57Z INF Registered tunnel connection connIndex=0 connection=b1e46e96-7268-407c-b8e5-87dffe45d34f event=0 ip=198.41.200.23 location=iad20 protocol=quic
+2026-05-27T17:17:33Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-27T17:17:33Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.23
+2026-05-27T17:17:33Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.23
+2026-05-27T17:17:33Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.23
+2026-05-27T17:17:33Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.23
+2026-05-27T17:17:33Z ERR Connection terminated connIndex=0
+2026-05-27T17:17:33Z ERR no more connections active and exiting
+2026-05-27T17:17:33Z INF Tunnel server stopped
+2026-05-27T17:17:33Z INF Metrics server stopped
+2026-05-27T17:18:06Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-27T17:18:06Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-27T17:18:11Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T17:18:11Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-27T17:18:11Z INF |  https://dare-locks-rca-cell.trycloudflare.com                                             |
+2026-05-27T17:18:11Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T17:18:11Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-27T17:18:11Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-27T17:18:11Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-27T17:18:11Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-27T17:18:11Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-27T17:18:11Z INF Generated Connector ID: 4daa209c-4cd5-40c4-85ef-81da4e8c92db
+2026-05-27T17:18:11Z INF Initial protocol quic
+2026-05-27T17:18:11Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T17:18:11Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T17:18:11Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T17:18:11Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T17:18:11Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-27T17:18:11Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.77
+2026-05-27T17:18:11Z INF Registered tunnel connection connIndex=0 connection=3f55c182-3b1e-4c07-ae32-c5960b4e2ec2 event=0 ip=198.41.192.77 location=iad17 protocol=quic
+2026-05-27T17:49:38Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-27T17:49:39Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.77
+2026-05-27T17:49:39Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.77
+2026-05-27T17:49:39Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.77
+2026-05-27T17:49:39Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.77
+2026-05-27T17:49:39Z ERR Connection terminated connIndex=0
+2026-05-27T17:49:39Z ERR no more connections active and exiting
+2026-05-27T17:49:39Z INF Tunnel server stopped
+2026-05-27T17:49:39Z INF Metrics server stopped
+2026-05-27T17:50:17Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-27T17:50:17Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-27T17:50:22Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T17:50:22Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-27T17:50:22Z INF |  https://observation-office-mouth-front.trycloudflare.com                                  |
+2026-05-27T17:50:22Z INF +--------------------------------------------------------------------------------------------+
+2026-05-27T17:50:22Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-27T17:50:22Z INF Version 2026.5.0 (Checksum 2dc0945345677d27de3ae390a31c3b168866b48766da5f4cfd3fc473ce572303)
+2026-05-27T17:50:22Z INF GOOS: linux, GOVersion: go1.26.2, GoArch: arm64
+2026-05-27T17:50:22Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-27T17:50:22Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-27T17:50:22Z INF Generated Connector ID: 49d0bfed-4e5d-4046-b003-4170f4d81636
+2026-05-27T17:50:22Z INF Initial protocol quic
+2026-05-27T17:50:22Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T17:50:22Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T17:50:22Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-27T17:50:22Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-27T17:50:22Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-27T17:50:22Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-05-27T17:50:22Z INF Registered tunnel connection connIndex=0 connection=86725309-fc20-4803-823a-d955eb4f081b event=0 ip=198.41.192.107 location=iad17 protocol=quic
+2026-05-28T05:46:48Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T05:46:48Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T05:46:48Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T05:46:48Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T05:46:48Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T05:46:50Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T05:46:50Z INF Registered tunnel connection connIndex=0 connection=285f6a84-cc8d-42ce-9649-9ea276fb93b4 event=0 ip=198.41.192.107 location=iad17 protocol=quic
+2026-05-28T10:52:56Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T10:52:56Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T10:52:57Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T10:52:57Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T10:52:57Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T10:52:58Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T10:53:02Z INF Registered tunnel connection connIndex=0 connection=67cd5b5a-f9ad-4dc3-877c-902043d65424 event=0 ip=198.41.192.107 location=iad17 protocol=quic
+2026-05-28T14:13:01Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T14:13:01Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T14:13:16Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T14:13:16Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T14:13:16Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T14:13:17Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T14:13:17Z INF Registered tunnel connection connIndex=0 connection=26f9392a-2a1d-40f0-a715-cce51271f0a6 event=0 ip=198.41.192.107 location=iad17 protocol=quic
+2026-05-28T15:55:27Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T15:55:27Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T15:55:27Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T15:55:27Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T15:55:27Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T15:55:29Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T15:55:40Z INF Registered tunnel connection connIndex=0 connection=01347da4-ba9f-4f06-871a-7aaba5bcaac0 event=0 ip=198.41.192.107 location=iad17 protocol=quic
+2026-05-28T16:15:29Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T16:15:29Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T16:15:29Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T16:15:29Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T16:15:29Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T16:15:29Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T16:15:29Z INF Registered tunnel connection connIndex=0 connection=9cc3b798-5a75-4d15-9435-e29dc84f1e2f event=0 ip=198.41.192.107 location=iad17 protocol=quic
+2026-05-28T17:50:24Z INF cloudflared has been updated version=2026.5.2
+2026-05-28T17:50:24Z INF Restarting service managed by SysV...
+2026-05-28T17:50:24Z INF PID of the new process is 89
+2026-05-28T17:50:24Z ERR Initiating shutdown error="cloudflared has been updated to version 2026.5.2"
+2026-05-28T17:50:24Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T17:50:24Z INF Metrics server stopped
+2026-05-28T17:50:24Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T17:50:24Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.107
+2026-05-28T17:50:24Z INF Tunnel server stopped
+cloudflared has been updated to version 2026.5.2
+2026-05-28T17:50:25Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-28T17:50:25Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-28T17:50:29Z INF +--------------------------------------------------------------------------------------------+
+2026-05-28T17:50:29Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-28T17:50:29Z INF |  https://quad-meaningful-gets-romantic.trycloudflare.com                                   |
+2026-05-28T17:50:29Z INF +--------------------------------------------------------------------------------------------+
+2026-05-28T17:50:29Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-28T17:50:29Z INF Version 2026.5.2 (Checksum 5a4e8ce2701105271412059f44b6a0bf1ae4542b4d98ff3180c0c019443a5815)
+2026-05-28T17:50:29Z INF GOOS: linux, GOVersion: go1.26.3, GoArch: arm64
+2026-05-28T17:50:29Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-28T17:50:29Z INF Generated Connector ID: b2cd369b-df3f-44a6-b19a-29a67e3b5ce5
+2026-05-28T17:50:29Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-28T17:50:29Z INF Initial protocol quic
+2026-05-28T17:50:29Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-28T17:50:29Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-28T17:50:30Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-28T17:50:30Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-28T17:50:30Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-28T17:50:30Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T17:50:30Z INF +-------------------------------------------------------------------------------------+
+2026-05-28T17:50:30Z INF |                               CONNECTIVITY PRE-CHECKS                               |
+2026-05-28T17:50:30Z INF +-------------------------------------------------------------------------------------+
+2026-05-28T17:50:30Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                       |
+2026-05-28T17:50:30Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-28T17:50:30Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-28T17:50:30Z INF |  UDP Connectivity  region1.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-28T17:50:30Z INF |  UDP Connectivity  region2.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-28T17:50:30Z INF |  TCP Connectivity  region1.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-28T17:50:30Z INF |  TCP Connectivity  region2.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-28T17:50:30Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
+2026-05-28T17:50:30Z INF |                                                                                     |
+2026-05-28T17:50:30Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
+2026-05-28T17:50:30Z INF +-------------------------------------------------------------------------------------+
+2026-05-28T17:50:30Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=region1.v2.argotunnel.com
+2026-05-28T17:50:30Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=region2.v2.argotunnel.com
+2026-05-28T17:50:30Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=region1.v2.argotunnel.com
+2026-05-28T17:50:30Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=region2.v2.argotunnel.com
+2026-05-28T17:50:30Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=region1.v2.argotunnel.com
+2026-05-28T17:50:30Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=region2.v2.argotunnel.com
+2026-05-28T17:50:30Z INF precheck component="Cloudflare API" details="API is reachable" run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 status=pass target=api.cloudflare.com:443
+2026-05-28T17:50:30Z INF precheck complete hard_fail=false run_id=d967cab6-2e6c-43f0-ad34-bdfcecbfd4b2 suggested_protocol=quic
+2026-05-28T17:50:30Z INF Registered tunnel connection connIndex=0 connection=4d58cd7a-e87f-4ce3-8e7f-7539d420480f event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T20:32:03Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:32:03Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:32:03Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:32:03Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:32:03Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:32:05Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:32:06Z INF Registered tunnel connection connIndex=0 connection=0dc5bc11-78df-4825-b402-1fbbbd943a1a event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T20:33:00Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:33:00Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:33:00Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:33:00Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:33:00Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:33:01Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T20:33:01Z INF Registered tunnel connection connIndex=0 connection=c5ebaa51-b6c6-4af6-a677-79068ec82465 event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T21:11:38Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T21:11:38Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T21:11:38Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T21:11:38Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T21:11:38Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T21:11:38Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T21:11:39Z INF Registered tunnel connection connIndex=0 connection=8631cd26-d7ba-4821-bd62-df77ac446272 event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T22:00:12Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:00:12Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:00:12Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:00:12Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:00:12Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:00:12Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:00:12Z INF Registered tunnel connection connIndex=0 connection=c89bc682-6517-4f97-9172-58062573bbde event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T22:24:51Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:24:51Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:24:51Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:24:51Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:24:51Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:24:53Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:24:53Z INF Registered tunnel connection connIndex=0 connection=315d2373-d9a7-4248-b4ac-1a2e8ac4969e event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T22:35:24Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:35:24Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:35:24Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:35:24Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:35:24Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:35:25Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:35:25Z INF Registered tunnel connection connIndex=0 connection=93313e10-fd54-49ea-a037-5946ffb0ed69 event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T22:36:47Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:36:47Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:36:47Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:36:47Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:36:47Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:36:48Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:36:48Z INF Registered tunnel connection connIndex=0 connection=bcd9d56e-8070-41ce-a95c-daef891d30ff event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T22:37:46Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:37:46Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:37:46Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:37:46Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:37:46Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:37:47Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T22:37:47Z INF Registered tunnel connection connIndex=0 connection=611e5136-232c-45e3-8745-1b40eb1c2b95 event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-28T23:15:19Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T23:15:19Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T23:15:19Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T23:15:19Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T23:15:19Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T23:15:21Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.192.167
+2026-05-28T23:15:21Z INF Registered tunnel connection connIndex=0 connection=9ef673b7-3288-4890-959d-5a15321eeb2e event=0 ip=198.41.192.167 location=iad16 protocol=quic
+2026-05-29T07:29:05Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-29T07:29:06Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.167
+2026-05-29T07:29:06Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-29T07:29:06Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.167
+2026-05-29T07:29:06Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.167
+2026-05-29T07:29:06Z ERR Connection terminated connIndex=0
+2026-05-29T07:29:06Z ERR no more connections active and exiting
+2026-05-29T07:29:06Z INF Tunnel server stopped
+2026-05-29T07:29:06Z INF Metrics server stopped
+2026-05-29T07:29:49Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-29T07:29:49Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-29T07:29:54Z INF +--------------------------------------------------------------------------------------------+
+2026-05-29T07:29:54Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-29T07:29:54Z INF |  https://seeks-zero-aggregate-dat.trycloudflare.com                                        |
+2026-05-29T07:29:54Z INF +--------------------------------------------------------------------------------------------+
+2026-05-29T07:29:54Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-29T07:29:54Z INF Version 2026.5.2 (Checksum 5a4e8ce2701105271412059f44b6a0bf1ae4542b4d98ff3180c0c019443a5815)
+2026-05-29T07:29:54Z INF GOOS: linux, GOVersion: go1.26.3, GoArch: arm64
+2026-05-29T07:29:54Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-29T07:29:54Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-29T07:29:54Z INF Generated Connector ID: af18fddd-6db0-43eb-81d9-98814b2e71a9
+2026-05-29T07:29:54Z INF Initial protocol quic
+2026-05-29T07:29:54Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-29T07:29:54Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-29T07:29:54Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-29T07:29:54Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-29T07:29:54Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-29T07:29:54Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.33
+2026-05-29T07:29:54Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T07:29:54Z INF |                               CONNECTIVITY PRE-CHECKS                               |
+2026-05-29T07:29:54Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T07:29:54Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                       |
+2026-05-29T07:29:54Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-29T07:29:54Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-29T07:29:54Z INF |  UDP Connectivity  region1.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-29T07:29:54Z INF |  UDP Connectivity  region2.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-29T07:29:54Z INF |  TCP Connectivity  region1.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-29T07:29:54Z INF |  TCP Connectivity  region2.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-29T07:29:54Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
+2026-05-29T07:29:54Z INF |                                                                                     |
+2026-05-29T07:29:54Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
+2026-05-29T07:29:54Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T07:29:54Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=region1.v2.argotunnel.com
+2026-05-29T07:29:54Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=region2.v2.argotunnel.com
+2026-05-29T07:29:54Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=region1.v2.argotunnel.com
+2026-05-29T07:29:54Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=region2.v2.argotunnel.com
+2026-05-29T07:29:54Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=region1.v2.argotunnel.com
+2026-05-29T07:29:54Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=region2.v2.argotunnel.com
+2026-05-29T07:29:54Z INF precheck component="Cloudflare API" details="API is reachable" run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 status=pass target=api.cloudflare.com:443
+2026-05-29T07:29:54Z INF precheck complete hard_fail=false run_id=8de41ca2-a7b0-4962-a1c8-65a779b3fac6 suggested_protocol=quic
+2026-05-29T07:29:55Z INF Registered tunnel connection connIndex=0 connection=07374738-62be-4774-b91d-ce1079b483f2 event=0 ip=198.41.200.33 location=iad11 protocol=quic
+2026-05-29T09:28:29Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-29T09:28:29Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.200.33
+2026-05-29T09:28:30Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.33
+2026-05-29T09:28:30Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.33
+2026-05-29T09:28:30Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.33
+2026-05-29T09:28:30Z ERR Connection terminated connIndex=0
+2026-05-29T09:28:30Z ERR no more connections active and exiting
+2026-05-29T09:28:30Z INF Tunnel server stopped
+2026-05-29T09:28:30Z INF Metrics server stopped
+2026-05-29T09:29:17Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-29T09:29:17Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-29T09:29:21Z INF +--------------------------------------------------------------------------------------------+
+2026-05-29T09:29:21Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-29T09:29:21Z INF |  https://armor-happens-undergraduate-annually.trycloudflare.com                            |
+2026-05-29T09:29:21Z INF +--------------------------------------------------------------------------------------------+
+2026-05-29T09:29:21Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-29T09:29:21Z INF Version 2026.5.2 (Checksum 5a4e8ce2701105271412059f44b6a0bf1ae4542b4d98ff3180c0c019443a5815)
+2026-05-29T09:29:21Z INF GOOS: linux, GOVersion: go1.26.3, GoArch: arm64
+2026-05-29T09:29:21Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-29T09:29:21Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-29T09:29:21Z INF Generated Connector ID: ac026061-e559-4d89-82e0-9ab4df8d404c
+2026-05-29T09:29:21Z INF Initial protocol quic
+2026-05-29T09:29:21Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-29T09:29:21Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-29T09:29:21Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-29T09:29:21Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-29T09:29:21Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-29T09:29:22Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T09:29:22Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T09:29:22Z INF |                               CONNECTIVITY PRE-CHECKS                               |
+2026-05-29T09:29:22Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T09:29:22Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                       |
+2026-05-29T09:29:22Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-29T09:29:22Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-29T09:29:22Z INF |  UDP Connectivity  region1.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-29T09:29:22Z INF |  UDP Connectivity  region2.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-29T09:29:22Z INF |  TCP Connectivity  region1.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-29T09:29:22Z INF |  TCP Connectivity  region2.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-29T09:29:22Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
+2026-05-29T09:29:22Z INF |                                                                                     |
+2026-05-29T09:29:22Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
+2026-05-29T09:29:22Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T09:29:22Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=region1.v2.argotunnel.com
+2026-05-29T09:29:22Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=region2.v2.argotunnel.com
+2026-05-29T09:29:22Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=region1.v2.argotunnel.com
+2026-05-29T09:29:22Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=region2.v2.argotunnel.com
+2026-05-29T09:29:22Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=region1.v2.argotunnel.com
+2026-05-29T09:29:22Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=region2.v2.argotunnel.com
+2026-05-29T09:29:22Z INF precheck component="Cloudflare API" details="API is reachable" run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 status=pass target=api.cloudflare.com:443
+2026-05-29T09:29:22Z INF precheck complete hard_fail=false run_id=aed7c744-bfef-4fb1-89a3-d2ced9e48ac2 suggested_protocol=quic
+2026-05-29T09:29:22Z INF Registered tunnel connection connIndex=0 connection=f16fa39b-220e-42c0-981a-d821b467bbd0 event=0 ip=198.41.200.113 location=iad14 protocol=quic
+2026-05-29T11:50:28Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-05-29T11:50:29Z ERR failed to run the datagram handler error="Application error 0x0 (remote)" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T11:50:29Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T11:50:29Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T11:50:29Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T11:50:29Z ERR Connection terminated connIndex=0
+2026-05-29T11:50:29Z ERR no more connections active and exiting
+2026-05-29T11:50:29Z INF Tunnel server stopped
+2026-05-29T11:50:29Z INF Metrics server stopped
+2026-05-29T11:51:19Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-05-29T11:51:19Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-05-29T11:51:25Z INF +--------------------------------------------------------------------------------------------+
+2026-05-29T11:51:25Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-05-29T11:51:25Z INF |  https://tuesday-activity-regular-emperor.trycloudflare.com                                |
+2026-05-29T11:51:25Z INF +--------------------------------------------------------------------------------------------+
+2026-05-29T11:51:25Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
+2026-05-29T11:51:25Z INF Version 2026.5.2 (Checksum 5a4e8ce2701105271412059f44b6a0bf1ae4542b4d98ff3180c0c019443a5815)
+2026-05-29T11:51:25Z INF GOOS: linux, GOVersion: go1.26.3, GoArch: arm64
+2026-05-29T11:51:25Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5000]
+2026-05-29T11:51:25Z INF Autoupdate frequency is set autoupdateFreq=86400000
+2026-05-29T11:51:25Z INF Generated Connector ID: e0ec89b2-6688-4341-8559-a488bbea1f82
+2026-05-29T11:51:25Z INF Initial protocol quic
+2026-05-29T11:51:25Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-29T11:51:25Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-29T11:51:25Z INF ICMP proxy will use 172.18.0.5 as source for IPv4
+2026-05-29T11:51:25Z INF ICMP proxy will use fdba:17c8:6c94::4 in zone eth0 as source for IPv6
+2026-05-29T11:51:25Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-05-29T11:51:26Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T11:51:26Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T11:51:26Z INF |                               CONNECTIVITY PRE-CHECKS                               |
+2026-05-29T11:51:26Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T11:51:26Z INF |  COMPONENT         TARGET                     STATUS  DETAILS                       |
+2026-05-29T11:51:26Z INF |  DNS Resolution    region1.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-29T11:51:26Z INF |  DNS Resolution    region2.v2.argotunnel.com  PASS    DNS Resolved successfully     |
+2026-05-29T11:51:26Z INF |  UDP Connectivity  region1.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-29T11:51:26Z INF |  UDP Connectivity  region2.v2.argotunnel.com  PASS    QUIC connection successful    |
+2026-05-29T11:51:26Z INF |  TCP Connectivity  region1.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-29T11:51:26Z INF |  TCP Connectivity  region2.v2.argotunnel.com  PASS    HTTP/2 connection successful  |
+2026-05-29T11:51:26Z INF |  Cloudflare API    api.cloudflare.com:443     PASS    API is reachable              |
+2026-05-29T11:51:26Z INF |                                                                                     |
+2026-05-29T11:51:26Z INF |  SUMMARY: Environment is healthy. cloudflared will use 'quic' as primary protocol.  |
+2026-05-29T11:51:26Z INF +-------------------------------------------------------------------------------------+
+2026-05-29T11:51:26Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=region1.v2.argotunnel.com
+2026-05-29T11:51:26Z INF precheck component="DNS Resolution" details="DNS Resolved successfully" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=region2.v2.argotunnel.com
+2026-05-29T11:51:26Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=region1.v2.argotunnel.com
+2026-05-29T11:51:26Z INF precheck component="UDP Connectivity" details="QUIC connection successful" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=region2.v2.argotunnel.com
+2026-05-29T11:51:26Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=region1.v2.argotunnel.com
+2026-05-29T11:51:26Z INF precheck component="TCP Connectivity" details="HTTP/2 connection successful" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=region2.v2.argotunnel.com
+2026-05-29T11:51:26Z INF precheck component="Cloudflare API" details="API is reachable" run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 status=pass target=api.cloudflare.com:443
+2026-05-29T11:51:26Z INF precheck complete hard_fail=false run_id=eda030cf-a0a9-43f3-8cb1-ee7a35d79cf5 suggested_protocol=quic
+2026-05-29T11:51:26Z INF Registered tunnel connection connIndex=0 connection=ba2499ed-f986-4eca-a320-acf767f6911c event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T13:29:26Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:29:26Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:29:26Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:29:26Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:29:26Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:29:27Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:29:27Z INF Registered tunnel connection connIndex=0 connection=f5764a16-6dc7-4d98-ae8f-c978ddf1b1f3 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T13:37:37Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:37:37Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:37:37Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:37:37Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:37:37Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:37:37Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T13:37:38Z INF Registered tunnel connection connIndex=0 connection=2cce0660-ddf0-4c90-b2f8-f1f9efb8f43c event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T17:01:27Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T17:01:27Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T17:01:28Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T17:01:28Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T17:01:28Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T17:01:29Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T17:01:35Z INF Registered tunnel connection connIndex=0 connection=6fdf1779-2413-4d40-927e-6cef46ad01c8 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T20:21:36Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:21:36Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:21:37Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:21:37Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:21:37Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:21:38Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:21:46Z INF Registered tunnel connection connIndex=0 connection=7c6f12bc-5d5d-4be0-96e8-d87963cd4d24 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T20:39:03Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:38:59Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:39:05Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:39:05Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:39:05Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:39:05Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T20:39:06Z INF Registered tunnel connection connIndex=0 connection=2579b76a-83a0-4769-a73e-63b45af7d7aa event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T21:44:41Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:44:41Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:44:41Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:44:41Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:44:41Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:44:41Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:44:41Z INF Registered tunnel connection connIndex=0 connection=d6a34672-3fc9-4c69-b2e2-c5ba7c6c2897 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-29T21:45:38Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:45:38Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:45:38Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:45:38Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:45:38Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:45:40Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-29T21:45:40Z INF Registered tunnel connection connIndex=0 connection=4b89c75e-2983-47a3-94e2-feab21533e69 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-30T01:08:12Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T01:08:15Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T01:08:24Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T01:08:25Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T01:08:25Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T01:08:32Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T01:08:55Z INF Registered tunnel connection connIndex=0 connection=1453fd70-b15b-433a-9a76-cf1451425d68 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-30T02:50:26Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:50:26Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:50:26Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:50:26Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:50:26Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:50:28Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:50:28Z INF Registered tunnel connection connIndex=0 connection=5db6abd7-3cc6-4bb8-8342-a37f34bce7b5 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-30T02:57:58Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:57:58Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:57:58Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:57:58Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:57:58Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:00Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:01Z INF Registered tunnel connection connIndex=0 connection=662f71f1-b70f-41c9-95ae-04a84dfabd0f event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-30T02:58:32Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:32Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:32Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:32Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:32Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:34Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T02:58:34Z INF Registered tunnel connection connIndex=0 connection=2157d0cb-c788-440f-b620-635917eee800 event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-30T03:00:03Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:00:03Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:00:03Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:00:03Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:00:03Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:00:03Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:00:04Z INF Registered tunnel connection connIndex=0 connection=1d9caa72-35cb-4127-ad29-39d5bb0495bf event=0 ip=198.41.200.113 location=iad19 protocol=quic
+2026-05-30T03:01:24Z ERR failed to run the datagram handler error="timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:01:24Z ERR failed to accept incoming stream requests error="failed to accept QUIC stream: timeout: no recent network activity" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:01:24Z ERR failed to serve tunnel connection error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:01:24Z ERR Serve tunnel error error="datagram manager encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:01:24Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:01:25Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveID(65074) CurveP256] connIndex=0 event=0 ip=198.41.200.113
+2026-05-30T03:01:26Z INF Registered tunnel connection connIndex=0 connection=877e9110-c891-4b92-b99d-3ed59ef7090b event=0 ip=198.41.200.113 location=iad19 protocol=quic
