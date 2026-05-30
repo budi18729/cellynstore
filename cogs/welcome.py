@@ -1,6 +1,4 @@
 import os
-import datetime
-import asyncio
 import aiohttp
 import discord
 from discord import app_commands
@@ -96,7 +94,7 @@ class WelcomeCog(commands.Cog):
             ok = await self._download_gif(gif.url, WELCOME_GIF_PATH)
             if ok:
                 self._has_gif = True
-                await interaction.followup.send(f"✅ GIF welcome berhasil diupload!", ephemeral=True)
+                await interaction.followup.send("✅ GIF welcome berhasil diupload!", ephemeral=True)
             else:
                 await interaction.followup.send("❌ Gagal upload GIF.", ephemeral=True)
         elif action == "boostgif":
@@ -106,7 +104,7 @@ class WelcomeCog(commands.Cog):
             ok = await self._download_gif(gif.url, BOOST_GIF_PATH)
             if ok:
                 self._has_boost_gif = True
-                await interaction.followup.send(f"✅ GIF boost berhasil diupload!", ephemeral=True)
+                await interaction.followup.send("✅ GIF boost berhasil diupload!", ephemeral=True)
             else:
                 await interaction.followup.send("❌ Gagal upload GIF boost.", ephemeral=True)
         elif action == "test":

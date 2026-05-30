@@ -3,7 +3,6 @@ import datetime
 import discord
 from discord.ext import commands
 from utils.config import ADMIN_ROLE_ID, LOG_CHANNEL_ID, STORE_NAME, TRANSCRIPT_CHANNEL_ID
-from utils.db import get_conn
 from utils.counter import next_ticket_number
 from utils.transcript import generate as generate_transcript
 

@@ -1,4 +1,3 @@
-import sqlite3
 from utils.db import get_conn
 
 def load_vilog_tickets():

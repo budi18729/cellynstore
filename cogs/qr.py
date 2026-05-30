@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from utils.db import get_conn
-from utils.config import ADMIN_ROLE_ID
 
 def _migrate():
     conn = get_conn()

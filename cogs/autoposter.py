@@ -1,6 +1,4 @@
-import asyncio
 import aiohttp
-import discord
 from discord.ext import commands, tasks
 from utils.autoposter_settings import (
     get_autopost_tasks,
@@ -9,7 +7,6 @@ from utils.autoposter_settings import (
     log_autopost_history,
     init_autopost_tables
 )
-from utils.config import ADMIN_ROLE_ID
 
 LOOP_INTERVAL = 60
 
