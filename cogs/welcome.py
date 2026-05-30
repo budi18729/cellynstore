@@ -143,7 +143,6 @@ class WelcomeCog(commands.Cog):
         if not channel:
             return
         member_count = sum(1 for m in member.guild.members if not m.bot)
-        import datetime
         now = datetime.datetime.now(datetime.timezone.utc)
         joined = member.joined_at
         if joined:
