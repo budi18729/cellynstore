@@ -15,6 +15,7 @@ from utils.robux_stock import (
     add_available as add_robux_stock_available,
 )
 from utils.store_hours import is_store_open
+from utils.paginator import PaginatedSelectView
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -121,9 +122,17 @@ class CategoryButton(discord.ui.Button):
                 description=f"{item['robux']} Robux — {harga_str}",
                 value=str(item["id"]),
             ))
-        view = discord.ui.View(timeout=60)
-        select = ItemSelect(options, self.category)
-        view.add_item(select)
+        if not options:
+            await interaction.response.send_message(
+                f"Belum ada item aktif di kategori **{self.category}**.", ephemeral=True
+            )
+            return
+        view = PaginatedSelectView(
+            options,
+            on_select=_robux_handle_item,
+            placeholder=f"Pilih item {self.category}",
+            owner_id=interaction.user.id,
+        )
         await interaction.response.send_message(
             f"Pilih item **{self.category}**:",
             view=view,
@@ -274,6 +283,33 @@ class CartView(discord.ui.View):
         await interaction.response.edit_message(content="Keranjang dibatalkan.", embed=None, view=None)
 
 
+async def _robux_handle_item(interaction: discord.Interaction, value: str):
+    """Tambahkan item terpilih ke keranjang lalu tampilkan CartView."""
+    item_id = int(value)
+    item = next((p for p in PRODUCTS if p["id"] == item_id), None)
+    if not item:
+        await interaction.response.send_message("Item tidak ditemukan!", ephemeral=True)
+        return
+
+    rate = get_rate()
+    if rate == 0:
+        await interaction.response.send_message("Rate belum diset oleh admin!", ephemeral=True)
+        return
+
+    cog = interaction.client.cogs.get("RobuxStore")
+    user_id = interaction.user.id
+
+    # Tambah item ke cart
+    if user_id not in cog.carts:
+        cog.carts[user_id] = []
+    cog.carts[user_id].append(item)
+
+    cart = cog.carts[user_id]
+    embed = _build_cart_embed(cart, rate)
+    view = CartView(user_id=user_id)
+    await interaction.response.edit_message(content=None, embed=embed, view=view)
+
+
 class ItemSelect(discord.ui.Select):
     def __init__(self, options, category):
         super().__init__(
@@ -283,35 +319,7 @@ class ItemSelect(discord.ui.Select):
         )
 
     async def callback(self, interaction: discord.Interaction):
-        item_id = int(self.values[0])
-        item = next((p for p in PRODUCTS if p["id"] == item_id), None)
-        if not item:
-            await interaction.response.send_message("Item tidak ditemukan!", ephemeral=True)
-            return
-
-        rate = get_rate()
-        if rate == 0:
-            await interaction.response.send_message("Rate belum diset oleh admin!", ephemeral=True)
-            return
-
-        cog = interaction.client.cogs.get("RobuxStore")
-        user_id = interaction.user.id
-
-        # Tambah item ke cart
-        if user_id not in cog.carts:
-            cog.carts[user_id] = []
-        cog.carts[user_id].append(item)
-
-        cart = cog.carts[user_id]
-        embed = _build_cart_embed(cart, rate)
-        view = CartView(user_id=user_id)
-        await interaction.response.edit_message(content=None, embed=embed, view=view)
-
-        if False:  # dead code placeholder — biarkan aja untuk hindari indentasi error
-            guild = interaction.guild
-            member = interaction.user
-            total = item["robux"] * rate
-            cog = interaction.client.cogs.get("RobuxStore")
+        await _robux_handle_item(interaction, self.values[0])
 
 
 class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):

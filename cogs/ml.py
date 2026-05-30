@@ -8,6 +8,7 @@ from utils.counter import next_ticket_number
 from utils.transcript import generate as generate_transcript
 from utils.db import get_conn
 from utils.store_hours import is_store_open
+from utils.paginator import PaginatedSelectView
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -272,50 +273,43 @@ class MLConfirmView(discord.ui.View):
         await interaction.response.edit_message(content="Order dibatalkan.", embed=None, view=None)
 
 
-class ProductSelect(discord.ui.Select):
-    def __init__(self, game: dict):
-        self.game = game
-        products = _load_products(game["code"])
-        options = [
-            discord.SelectOption(
-                label=p["label"][:100], description=f"Rp {p['harga']:,}", value=str(p["id"])
-            ) for p in products[:25]
-        ] or [discord.SelectOption(label="Tidak ada produk aktif", value="none")]
-        super().__init__(
-            placeholder=f"Pilih produk {game['name']}...",
-            options=options,
-            custom_id=f"ml_product_{game['code']}"
-        )
+def _build_product_options(game: dict) -> list:
+    """Bangun daftar lengkap SelectOption produk untuk sebuah game (tanpa batas 25)."""
+    products = _load_products(game["code"])
+    return [
+        discord.SelectOption(
+            label=p["label"][:100], description=f"Rp {p['harga']:,}", value=str(p["id"])
+        ) for p in products
+    ]
 
-    async def callback(self, interaction: discord.Interaction):
-        if self.values[0] == "none":
-            await interaction.response.send_message("Tidak ada produk tersedia.", ephemeral=True)
-            return
-        pid = int(self.values[0])
-        conn = get_conn()
-        row = conn.execute(
-            "SELECT id, label, dm, harga FROM game_products WHERE id=? AND active=1", (pid,)
-        ).fetchone()
-        conn.close()
-        if not row:
-            await interaction.response.send_message("Produk tidak ditemukan.", ephemeral=True)
-            return
-        product = dict(row)
-        from utils.service_info import get_service_info, build_info_embed
-        info = get_service_info("ml")
-        color = self.game.get("color", 0x3498DB)
-        has_info = any([info["description"], info["terms"], info["payment_info"]])
-        if has_info:
-            embed = build_info_embed(f"Topup {self.game['name']}", info, color)
-            embed.add_field(
-                name="🛒 Produk Dipilih",
-                value=f"**{product['label']}** — Rp {product['harga']:,}",
-                inline=False
-            )
-            view = MLConfirmView(game=self.game, product=product)
-            await interaction.response.edit_message(content=None, embed=embed, view=view)
-        else:
-            await interaction.response.send_modal(GameFormModal(game=self.game, product=product))
+
+async def _ml_handle_product(interaction: discord.Interaction, game: dict, value: str):
+    """Dipanggil saat member memilih produk dari dropdown (terpaginasi)."""
+    pid = int(value)
+    conn = get_conn()
+    row = conn.execute(
+        "SELECT id, label, dm, harga FROM game_products WHERE id=? AND active=1", (pid,)
+    ).fetchone()
+    conn.close()
+    if not row:
+        await interaction.response.send_message("Produk tidak ditemukan.", ephemeral=True)
+        return
+    product = dict(row)
+    from utils.service_info import get_service_info, build_info_embed
+    info = get_service_info("ml")
+    color = game.get("color", 0x3498DB)
+    has_info = any([info["description"], info["terms"], info["payment_info"]])
+    if has_info:
+        embed = build_info_embed(f"Topup {game['name']}", info, color)
+        embed.add_field(
+            name="🛒 Produk Dipilih",
+            value=f"**{product['label']}** — Rp {product['harga']:,}",
+            inline=False
+        )
+        view = MLConfirmView(game=game, product=product)
+        await interaction.response.edit_message(content=None, embed=embed, view=view)
+    else:
+        await interaction.response.send_modal(GameFormModal(game=game, product=product))
 
 
 class GameSelect(discord.ui.Select):
@@ -337,8 +331,18 @@ class GameSelect(discord.ui.Select):
         if not game:
             await interaction.response.send_message("Game tidak ditemukan.", ephemeral=True)
             return
-        view = discord.ui.View(timeout=60)
-        view.add_item(ProductSelect(game))
+        options = _build_product_options(game)
+        if not options:
+            await interaction.response.send_message(
+                f"Belum ada produk aktif untuk **{game['name']}**.", ephemeral=True
+            )
+            return
+        view = PaginatedSelectView(
+            options,
+            on_select=lambda i, v, g=game: _ml_handle_product(i, g, v),
+            placeholder=f"Pilih produk {game['name']}",
+            owner_id=interaction.user.id,
+        )
         await interaction.response.send_message(
             f"Pilih produk **{game['name']}**:", view=view, ephemeral=True
         )
