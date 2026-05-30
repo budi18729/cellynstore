@@ -22,8 +22,12 @@ LAST_TX_KEY = "reviews_last_tx_id"
 STATUS_PENDING = "pending"     # prompt sudah dikirim, menunggu rating member
 STATUS_RATED = "rated"         # member sudah memberi rating
 STATUS_PUBLISHED = "published" # ulasan sudah diposting ke channel testimoni
+STATUS_EXPIRED = "expired"     # lewat 24 jam tanpa rating -> garansi hangus
 
 VALID_RATINGS = (1, 2, 3, 4, 5)
+
+# Batas waktu memberi rating sebelum garansi hangus.
+RATING_DEADLINE_HOURS = 24
 
 
 def init_reviews_db():
@@ -45,16 +49,27 @@ def init_reviews_db():
             prompt_msg_id    INTEGER,
             published_msg_id INTEGER,
             created_at   TEXT NOT NULL,
+            deadline_at  TEXT,
             rated_at     TEXT
         )
         """
     )
+    # Migrasi: tambah kolom deadline_at bila DB lama belum punya.
+    try:
+        c.execute("ALTER TABLE reviews ADD COLUMN deadline_at TEXT")
+    except Exception as e:
+        if "duplicate column" not in str(e).lower():
+            print(f"[Reviews] migrasi deadline_at: {e}")
     conn.commit()
     conn.close()
 
 
 def _now_iso():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+
+def _deadline_from(created: datetime.datetime) -> datetime.datetime:
+    return created + datetime.timedelta(hours=RATING_DEADLINE_HOURS)
 
 
 # ── Pelacakan transaksi (poller) ────────────────────────────────────────────────
@@ -121,13 +136,16 @@ def create_pending(tx_id, user_id: int, layanan: str = None, item: str = None,
     tx_id sudah pernah dibuat (UNIQUE) — anti-duplikat."""
     conn = get_conn()
     c = conn.cursor()
+    now = datetime.datetime.now(datetime.timezone.utc)
+    deadline = _deadline_from(now)
     try:
         c.execute(
             """
-            INSERT INTO reviews (tx_id, user_id, layanan, item, nominal, status, created_at)
-            VALUES (?,?,?,?,?,?,?)
+            INSERT INTO reviews (tx_id, user_id, layanan, item, nominal, status, created_at, deadline_at)
+            VALUES (?,?,?,?,?,?,?,?)
             """,
-            (tx_id, user_id, layanan, item, nominal or 0, STATUS_PENDING, _now_iso()),
+            (tx_id, user_id, layanan, item, nominal or 0, STATUS_PENDING,
+             now.isoformat(), deadline.isoformat()),
         )
         conn.commit()
         return c.lastrowid
@@ -190,6 +208,39 @@ def set_published(review_id: int, published_msg_id: int):
     )
     conn.commit()
     conn.close()
+
+
+# ── Kedaluwarsa 24 jam ───────────────────────────────────────────────────────────
+def fetch_expired_pending() -> list[dict]:
+    """Ambil review 'pending' yang sudah lewat deadline_at (untuk diberi tahu hangus)."""
+    now_iso = _now_iso()
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        """
+        SELECT * FROM reviews
+        WHERE status = ? AND deadline_at IS NOT NULL AND deadline_at <= ?
+        ORDER BY id ASC
+        """,
+        (STATUS_PENDING, now_iso),
+    )
+    rows = c.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def mark_expired(review_id: int) -> bool:
+    """Tandai review pending menjadi 'expired' (garansi hangus). Hanya bila masih pending."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        "UPDATE reviews SET status=? WHERE id=? AND status=?",
+        (STATUS_EXPIRED, review_id, STATUS_PENDING),
+    )
+    changed = c.rowcount
+    conn.commit()
+    conn.close()
+    return changed > 0
 
 
 # ── Statistik & listing ──────────────────────────────────────────────────────────
