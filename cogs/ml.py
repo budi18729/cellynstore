@@ -9,6 +9,7 @@ from utils.transcript import generate as generate_transcript
 from utils.db import get_conn
 from utils.store_hours import is_store_open
 from utils.paginator import PaginatedSelectView, with_price
+from utils import ticket_ui
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -206,48 +207,36 @@ class GameFormModal(discord.ui.Modal):
         if admin_role:
             overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
         game_slug = game["code"].lower().replace(" ", "")
+        ticket_number = next_ticket_number()
         channel = await guild.create_text_channel(
-            name=f"{game_slug}-{user.name}", category=category, overwrites=overwrites
+            name=ticket_ui.channel_name(game_slug, ticket_number, user.name), category=category, overwrites=overwrites
         )
         server_val = self.server_id_input.value.strip() if game.get("needs_server") else "-"
         ticket = {
             "channel_id": channel.id, "user_id": user.id,
             "id_ml": self.player_id.value.strip(), "server_id": server_val,
             "dm": product["dm"], "item_label": product["label"], "harga": product["harga"],
+            "ticket_number": ticket_number,
             "opened_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "last_activity": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "game": game["code"],
         }
         cog.active_tickets[channel.id] = ticket
         save_ml_ticket(ticket)
-        color = game.get("color", 0x3498DB)
-        embed = discord.Embed(
-            title=f"TOPUP {game['name'].upper()} — {STORE_NAME}",
-            color=color,
-            timestamp=datetime.datetime.now(datetime.timezone.utc)
-        )
         id_label = game.get("id_label", "Player ID")
-        info = (
-            f"Halo, {user.mention}! Tiket topup kamu sudah dibuat.\n"
-            f"──────────────────────────────\n"
-            f"Member       : {user.mention}\n"
-            f"{id_label:<13}: `{self.player_id.value.strip()}`\n"
-        )
+        _extra = [(id_label, f"`{self.player_id.value.strip()}`", True)]
         if game.get("needs_server") and server_val != "-":
-            info += f"Server ID    : `{server_val}`\n"
-        info += (
-            f"Item         : {product['label']}\n"
-            f"Total        : Rp {product['harga']:,}\n"
-            f"Metode       : QRIS\n"
-            f"Status       : Menunggu proses\n"
-            f"──────────────────────────────\n"
-            f"**!mlselesai** — konfirmasi topup selesai\n"
-            f"**!mlbatal [alasan]** — batalkan tiket\n"
-            f"──────────────────────────────\n"
-            f"Tiket yang tidak aktif selama 2 jam akan otomatis ditutup."
+            _extra.append(("Server ID", f"`{server_val}`", True))
+        _extra.append(("Status", "Menunggu proses", False))
+        _extra.append(("Perintah Admin", "**!mlselesai** — konfirmasi topup selesai\n**!mlbatal [alasan]** — batalkan tiket", False))
+        _extra.append(("Peringatan", "Tiket yang tidak aktif selama 2 jam akan otomatis ditutup.", False))
+        embed = ticket_ui.open_ticket_embed(
+            game_slug, ticket_number, user,
+            item=product["label"],
+            total=f"Rp {product['harga']:,}",
+            payment="QRIS",
+            extra_fields=_extra,
         )
-        embed.add_field(name="\u200b", value=info, inline=False)
-        embed.set_footer(text=STORE_NAME)
         if admin_role:
             await channel.send(content=admin_role.mention, embed=embed)
         else:
@@ -530,7 +519,7 @@ class MLStore(commands.Cog):
             return
         ticket = self.active_tickets[channel_id]
         member = ctx.guild.get_member(ticket["user_id"])
-        nomor = next_ticket_number()
+        nomor = ticket.get("ticket_number") or next_ticket_number()
         closed_at = datetime.datetime.now(datetime.timezone.utc)
         await ctx.send(
             f"{member.mention if member else ''}\n"
@@ -552,26 +541,19 @@ class MLStore(commands.Cog):
         game_info = _get_game(ticket.get("game", "ML")) or {}
         game_name = game_info.get("name", ticket.get("game", "ML"))
         if log_ch:
-            log_embed = discord.Embed(
-                title=f"TOPUP {game_name.upper()} SUKSES — #{nomor:04d}",
-                description="Topup berhasil. Terima kasih telah berbelanja di Cellyn Store!",
-                color=game_info.get("color", 0x3498DB),
-                timestamp=closed_at
-            )
-            log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-            log_embed.add_field(
-                name="Member",
-                value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
-                inline=False
-            )
-            id_label = game_info.get("id_label", "Player ID")
-            log_embed.add_field(name=id_label, value=f"`{ticket['id_ml']}`", inline=False)
+            _extra = [(game_info.get("id_label", "Player ID"), f"`{ticket['id_ml']}`", True)]
             if game_info.get("needs_server") and ticket.get("server_id", "-") != "-":
-                log_embed.add_field(name="Server ID", value=f"`{ticket['server_id']}`", inline=False)
-            log_embed.add_field(name="Item", value=ticket.get("item_label", f"{ticket['dm']} Diamond"), inline=False)
-            log_embed.add_field(name="Total", value=f"Rp {ticket['harga']:,}", inline=False)
-            log_embed.add_field(name="Metode Pembayaran", value="QRIS", inline=False)
-            log_embed.set_footer(text=STORE_NAME)
+                _extra.append(("Server ID", f"`{ticket['server_id']}`", True))
+            log_embed = ticket_ui.success_log_embed(
+                ticket.get("game", "ml").lower(), nomor,
+                subtitle=f"{game_name} — Topup",
+                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
+                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
+                item=ticket.get("item_label", f"{ticket['dm']} Diamond"),
+                total=f"Rp {ticket['harga']:,}",
+                payment="QRIS",
+                extra_fields=_extra,
+            )
             await log_ch.send(embed=log_embed)
         try:
             from utils.db import log_transaction

@@ -10,6 +10,8 @@ from utils.config import (
 from utils.db import get_conn
 from utils.fee import format_nominal
 import utils.transcript as transcript_gen
+from utils.counter import next_ticket_number
+from utils import ticket_ui
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 COLOR_WAIT   = 0xFFD700   # kuning — menunggu admin
@@ -264,8 +266,9 @@ class JBTradeModal(discord.ui.Modal, title="Midman Jual Beli"):
         if admin_role:
             overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
 
+        ticket_number = next_ticket_number()
         channel = await guild.create_text_channel(
-            name=f"jb-{user.name}",
+            name=ticket_ui.channel_name("jualbeli", ticket_number, user.name),
             category=category,
             overwrites=overwrites
         )
@@ -279,6 +282,7 @@ class JBTradeModal(discord.ui.Modal, title="Midman Jual Beli"):
             "fee_final": None,
             "fee_penanggung": None,
             "admin_id": None,
+            "ticket_number": ticket_number,
             "opened_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "warned": 0,
             "status": "menunggu_admin",
@@ -287,7 +291,18 @@ class JBTradeModal(discord.ui.Modal, title="Midman Jual Beli"):
         cog.active_tickets[channel.id] = ticket
         save_jb_ticket(ticket)
 
-        e = embed_menunggu_admin(STORE_NAME, user.mention, self.deskripsi.value.strip(), harga_int)
+        e = ticket_ui.open_ticket_embed(
+            "jualbeli", ticket_number, user,
+            item=self.deskripsi.value.strip(),
+            total=format_nominal(harga_int),
+            payment="QRIS",
+            extra_fields=[
+                ("Penjual", user.mention, True),
+                ("Pembeli", "-", True),
+                ("Admin", "-", True),
+                ("Status", "Menunggu admin bergabung", False),
+                ("Peringatan", "Tiket yang tidak aktif selama 2 jam akan otomatis ditutup.", False),
+            ])
         view = JBAdminSetupView()
         if admin_role:
             msg = await channel.send(content=admin_role.mention, embed=e, view=view)
@@ -528,17 +543,20 @@ class JualBeli(commands.Cog):
             fee = ticket.get("fee_final")
             penanggung = ticket.get("fee_penanggung", "-")
             release = format_nominal(ticket["harga"] - fee) if fee and penanggung == "penjual" else format_nominal(ticket["harga"])
-            log_e = discord.Embed(title=f"MIDMAN JUAL BELI SELESAI — {STORE_NAME}",
-                                  color=COLOR_DONE,
-                                  timestamp=datetime.datetime.now(datetime.timezone.utc))
-            log_e.add_field(name="Admin", value=f"{admin.mention}\n`{admin.id}`", inline=False)
-            log_e.add_field(name="Penjual", value=f"{p1.mention if p1 else '-'}\n`{ticket['p1_id']}`", inline=False)
-            log_e.add_field(name="Pembeli", value=f"{p2.mention if p2 else '-'}\n`{ticket.get('p2_id', '-')}`", inline=False)
-            log_e.add_field(name="Item", value=ticket["deskripsi"], inline=False)
-            log_e.add_field(name="Harga", value=format_nominal(ticket["harga"]), inline=False)
-            log_e.add_field(name="Fee", value=f"{format_nominal(fee)} (ditanggung {penanggung})" if fee else "-", inline=False)
-            log_e.add_field(name="Dana ke Penjual", value=release, inline=False)
-            log_e.set_footer(text=STORE_NAME)
+            nomor = ticket.get("ticket_number") or next_ticket_number()
+            log_e = ticket_ui.success_log_embed(
+                "jualbeli", nomor,
+                subtitle="Midman jual beli selesai. Item & dana telah diserahkan.",
+                admin_value=f"{admin.mention}\n`{admin.id}`",
+                item=ticket["deskripsi"],
+                total=format_nominal(ticket["harga"]),
+                payment="QRIS",
+                extra_fields=[
+                    ("Penjual", f"{p1.mention if p1 else '-'}\n`{ticket['p1_id']}`", True),
+                    ("Pembeli", f"{p2.mention if p2 else '-'}\n`{ticket.get('p2_id', '-')}`", True),
+                    ("Fee", f"{format_nominal(fee)} (ditanggung {penanggung})" if fee else "-", False),
+                    ("Dana ke Penjual", release, True),
+                ])
             await log_ch.send(embed=log_e)
 
         # Transcript

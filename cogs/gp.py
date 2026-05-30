@@ -19,6 +19,8 @@ from utils.gp_db import (
 )
 from utils.robux_stock import get_available as get_robux_stock_available, get_out_total as get_robux_out_total, record_outgoing as record_robux_outgoing
 from utils.store_hours import is_store_open
+from utils.counter import next_ticket_number
+from utils import ticket_ui
 
 GP_CATALOG_CHANNEL_ID = 1478917118715236603
 MIN_ROBUX = 300
@@ -238,8 +240,9 @@ class ConfirmView(discord.ui.View):
         if admin_role:
             overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
 
+        ticket_number = next_ticket_number()
         channel = await guild.create_text_channel(
-            name=f"gp-{member.name}", category=ticket_category, overwrites=overwrites
+            name=ticket_ui.channel_name("gp", ticket_number, member.name), category=ticket_category, overwrites=overwrites
         )
 
         now = datetime.datetime.now(datetime.timezone.utc)
@@ -253,6 +256,7 @@ class ConfirmView(discord.ui.View):
             "paid":        False,
             "gp_link":     None,
             "admin_id":    None,
+            "ticket_number": ticket_number,
             "opened_at":   now.isoformat(),
             "last_activity": now.isoformat(),
             "warned":      False,
@@ -261,37 +265,20 @@ class ConfirmView(discord.ui.View):
         cog.active_tickets[channel.id] = ticket
         save_gp_ticket(ticket)
 
-        embed = discord.Embed(
-            title=f"TOPUP ROBUX VIA GAMEPASS — {STORE_NAME}",
-            color=COLOR,
-            timestamp=now
+        embed = ticket_ui.open_ticket_embed(
+            "gp", ticket_number, member,
+            item=f"{self.robux} Robux via Gamepass",
+            total=f"Rp {self.total:,}",
+            payment="QRIS",
+            extra_fields=[
+                ("Rate", f"Rp {self.rate:,}/Robux", True),
+                ("Robux Diterima", f"{self.robux} Robux (after tax)", True),
+                ("Harga Gamepass", f"**{self.gp_price} Robux**\n*(buat gamepass dengan harga ini setelah bayar)*", True),
+                ("Langkah Selanjutnya", "1. Bayar tagihan ke admin via QRIS\n2. Kirim bukti pembayaran di tiket ini\n3. Setelah admin konfirmasi, buat gamepass dengan harga {} Robux\n4. Kirim link gamepass di sini\n5. Tunggu Robux masuk 3-7 hari".format(self.gp_price), False),
+                ("Peringatan", "Tiket tidak aktif 2 jam akan otomatis ditutup.", False),
+                ("Catatan", "Jangan hapus gamepass sebelum Robux masuk.", False),
+            ],
         )
-        embed.add_field(name="Rate", value=f"**Rp {self.rate:,}/Robux**", inline=True)
-        embed.add_field(name="Member", value=member.mention, inline=True)
-        embed.add_field(name="Robux Diterima", value=f"{self.robux} Robux (after tax)", inline=True)
-        embed.add_field(name="Total Tagihan", value=f"**Rp {self.total:,}**", inline=True)
-        embed.add_field(
-            name="Harga Gamepass",
-            value=f"**{self.gp_price} Robux**\n*(buat gamepass dengan harga ini setelah bayar)*",
-            inline=True
-        )
-        embed.add_field(
-            name="Langkah Selanjutnya",
-            value=(
-                "1. **Bayar tagihan** ke admin (QRIS/DANA/BCA)\n"
-                "2. Kirim bukti pembayaran di tiket ini\n"
-                "3. Setelah admin konfirmasi, buat gamepass dengan harga **{} Robux**\n"
-                "4. Kirim link gamepass di sini\n"
-                "5. Tunggu Robux masuk 3-7 hari 🎉"
-            ).format(self.gp_price),
-            inline=False
-        )
-        embed.add_field(
-            name="Peringatan",
-            value="Tiket tidak aktif 2 jam akan otomatis ditutup.",
-            inline=False
-        )
-        embed.set_footer(text=f"{STORE_NAME} • Jangan hapus gamepass sebelum Robux masuk")
 
         ping = admin_role.mention if admin_role else ""
         await channel.send(
@@ -432,7 +419,7 @@ class GPStore(commands.Cog):
         durasi_secs = int((now - opened_at).total_seconds())
 
         from utils.counter import next_ticket_number
-        nomor = next_ticket_number()
+        nomor = ticket.get("ticket_number") or next_ticket_number()
 
         transcript_ch = ctx.guild.get_channel(TRANSCRIPT_CHANNEL_ID)
         if transcript_ch:
@@ -448,18 +435,19 @@ class GPStore(commands.Cog):
 
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            log_embed = discord.Embed(
-                title=f"GP TOPUP SUKSES — #{nomor:04d}",
-                description="Gamepass berhasil dibeli. Robux masuk 3-7 hari.",
-                color=COLOR,
-                timestamp=now
+            log_embed = ticket_ui.success_log_embed(
+                "gp", nomor,
+                subtitle="Gamepass berhasil dibeli. Robux masuk 3-7 hari.",
+                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
+                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
+                item=f"{ticket['robux']} Robux via Gamepass",
+                total=f"Rp {ticket['total']:,}",
+                payment="QRIS",
+                extra_fields=[
+                    ("Robux Diterima", f"{ticket['robux']} Robux (after tax)", True),
+                    ("Harga Gamepass", f"{ticket['gp_price']} Robux", True),
+                ],
             )
-            log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-            log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
-            log_embed.add_field(name="Robux", value=f"{ticket['robux']} Robux (after tax)", inline=True)
-            log_embed.add_field(name="Harga Gamepass", value=f"{ticket['gp_price']} Robux", inline=True)
-            log_embed.add_field(name="Total", value=f"Rp {ticket['total']:,}", inline=False)
-            log_embed.set_footer(text=STORE_NAME)
             await log_ch.send(embed=log_embed)
 
         try:
