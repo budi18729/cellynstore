@@ -13,6 +13,7 @@ rating = garansi, jadi semua transaksi diberi kesempatan rating.
 """
 
 import re
+import datetime
 
 import discord
 from discord import app_commands
@@ -130,6 +131,13 @@ class StarButton(
                 "Rating ini sudah tidak tersedia.", ephemeral=True
             )
             return
+        if review["status"] == rv.STATUS_EXPIRED:
+            await interaction.response.send_message(
+                f"Maaf, batas waktu **{rv.RATING_DEADLINE_HOURS} jam** sudah lewat, "
+                "jadi rating untuk transaksi ini sudah ditutup dan garansi tidak berlaku. 🙏",
+                ephemeral=True,
+            )
+            return
         if review["status"] != rv.STATUS_PENDING:
             await interaction.response.send_message(
                 "Kamu sudah memberi rating untuk transaksi ini. Terima kasih! 🙏",
@@ -154,12 +162,26 @@ def build_rating_view(review_id: int) -> discord.ui.View:
 
 
 def build_prompt_embed(review: dict) -> discord.Embed:
+    deadline_txt = ""
+    if review.get("deadline_at"):
+        try:
+            dl = datetime.datetime.fromisoformat(review["deadline_at"])
+            # Tampilkan sebagai timestamp Discord relatif (mis. "in 24 hours") + absolut.
+            ts = int(dl.timestamp())
+            deadline_txt = f"\n\n⏳ **Batas waktu: <t:{ts}:R>** (<t:{ts}:f>)"
+        except Exception:
+            deadline_txt = ""
+
     embed = discord.Embed(
         title="⭐ Beri Rating Transaksimu",
         description=(
             f"Terima kasih sudah berbelanja di **{STORE_NAME}**!\n\n"
-            "Beri rating untuk transaksi ini dengan menekan tombol bintang di bawah.\n"
-            "**Rating = garansi** transaksimu, jadi jangan lupa ya! 💛"
+            "Beri rating untuk transaksi ini dengan menekan tombol bintang di bawah.\n\n"
+            f"⚠️ **PENTING: Rating = Garansi.**\n"
+            f"Kamu wajib memberi rating dalam **{rv.RATING_DEADLINE_HOURS} jam**. "
+            f"**Tanpa rating sebelum batas waktu, transaksimu TIDAK mendapat garansi.** "
+            f"Mohon beri rating sesegera mungkin ya! 💛"
+            f"{deadline_txt}"
         ),
         color=COLOR_REVIEW,
     )
@@ -168,7 +190,25 @@ def build_prompt_embed(review: dict) -> discord.Embed:
         embed.add_field(name="Item", value=str(review["item"])[:256], inline=True)
     if review.get("nominal"):
         embed.add_field(name="Nominal", value=f"Rp {review['nominal']:,}", inline=True)
-    embed.set_footer(text=STORE_NAME)
+    embed.set_footer(text=f"{STORE_NAME} • Tanpa rating = tanpa garansi")
+    return embed
+
+
+def build_expired_embed(review: dict) -> discord.Embed:
+    """Embed pemberitahuan saat 24 jam lewat tanpa rating (garansi hangus)."""
+    embed = discord.Embed(
+        title="⌛ Waktu Rating Habis — Garansi Hangus",
+        description=(
+            f"Batas waktu **{rv.RATING_DEADLINE_HOURS} jam** untuk memberi rating sudah lewat, "
+            f"sehingga transaksi ini **tidak mendapat garansi**.\n\n"
+            f"Lain kali jangan lupa beri rating segera setelah transaksi ya, agar garansimu aktif. 🙏"
+        ),
+        color=0xED4245,  # merah
+    )
+    embed.add_field(name="Layanan", value=_pretty_layanan(review.get("layanan")), inline=True)
+    if review.get("item"):
+        embed.add_field(name="Item", value=str(review["item"])[:256], inline=True)
+    embed.set_footer(text=f"{STORE_NAME} • Tanpa rating = tanpa garansi")
     return embed
 
 
@@ -201,9 +241,11 @@ class Reviews(commands.Cog):
         # Daftarkan handler tombol persisten sekali.
         self.bot.add_dynamic_items(StarButton)
         self.poll_transactions.start()
+        self.expire_pending.start()
 
     def cog_unload(self):
         self.poll_transactions.cancel()
+        self.expire_pending.cancel()
 
     # ── Poller transaksi baru ─────────────────────
     @tasks.loop(seconds=POLL_INTERVAL_SECONDS)
@@ -230,6 +272,48 @@ class Reviews(commands.Cog):
         # transaksi historis tidak dikirimi prompt rating beruntun.
         if rv.get_last_tx_id() == 0:
             rv.set_last_tx_id(rv.current_max_tx_id())
+
+    # ── Poller kedaluwarsa 24 jam ─────────────────
+    @tasks.loop(minutes=10)
+    async def expire_pending(self):
+        try:
+            overdue = rv.fetch_expired_pending()
+            for review in overdue:
+                if rv.mark_expired(review["id"]):
+                    await self._notify_expired(review)
+        except Exception as e:
+            print(f"[Reviews] expire loop error: {e}")
+
+    @expire_pending.before_loop
+    async def _before_expire(self):
+        await self.bot.wait_until_ready()
+
+    async def _notify_expired(self, review: dict):
+        """Beri tahu buyer bahwa waktu rating habis & garansi hangus."""
+        embed = build_expired_embed(review)
+        user = self.bot.get_user(review["user_id"])
+        if user is None:
+            try:
+                user = await self.bot.fetch_user(review["user_id"])
+            except Exception:
+                user = None
+        # Coba bersihkan tombol pada prompt lama (best-effort, hanya untuk DM).
+        if user is not None:
+            try:
+                await user.send(embed=embed)
+                return
+            except discord.Forbidden:
+                pass
+            except Exception as e:
+                print(f"[Reviews] notify expired DM error {review['user_id']}: {e}")
+        # Fallback ke channel testimoni.
+        if TESTIMONI_CHANNEL_ID:
+            channel = self.bot.get_channel(TESTIMONI_CHANNEL_ID)
+            if channel is not None:
+                try:
+                    await channel.send(content=f"<@{review['user_id']}>", embed=embed)
+                except Exception as e:
+                    print(f"[Reviews] notify expired channel error: {e}")
 
     async def _handle_new_tx(self, tx: dict):
         review_id = rv.create_pending(
