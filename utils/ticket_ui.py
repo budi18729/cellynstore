@@ -73,6 +73,19 @@ def _today_str() -> str:
     return datetime.datetime.now(datetime.timezone.utc).strftime("%d/%m/%Y")
 
 
+def avatar_url(member) -> str | None:
+    """Ambil URL foto profil member/user dengan aman (None bila tidak ada)."""
+    if member is None:
+        return None
+    try:
+        return member.display_avatar.url
+    except Exception:
+        try:
+            return member.avatar.url if member.avatar else None
+        except Exception:
+            return None
+
+
 def open_ticket_embed(
     layanan: str,
     number: int,
@@ -135,14 +148,20 @@ def success_log_embed(
     payment: str = "QRIS",
     extra_fields: list[tuple[str, str, bool]] = None,
     rating_reminder: bool = True,
+    thumbnail_url: str = None,
 ) -> discord.Embed:
-    """Embed log 'TRANSAKSI BERHASIL' (selalu neon hijau, + reminder rating)."""
+    """Embed log 'TRANSAKSI BERHASIL' (selalu neon hijau, + reminder rating).
+
+    thumbnail_url: foto profil pembeli, tampil di pojok kanan atas embed.
+    """
     num = format_number(number)
     embed = discord.Embed(
         title=f"TRANSAKSI BERHASIL · #{num}",
         description=subtitle or None,
         color=NEON_GREEN,
     )
+    if thumbnail_url:
+        embed.set_thumbnail(url=thumbnail_url)
     if member_value:
         embed.add_field(name="Member", value=member_value, inline=True)
     if admin_value:

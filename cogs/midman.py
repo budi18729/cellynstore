@@ -370,7 +370,9 @@ class Midman(commands.Cog):
                 ("Pihak 1", f"{p1.mention}\n`{p1.id}`", True),
                 ("Pihak 2", f"{p2.mention if p2 else '-'}\n`{p2.id if p2 else '-'}`", True),
                 ("Fee", fee_str_log, False),
-            ])
+            ],
+            thumbnail_url=ticket_ui.avatar_url(p1),
+        )
         await ctx.send("Admin telah mengkonfirmasi bahwa trade selesai dan kedua pihak telah menerima item masing-masing. Tiket ditutup dalam 5 detik.")
         await asyncio.sleep(5)
         transcript_file = await generate_transcript(ctx.channel, STORE_NAME)

@@ -556,7 +556,9 @@ class JualBeli(commands.Cog):
                     ("Pembeli", f"{p2.mention if p2 else '-'}\n`{ticket.get('p2_id', '-')}`", True),
                     ("Fee", f"{format_nominal(fee)} (ditanggung {penanggung})" if fee else "-", False),
                     ("Dana ke Penjual", release, True),
-                ])
+                ],
+                thumbnail_url=ticket_ui.avatar_url(p2),
+            )
             await log_ch.send(embed=log_e)
 
         # Transcript

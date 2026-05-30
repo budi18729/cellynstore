@@ -105,6 +105,7 @@ class OrdersAdmin(commands.Cog):
                 total=f"Rp {nominal:,}",
                 payment=ticket.get("payment_method", "QRIS"),
                 extra_fields=[("Kategori", kategori, True)],
+                thumbnail_url=ticket_ui.avatar_url(member),
             )
             await log_ch.send(embed=log_embed)
 

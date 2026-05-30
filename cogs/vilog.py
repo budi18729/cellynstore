@@ -444,6 +444,7 @@ class Vilog(commands.Cog):
                 extra_fields=[
                     ("Robux", f"{ticket['boost']['robux']} Robux", True),
                 ],
+                thumbnail_url=ticket_ui.avatar_url(member),
             )
             await log_ch.send(embed=log_embed)
 

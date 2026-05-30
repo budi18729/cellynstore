@@ -822,6 +822,7 @@ class RobuxStore(commands.Cog):
                 total=f"Rp {ticket['total']:,}",
                 payment=ticket.get("payment_method", "QRIS"),
                 extra_fields=[("Rate", f"Rp {ticket['rate']:,}/Robux", True)],
+                thumbnail_url=ticket_ui.avatar_url(member),
             )
             await log_ch.send(embed=log_embed)
 
