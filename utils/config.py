@@ -19,6 +19,8 @@ ROBUX_CATALOG_CHANNEL_ID = int(os.getenv('ROBUX_CATALOG_CHANNEL_ID'))
 DANA_NUMBER = os.getenv('DANA_NUMBER', '-')
 BCA_NUMBER = os.getenv('BCA_NUMBER', '-')
 ML_CATALOG_CHANNEL_ID = int(os.getenv('ML_CATALOG_CHANNEL_ID'))
+# Channel auto-reply layanan "lainnya": member ketik kata kunci -> bot balas item + harga + S&K
+LAINNYA_AUTOREPLY_CHANNEL_ID = int(os.getenv('LAINNYA_AUTOREPLY_CHANNEL_ID', '1508564472141447389'))
 
 INVITE_REWARD_CHANNEL_ID = int(os.getenv('INVITE_REWARD_CHANNEL_ID', '1482464579085799435'))
 AUTOPOSTER_TOKEN = os.getenv('AUTOPOSTER_TOKEN', '')

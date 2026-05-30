@@ -10,7 +10,9 @@ from utils.config import (
 
     ADMIN_ROLE_ID, LOG_CHANNEL_ID, STORE_NAME,
 
-    TICKET_CATEGORY_ID, TRANSCRIPT_CHANNEL_ID, GUILD_ID
+    TICKET_CATEGORY_ID, TRANSCRIPT_CHANNEL_ID, GUILD_ID,
+
+    LAINNYA_AUTOREPLY_CHANNEL_ID
 
 )
 
@@ -374,6 +376,101 @@ def _categories_in_group(products, group):
         if group_of(p["category"]) == group:
             counts[p["category"]] += 1
     return sorted(counts.items())
+
+
+# ── AUTO-REPLY (FASE 2) ────────────────────────────────────────────────────────
+AUTOREPLY_COOLDOWN = 5          # detik per user, cegah spam
+AUTOREPLY_MIN_LEN = 3           # abaikan query terlalu pendek
+AUTOREPLY_MAX_PRODUCTS = 10     # batasi jumlah produk yang ditampilkan
+
+
+def _autoreply_search(query: str):
+    """Cari kategori/produk dari katalog (DB live) berdasarkan kata kunci.
+
+    Mengembalikan (kind, data):
+      - ("category", {"category", "items"})  bila query cocok sebuah kategori
+      - ("products", [items...])              bila query cocok nama produk
+      - (None, None)                          bila tidak ada yang cocok
+    Prioritas: exact category > substring category > substring nama produk.
+    """
+    q = " ".join(query.lower().split())
+    if len(q) < AUTOREPLY_MIN_LEN:
+        return None, None
+
+    products = load_lainnya_products()
+    if not products:
+        return None, None
+
+    categories = list(dict.fromkeys(p["category"] for p in products))
+
+    # 1) exact match nama kategori
+    for cat in categories:
+        if cat.lower() == q:
+            items = [p for p in products if p["category"] == cat]
+            return "category", {"category": cat, "items": items}
+
+    # 2) substring match nama kategori (ambil kategori pertama yang cocok)
+    cat_hits = [cat for cat in categories if q in cat.lower()]
+    if cat_hits:
+        cat = cat_hits[0]
+        items = [p for p in products if p["category"] == cat]
+        return "category", {"category": cat, "items": items}
+
+    # 3) substring match nama produk
+    prod_hits = [p for p in products if q in p["name"].lower()]
+    if prod_hits:
+        return "products", prod_hits
+
+    return None, None
+
+
+def _build_autoreply_embed(kind: str, data) -> discord.Embed:
+    """Bangun embed balasan auto-reply: item + harga + deskripsi + S&K."""
+    if kind == "category":
+        category = data["category"]
+        items = data["items"]
+        info = load_category_info(category)
+
+        embed = discord.Embed(
+            title=f"📦 {category} — {STORE_NAME}",
+            color=COLOR_LAINNYA,
+        )
+        shown = items[:AUTOREPLY_MAX_PRODUCTS]
+        lines = "\n".join(f"• **{p['name']}** — Rp {p['harga']:,}" for p in shown)
+        if len(items) > len(shown):
+            lines += f"\n… dan {len(items) - len(shown)} produk lain."
+        embed.add_field(name="Daftar Produk", value=lines[:1024], inline=False)
+
+        if info.get("description"):
+            embed.add_field(name="📋 Deskripsi", value=info["description"][:1024], inline=False)
+        if info.get("terms"):
+            embed.add_field(name="📜 Syarat & Ketentuan", value=info["terms"][:1024], inline=False)
+        embed.set_footer(text="Ketik nama kategori/produk lain untuk info • atau buka tiket di katalog")
+        return embed
+
+    # kind == "products"
+    items = data[:AUTOREPLY_MAX_PRODUCTS]
+    # kelompokkan per kategori untuk inject deskripsi/S&K yang relevan
+    from collections import OrderedDict
+    by_cat = OrderedDict()
+    for p in items:
+        by_cat.setdefault(p["category"], []).append(p)
+
+    if len(by_cat) == 1:
+        category = next(iter(by_cat))
+        embed = _build_autoreply_embed("category", {"category": category, "items": by_cat[category]})
+        return embed
+
+    # hasil tersebar di beberapa kategori: tampilkan ringkas dengan label kategori
+    embed = discord.Embed(
+        title=f"🔎 Hasil pencarian — {STORE_NAME}",
+        color=COLOR_LAINNYA,
+    )
+    for category, plist in by_cat.items():
+        lines = "\n".join(f"• **{p['name']}** — Rp {p['harga']:,}" for p in plist)
+        embed.add_field(name=category, value=lines[:1024], inline=False)
+    embed.set_footer(text="Ketik nama kategori spesifik untuk lihat deskripsi & S&K lengkap")
+    return embed
 
 
 # ── CATALOG EMBED & VIEW ───────────────────────────────────────────────────────
@@ -1281,6 +1378,7 @@ class LainnyaStore(commands.Cog):
         self.active_tickets = load_lainnya_tickets()
         self.carts = {}  # user_id -> list of items
         self.catalog_message_id = _get_catalog_msg_id()
+        self._autoreply_cd = {}  # user_id -> last autoreply monotonic timestamp
         # auto_close_loop dinonaktifkan
 
 
@@ -1468,6 +1566,35 @@ class LainnyaStore(commands.Cog):
         await ctx.send("✅ Katalog berhasil dikirim!", delete_after=5)
 
 
+
+    @commands.Cog.listener(name="on_message")
+
+    async def autoreply_listener(self, message: discord.Message):
+        # Fase 2: auto-reply kata kunci di channel khusus.
+        if message.author.bot or message.guild is None:
+            return
+        if message.channel.id != LAINNYA_AUTOREPLY_CHANNEL_ID:
+            return
+        content = (message.content or "").strip()
+        if not content or content.startswith("!"):
+            return
+
+        # cooldown per user
+        now = time.monotonic()
+        last = self._autoreply_cd.get(message.author.id, 0)
+        if now - last < AUTOREPLY_COOLDOWN:
+            return
+
+        kind, data = _autoreply_search(content)
+        if not kind:
+            return  # diam saat tidak ada yang cocok
+
+        self._autoreply_cd[message.author.id] = now
+        embed = _build_autoreply_embed(kind, data)
+        try:
+            await message.reply(embed=embed, mention_author=False)
+        except Exception as e:
+            print(f"[LainnyaStore] autoreply error: {e}")
 
 
 
