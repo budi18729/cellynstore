@@ -869,7 +869,6 @@ class RobuxStore(commands.Cog):
             print(f"[ROLE] Gagal assign Royal Customer: {e}")
         delete_robux_ticket(channel_id)
         del self.active_tickets[channel_id]
-        import asyncio
         await asyncio.sleep(5)
         await ctx.channel.delete()
 
@@ -892,7 +891,6 @@ class RobuxStore(commands.Cog):
         )
         delete_robux_ticket(channel_id)
         del self.active_tickets[channel_id]
-        import asyncio
         await asyncio.sleep(5)
         await ctx.channel.delete()
 

@@ -3,6 +3,8 @@ utils/service_info.py
 Helper untuk membaca/menyimpan informasi layanan (deskripsi, S&K, cara bayar)
 yang ditampilkan ke member sebelum membuka tiket.
 """
+import discord
+
 from utils.db import get_conn
 
 
@@ -59,7 +61,6 @@ def build_info_embed(service_name: str, info: dict, color: int = 0x5865F2) -> "d
     Buat embed informasi layanan untuk ditampilkan ke member sebelum buka tiket.
     Hanya field yang diisi yang ditampilkan.
     """
-    import discord
     from utils.config import STORE_NAME
 
     THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
