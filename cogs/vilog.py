@@ -25,6 +25,8 @@ from utils.db import get_conn
 from utils.vilog_db import load_vilog_tickets, save_vilog_ticket, delete_vilog_ticket
 from utils.robux_stock import get_available as get_robux_stock_available, get_out_total as get_robux_out_total, record_outgoing as record_robux_outgoing
 from utils.store_hours import is_store_open
+from utils.counter import next_ticket_number
+from utils import ticket_ui
 
 COLOR = 0xF1C40F
 
@@ -307,7 +309,8 @@ class Vilog(commands.Cog):
             overwrites[admin_role] = discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True)
 
         total = _calc_total(robux, rate)
-        ch_name = f"vilog-{_sanitize_channel_name(interaction.user.display_name)}"
+        ticket_number = next_ticket_number()
+        ch_name = ticket_ui.channel_name("vilog", ticket_number, interaction.user.name)
         try:
             channel = await guild.create_text_channel(
                 name=ch_name,
@@ -332,38 +335,32 @@ class Vilog(commands.Cog):
             "metode": "vilog",
             "nominal": total,
             "admin_id": None,
+            "ticket_number": ticket_number,
             "opened_at": now.isoformat(),
             "warned": False,
         }
         self.active_tickets[channel.id] = ticket
         save_vilog_ticket(ticket)
 
-        info_embed = discord.Embed(
-            title="🎫 Tiket Topup Robux via Login (Vilog)",
-            color=COLOR,
-            timestamp=now,
-        )
-        info_embed.add_field(name="Member", value=f"{interaction.user.mention}\n`{interaction.user.id}`", inline=False)
-        info_embed.add_field(name="Robux", value=f"**{robux} Robux**", inline=True)
-        info_embed.add_field(name="Rate", value=f"**{_format_rp(rate)}/Robux**", inline=True)
-        info_embed.add_field(name="Total Tagihan", value=f"**{_format_rp(total)}**", inline=False)
-        info_embed.add_field(name="Email", value=f"`{email}`", inline=True)
-        info_embed.add_field(name="Password", value=f"||`{password}`||", inline=True)
         codes_preview = "\n".join(f"||`{c}`||" for c in backup_codes[:10])
         if len(backup_codes) > 10:
             codes_preview += f"\n(+{len(backup_codes) - 10} kode lagi)"
-        info_embed.add_field(name="Kode Backup", value=codes_preview, inline=False)
-        info_embed.add_field(name="Premium", value="Yes" if premium else "No", inline=True)
-        info_embed.add_field(
-            name="Langkah Selanjutnya",
-            value=(
-                "1. Tunggu admin respon di tiket ini\n"
-                "2. Lakukan pembayaran sesuai instruksi admin\n"
-                "3. Admin proses topup setelah pembayaran dikonfirmasi"
-            ),
-            inline=False,
+        info_embed = ticket_ui.open_ticket_embed(
+            "vilog", ticket_number, interaction.user,
+            item=f"{robux} Robux via Login (Vilog)",
+            total=_format_rp(total),
+            payment="QRIS",
+            extra_fields=[
+                ("Robux", f"{robux} Robux", True),
+                ("Rate", f"{_format_rp(rate)}/Robux", True),
+                ("Email", f"`{email}`", True),
+                ("Password", f"||`{password}`||", True),
+                ("Premium", "Yes" if premium else "No", True),
+                ("Kode Backup", codes_preview, False),
+                ("Langkah Selanjutnya", "1. Tunggu admin respon di tiket ini\n2. Lakukan pembayaran sesuai instruksi admin\n3. Admin proses topup setelah pembayaran dikonfirmasi", False),
+                ("Catatan", "Jangan share password di luar tiket ini.", False),
+            ],
         )
-        info_embed.set_footer(text=f"{STORE_NAME} • Jangan share password di luar tiket")
 
         ping = admin_role.mention if admin_role else ""
         await channel.send(content=f"{ping} Tiket Vilog baru dibuat.", embed=info_embed)
@@ -418,7 +415,7 @@ class Vilog(commands.Cog):
         durasi_secs = int((now - opened_at).total_seconds())
 
         from utils.counter import next_ticket_number
-        nomor = next_ticket_number()
+        nomor = ticket.get("ticket_number") or next_ticket_number()
 
         # Transcript
         transcript_ch = ctx.guild.get_channel(TRANSCRIPT_CHANNEL_ID)
@@ -436,17 +433,18 @@ class Vilog(commands.Cog):
         # Log embed
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            log_embed = discord.Embed(
-                title=f"VILOG TOPUP SUKSES — #{nomor:04d}",
-                description="Topup Robux via login berhasil diproses.",
-                color=COLOR,
-                timestamp=now,
+            log_embed = ticket_ui.success_log_embed(
+                "vilog", nomor,
+                subtitle="Topup Robux via login berhasil diproses.",
+                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
+                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
+                item=f"{ticket['boost']['robux']} Robux via Login (Vilog)",
+                total=_format_rp(ticket.get("nominal", 0) or 0),
+                payment="QRIS",
+                extra_fields=[
+                    ("Robux", f"{ticket['boost']['robux']} Robux", True),
+                ],
             )
-            log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-            log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
-            log_embed.add_field(name="Robux", value=f"{ticket['boost']['robux']} Robux", inline=True)
-            log_embed.add_field(name="Total", value=_format_rp(ticket.get("nominal", 0) or 0), inline=True)
-            log_embed.set_footer(text=STORE_NAME)
             await log_ch.send(embed=log_embed)
 
         try:

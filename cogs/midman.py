@@ -19,6 +19,8 @@ from utils.backup import do_backup, do_restore
 from discord.ext import tasks
 from utils.db import get_conn
 from utils.store_hours import is_store_open
+from utils.counter import next_ticket_number
+from utils import ticket_ui
 
 
 def _get_setting(key: str) -> str | None:
@@ -357,17 +359,18 @@ class Midman(commands.Cog):
         opened_at.strftime("%d %b %Y, %H:%M UTC") if opened_at else "-"
         closed_at.strftime("%d %b %Y, %H:%M UTC") if closed_at else "-"
         ticket.get("verified_by")
-        log_embed = discord.Embed(
-            title=f"MIDMAN TRADE SUKSES — #{ticket_num}",
-            description="Transaksi telah selesai dan aman. Kedua pihak telah menerima item masing-masing.",
-            color=0x2ECC71,
-            timestamp=closed_at
-        )
-        log_embed.add_field(name="Midman", value=f"{adm.mention}\n`{adm.id}`", inline=False)
-        log_embed.add_field(name="Pihak 1", value=f"{p1.mention}\n`{p1.id}`", inline=False)
-        log_embed.add_field(name="Pihak 2", value=f"{p2.mention if p2 else '-'}\n`{p2.id if p2 else '-'}`", inline=False)
-        log_embed.add_field(name="Fee", value=fee_str_log, inline=False)
-        log_embed.set_footer(text=f"{STORE_NAME}")
+        nomor = ticket.get("ticket_number") or next_ticket_number()
+        log_embed = ticket_ui.success_log_embed(
+            "midman", nomor,
+            subtitle="Transaksi telah selesai dan aman. Kedua pihak telah menerima item masing-masing.",
+            admin_value=f"{adm.mention}\n`{adm.id}`",
+            item=f"{ticket.get('item_p1', '-')} ↔ {ticket.get('item_p2', '-')}",
+            payment="QRIS",
+            extra_fields=[
+                ("Pihak 1", f"{p1.mention}\n`{p1.id}`", True),
+                ("Pihak 2", f"{p2.mention if p2 else '-'}\n`{p2.id if p2 else '-'}`", True),
+                ("Fee", fee_str_log, False),
+            ])
         await ctx.send("Admin telah mengkonfirmasi bahwa trade selesai dan kedua pihak telah menerima item masing-masing. Tiket ditutup dalam 5 detik.")
         await asyncio.sleep(5)
         transcript_file = await generate_transcript(ctx.channel, STORE_NAME)

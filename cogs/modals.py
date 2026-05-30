@@ -4,7 +4,8 @@ from utils.fee import format_nominal
 from utils.tickets import save_tickets
 from utils.counter import next_ticket_number
 from utils.config import TICKET_CATEGORY_ID, ADMIN_ROLE_ID, STORE_NAME
-from cogs.views import AdminSetupView, TradeFinishView, build_embed_awal, build_embed_setup
+from cogs.views import AdminSetupView, TradeFinishView, build_embed_setup
+from utils import ticket_ui
 
 class MidmanTradeModal(discord.ui.Modal, title="Buka Tiket Midman Trade"):
     item_p1 = discord.ui.TextInput(label="Item kamu (Pihak 1)", placeholder="contoh: ruby gemstone")
@@ -46,7 +47,7 @@ class MidmanTradeModal(discord.ui.Modal, title="Buka Tiket Midman Trade"):
         }
         ticket_num = next_ticket_number()
         channel = await guild.create_text_channel(
-            f"trade-{str(ticket_num).zfill(4)}-{interaction.user.name[:10]}",
+            name=ticket_ui.channel_name("midman", ticket_num, interaction.user.name),
             category=category,
             overwrites=overwrites
         )
@@ -64,8 +65,18 @@ class MidmanTradeModal(discord.ui.Modal, title="Buka Tiket Midman Trade"):
             "opened_at": datetime.datetime.now(datetime.timezone.utc),
         }
         await interaction.response.send_message(f"Tiket dibuat: {channel.mention}", ephemeral=True)
-        embed = build_embed_awal(STORE_NAME, interaction.user.mention, self.item_p1.value, self.item_p2.value)
-        embed.add_field(name="Estimasi Proses", value="Admin akan segera mengatur detail trade. Harap tunggu.", inline=False)
+        embed = ticket_ui.open_ticket_embed(
+            "midman", ticket_num, interaction.user,
+            item=f"{self.item_p1.value} ↔ {self.item_p2.value}",
+            payment="QRIS",
+            extra_fields=[
+                ("Pihak 1", f"{interaction.user.mention} (item: {self.item_p1.value})", False),
+                ("Pihak 2", f"- (item: {self.item_p2.value})", False),
+                ("Admin", "-", True),
+                ("Status", "Menunggu konfirmasi admin", True),
+                ("Estimasi Proses", "Admin akan segera mengatur detail trade. Harap tunggu.", False),
+                ("Peringatan", "Tiket yang tidak aktif selama 2 jam akan otomatis ditutup dan transaksi dianggap batal.", False),
+            ])
         msg = await channel.send(
             content=f"{admin_role.mention} — Tiket midman trade baru dari {interaction.user.mention}.",
             embed=embed,
