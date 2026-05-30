@@ -307,7 +307,6 @@ def render_page(content, **ctx):
         ico_ml    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>'
         ico_ff    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>'
         ico_robux = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
-        ico_auto  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.72A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>'
         ico_out   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>'
         nav = f'''<aside class="sidebar">
   <div class="sidebar-logo">
@@ -1065,7 +1064,7 @@ def page_stats():
     harian_map = {row["tgl"]: {"total": row["total"], "omzet": row["omzet"] or 0} for row in harian}
     chart_labels = [d[-5:] for d in days7]
     chart_total  = [harian_map.get(d, {}).get("total", 0) for d in days7]
-    chart_omzet  = [harian_map.get(d, {}).get("omzet", 0) for d in days7]
+    [harian_map.get(d, {}).get("omzet", 0) for d in days7]
 
     # Chart data 30 hari
     days30 = [(today - timedelta(days=i)).isoformat() for i in range(29,-1,-1)]
@@ -1495,9 +1494,9 @@ def _get_service_info_admin(service_key):
 def _service_info_widget(service_key, label):
     """Render HTML widget form info layanan untuk disematkan di halaman admin."""
     info = _get_service_info_admin(service_key)
-    desc = info["description"].replace('"', '&quot;')
-    terms = info["terms"].replace('"', '&quot;')
-    pay = info["payment_info"].replace('"', '&quot;')
+    info["description"].replace('"', '&quot;')
+    info["terms"].replace('"', '&quot;')
+    info["payment_info"].replace('"', '&quot;')
     return f"""
 <div class="card" style="margin-bottom:24px;border-left:4px solid #7c5cbf">
   <div class="card-header" style="display:flex;align-items:center;gap:10px">
@@ -1571,7 +1570,7 @@ def service_info_save():
         "gp": "page_service_info",
         "vilog": "page_service_info",
     }
-    flash(f"Info layanan berhasil disimpan.", "success")
+    flash("Info layanan berhasil disimpan.", "success")
     target = redirect_map.get(service_key, "page_service_info")
     return redirect(url_for(target))
 
@@ -1777,7 +1776,7 @@ def autopost_edit(tid):
 @login_required
 def autopost_edit_save(tid):
     from utils.autoposter_settings import update_autopost_task
-    channel_id = request.form.get("channel_id", "").strip()
+    request.form.get("channel_id", "").strip()
     interval_minutes = int(request.form.get("interval_minutes", 60))
     message = request.form.get("message", "").strip()
     update_autopost_task(tid, message=message, interval_minutes=interval_minutes)

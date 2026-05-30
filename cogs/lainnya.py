@@ -1,16 +1,14 @@
 import time
 
-import asyncio
-
 import datetime
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 from utils.config import (
 
-    ADMIN_ROLE_ID, LOG_CHANNEL_ID, STORE_NAME,
+    ADMIN_ROLE_ID, STORE_NAME,
 
-    TICKET_CATEGORY_ID, TRANSCRIPT_CHANNEL_ID, GUILD_ID,
+    TICKET_CATEGORY_ID, GUILD_ID,
 
     LAINNYA_AUTOREPLY_CHANNEL_ID
 
@@ -19,9 +17,7 @@ from utils.config import (
 from utils.db import get_conn
 from utils.store_hours import is_store_open
 from utils.paginator import PaginatedSelectView, with_price
-from utils.counter import next_ticket_number
 
-from utils.transcript import generate as generate_transcript
 
 # Data katalog produk "lainnya" (PRODUCTS, CATEGORY_INFO, grup, dst).
 from cogs import lainnya_catalog
@@ -894,7 +890,6 @@ async def _create_custom_ticket(interaction, cog, member, guild, item_name, qty_
     cog.active_tickets[channel.id] = ticket
     save_lainnya_ticket(ticket)
 
-    notes_text = f"\n**Catatan:** {notes_value}" if notes_value else ""
     embed = discord.Embed(
         title=f"CUSTOM ORDER — {STORE_NAME}",
         color=0x00FF00,

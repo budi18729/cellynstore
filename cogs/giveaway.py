@@ -1,6 +1,5 @@
 import asyncio
 import random
-import sqlite3
 import datetime
 import discord
 from discord import app_commands

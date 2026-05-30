@@ -54,7 +54,6 @@ class BroadcastCog(commands.Cog):
             return
 
         admin = interaction.user
-        cog_self = self
 
         class BroadcastModal(discord.ui.Modal, title="Broadcast Pesan"):
             pesan = discord.ui.TextInput(

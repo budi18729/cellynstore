@@ -1,5 +1,4 @@
 import time
-import asyncio
 import discord
 import datetime
 from discord.ext import commands, tasks
@@ -785,10 +784,10 @@ class RobuxStore(commands.Cog):
 
         member = ctx.guild.get_member(ticket["user_id"])
         now = datetime.datetime.now(datetime.timezone.utc)
-        tanggal = now.strftime("%d %b %Y, %H:%M UTC")
+        now.strftime("%d %b %Y, %H:%M UTC")
         opened_at = datetime.datetime.fromisoformat(ticket["opened_at"])
         durasi_secs = int((now - opened_at).total_seconds())
-        durasi_str = f"{durasi_secs // 3600}j {(durasi_secs % 3600) // 60}m {durasi_secs % 60}d"
+        f"{durasi_secs // 3600}j {(durasi_secs % 3600) // 60}m {durasi_secs % 60}d"
 
         from utils.counter import next_ticket_number
         nomor = next_ticket_number()
@@ -812,7 +811,7 @@ class RobuxStore(commands.Cog):
         if log_ch:
             log_embed = discord.Embed(
                 title=f"ROBUX STORE SUKSES — #{nomor:04d}",
-                description=f"Item berhasil diberikan. Terima kasih telah berbelanja di Cellyn Store!",
+                description="Item berhasil diberikan. Terima kasih telah berbelanja di Cellyn Store!",
                 color=0xE91E63,
                 timestamp=datetime.datetime.now(datetime.timezone.utc)
             )
@@ -883,7 +882,7 @@ class RobuxStore(commands.Cog):
             await ctx.send("Channel ini bukan tiket robux aktif.", delete_after=5)
             return
         ticket = self.active_tickets[channel_id]
-        member = ctx.guild.get_member(ticket["user_id"])
+        ctx.guild.get_member(ticket["user_id"])
         alasan_str = alasan if alasan else "Tidak ada alasan"
         await ctx.channel.send(
             f"Tiket dibatalkan oleh {ctx.author.mention}.\n"

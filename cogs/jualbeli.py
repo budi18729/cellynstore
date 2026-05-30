@@ -8,7 +8,7 @@ from utils.config import (
     LOG_CHANNEL_ID, TRANSCRIPT_CHANNEL_ID
 )
 from utils.db import get_conn
-from utils.fee import hitung_fee, format_nominal
+from utils.fee import format_nominal
 import utils.transcript as transcript_gen
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"

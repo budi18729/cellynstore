@@ -157,7 +157,7 @@ class GPInfoView(discord.ui.View):
 class NominalModal(discord.ui.Modal, title="Topup Robux via Gamepass"):
     nominal = discord.ui.TextInput(
         label=f"Jumlah Robux (minimal {MIN_ROBUX})",
-        placeholder=f"Contoh: 500",
+        placeholder="Contoh: 500",
         min_length=1,
         max_length=6,
     )

@@ -354,9 +354,9 @@ class Midman(commands.Cog):
                 durasi = f"{menit} menit {detik} detik"
             else:
                 durasi = f"{detik} detik"
-        dibuka_str = opened_at.strftime("%d %b %Y, %H:%M UTC") if opened_at else "-"
-        ditutup_str = closed_at.strftime("%d %b %Y, %H:%M UTC") if closed_at else "-"
-        verified_by = ticket.get("verified_by")
+        opened_at.strftime("%d %b %Y, %H:%M UTC") if opened_at else "-"
+        closed_at.strftime("%d %b %Y, %H:%M UTC") if closed_at else "-"
+        ticket.get("verified_by")
         log_embed = discord.Embed(
             title=f"MIDMAN TRADE SUKSES — #{ticket_num}",
             description="Transaksi telah selesai dan aman. Kedua pihak telah menerima item masing-masing.",
