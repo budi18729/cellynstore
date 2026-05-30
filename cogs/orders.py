@@ -11,17 +11,16 @@ THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
 
 class OrdersAdmin(commands.Cog):
-    """Shared !done dan !cancel untuk semua tiket order (lainnya + scaset)"""
+    """Shared !done dan !cancel untuk tiket order (lainnya / Cloud Phone & Nitro)"""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     def _get_ticket(self, channel_id):
-        """Cari tiket di semua cog order, return (cog_name, ticket) atau (None, None)"""
-        for cog_name in ["LainnyaStore", "ScasetStore"]:
-            cog = self.bot.cogs.get(cog_name)
-            if cog and channel_id in cog.active_tickets:
-                return cog_name, cog, cog.active_tickets[channel_id]
+        """Cari tiket order, return (cog_name, cog, ticket) atau (None, None, None)"""
+        cog = self.bot.cogs.get("LainnyaStore")
+        if cog and channel_id in cog.active_tickets:
+            return "LainnyaStore", cog, cog.active_tickets[channel_id]
         return None, None, None
 
     @commands.command(name="done")
@@ -60,52 +59,28 @@ class OrdersAdmin(commands.Cog):
         except Exception as e:
             print(f"[Orders] Transcript error: {e}")
 
+        # Data transaksi (single item — Cloud Phone / Nitro / Custom Order)
+        kategori = ticket.get("category", "")
+        layanan = "nitro" if "NITRO" in kategori.upper() else "cloudphone"
+        nominal = ticket.get("harga", 0)
+        item_str = ticket.get("item_name", "-")
+
         # Log embed
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            if cog_name == "ScasetStore":
-                # Format scaset: per item
-                items = ticket.get("items", [])
-                subtotal = sum(i.get("harga", 0) for i in items)
-                log_embed = discord.Embed(
-                    title=f"SC/ASET GAME SUKSES — #{nomor:04d}",
-                    color=0xF0A500,
-                    timestamp=closed_at
-                )
-                log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-                log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
-                for i, item in enumerate(items, 1):
-                    log_embed.add_field(
-                        name=f"Item {i}",
-                        value=f"{item['nama']} | Qty: {item['qty']} | Rp {item['harga']:,}",
-                        inline=False
-                    )
-                log_embed.add_field(name="Harga", value=f"Rp {subtotal:,}", inline=True)
-                log_embed.add_field(name="Metode", value=ticket.get("payment_method", "-"), inline=True)
-                log_embed.set_footer(text=STORE_NAME)
-                await log_ch.send(embed=log_embed)
-                nominal = subtotal
-                layanan = "scaset"
-                item_str = ", ".join(i["nama"] for i in items) or "-"
-            else:
-                # Format lainnya: single item
-                kategori = ticket.get("category", "")
-                layanan = "nitro" if "NITRO" in kategori.upper() else "cloudphone"
-                nominal = ticket.get("harga", 0)
-                item_str = ticket.get("item_name", "-")
-                log_embed = discord.Embed(
-                    title=f"ORDER SUKSES — #{nomor:04d}",
-                    color=0x5865F2,
-                    timestamp=closed_at
-                )
-                log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
-                log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
-                log_embed.add_field(name="Kategori", value=kategori, inline=True)
-                log_embed.add_field(name="Item", value=item_str, inline=True)
-                log_embed.add_field(name="Harga", value=f"Rp {nominal:,}", inline=True)
-                log_embed.add_field(name="Metode", value=ticket.get("payment_method", "-"), inline=True)
-                log_embed.set_footer(text=STORE_NAME)
-                await log_ch.send(embed=log_embed)
+            log_embed = discord.Embed(
+                title=f"ORDER SUKSES — #{nomor:04d}",
+                color=0x5865F2,
+                timestamp=closed_at
+            )
+            log_embed.add_field(name="Admin", value=f"{ctx.author.mention}\n`{ctx.author.id}`", inline=False)
+            log_embed.add_field(name="Member", value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`", inline=False)
+            log_embed.add_field(name="Kategori", value=kategori, inline=True)
+            log_embed.add_field(name="Item", value=item_str, inline=True)
+            log_embed.add_field(name="Harga", value=f"Rp {nominal:,}", inline=True)
+            log_embed.add_field(name="Metode", value=ticket.get("payment_method", "-"), inline=True)
+            log_embed.set_footer(text=STORE_NAME)
+            await log_ch.send(embed=log_embed)
 
         # Transaction log
         try:
@@ -131,12 +106,8 @@ class OrdersAdmin(commands.Cog):
             print(f"[Orders] Role error: {e}")
 
         # Cleanup
-        if cog_name == "ScasetStore":
-            from cogs.scaset import delete_scaset_ticket
-            delete_scaset_ticket(ch_id)
-        else:
-            from cogs.lainnya import delete_lainnya_ticket
-            delete_lainnya_ticket(ch_id)
+        from cogs.lainnya import delete_lainnya_ticket
+        delete_lainnya_ticket(ch_id)
         del cog.active_tickets[ch_id]
         await ctx.channel.delete()
 
@@ -152,12 +123,8 @@ class OrdersAdmin(commands.Cog):
         await ctx.send(f"❌ Pesanan dibatalkan.\nAlasan: {alasan}\nTiket ditutup dalam 5 detik.")
         await asyncio.sleep(5)
 
-        if cog_name == "ScasetStore":
-            from cogs.scaset import delete_scaset_ticket
-            delete_scaset_ticket(ch_id)
-        else:
-            from cogs.lainnya import delete_lainnya_ticket
-            delete_lainnya_ticket(ch_id)
+        from cogs.lainnya import delete_lainnya_ticket
+        delete_lainnya_ticket(ch_id)
         del cog.active_tickets[ch_id]
         await ctx.channel.delete()
 
