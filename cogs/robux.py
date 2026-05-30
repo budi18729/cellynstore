@@ -19,6 +19,46 @@ from utils.paginator import PaginatedSelectView, with_price
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
+
+async def send_qris_payment(channel, ticket: dict):
+    """Kirim embed pembayaran QRIS ke channel tiket dan tandai ticket.
+
+    Dipakai saat tiket dibuat — pembayaran kini QRIS otomatis (tanpa pilih 1/2/3).
+    """
+    qris_url = None
+    try:
+        conn = get_conn()
+        c = conn.cursor()
+        c.execute("SELECT value FROM settings WHERE key = 'qris_url'")
+        row = c.fetchone()
+        conn.close()
+        if row:
+            qris_url = row["value"]
+    except Exception:
+        pass
+
+    embed = discord.Embed(
+        title="QRIS PAYMENT",
+        description=(
+            f"Scan QR Code di bawah untuk membayar.\n\n"
+            f"Item: **{ticket['item_name']}**\n"
+            f"Rate: **Rp {ticket['rate']:,}/Robux**\n"
+            f"Total: **Rp {ticket['total']:,}**\n\n"
+            f"Setelah transfer, kirim bukti pembayaran di sini. Admin akan konfirmasi manual."
+        ),
+        color=0xE91E63,
+    )
+    if qris_url:
+        embed.set_image(url=qris_url)
+    embed.set_footer(text=f"{STORE_NAME} • Pastikan nominal sesuai")
+
+    ticket["payment_method"] = "QRIS"
+    payment_embed_msg = await channel.send(embed=embed)
+    ticket["payment_embed_msg_id"] = payment_embed_msg.id
+    ticket["payment_embed_method"] = "QRIS"
+    save_robux_ticket(ticket)
+
+
 def load_robux_products():
     conn = get_conn()
     c = conn.cursor()
@@ -241,7 +281,7 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
     embed.add_field(name="Total Robux", value=f"{total_robux} Robux", inline=True)
     embed.add_field(name="Rate", value=f"Rp {rate:,}/Robux", inline=True)
     embed.add_field(name="Total Tagihan", value=f"Rp {total_harga:,}", inline=True)
-    embed.add_field(name="Cara Bayar", value="Ketik **1** — QRIS  |  **2** — DANA  |  **3** — BCA", inline=False)
+    embed.add_field(name="Cara Bayar", value="Pembayaran via **QRIS** — scan QR di bawah lalu kirim bukti transfer.", inline=False)
     embed.add_field(name="Catatan", value="Setelah pembayaran dikonfirmasi, admin dan member masuk game untuk proses gift item.", inline=False)
     embed.add_field(name="Peringatan", value="Tiket yang tidak aktif selama 2 jam akan otomatis ditutup dan transaksi dianggap batal.", inline=False)
     embed.set_footer(text=f"{STORE_NAME} • Rate dapat berubah sewaktu-waktu")
@@ -250,6 +290,7 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
         content=f"Halo {member.mention}! Tiket pembelian item Robux telah dibuat.{' ' + admin_role.mention if admin_role else ''}",
         embed=embed
     )
+    await send_qris_payment(channel, ticket)
     await interaction.followup.send(f"Tiket dibuat! {channel.mention}", ephemeral=True)
 
 
@@ -435,7 +476,7 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
         embed.add_field(name="Jumlah Robux", value=f"{robux} Robux", inline=True)
         embed.add_field(name="Rate", value=f"Rp {rate:,}/Robux", inline=True)
         embed.add_field(name="Total Tagihan", value=f"Rp {total:,}", inline=True)
-        embed.add_field(name="Cara Bayar", value="Ketik **1** — QRIS  |  **2** — DANA  |  **3** — BCA", inline=False)
+        embed.add_field(name="Cara Bayar", value="Pembayaran via **QRIS** — scan QR di bawah lalu kirim bukti transfer.", inline=False)
         embed.add_field(name="Peringatan", value="Tiket yang tidak aktif selama 2 jam akan otomatis ditutup.", inline=False)
         embed.set_footer(text=f"{STORE_NAME} • Rate dapat berubah sewaktu-waktu")
 
@@ -443,6 +484,7 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
             content=f"Halo {member.mention}! Custom order kamu telah dibuat.{' ' + admin_role.mention if admin_role else ''}",
             embed=embed
         )
+        await send_qris_payment(channel, ticket)
         await interaction.edit_original_response(content=f"Tiket dibuat! {channel.mention}")
 
 
@@ -708,91 +750,8 @@ class RobuxStore(commands.Cog):
             return
 
         ticket = self.active_tickets[channel_id]
-        if ticket.get("paid"):
-            return
-        if ticket.get("payment_method"):
-            return
-
+        # Hanya update last_activity; pembayaran sekarang QRIS otomatis saat tiket dibuat.
         ticket["last_activity"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
-
-        if message.content.strip() not in ["1", "2", "3"]:
-            return
-
-        from utils.config import DANA_NUMBER, BCA_NUMBER
-        methods = ["QRIS", "DANA", "BCA"]
-        method = methods[int(message.content.strip()) - 1]
-        ticket["payment_method"] = method
-        rate = ticket["rate"]
-        total = ticket["total"]
-
-        if method == "QRIS":
-            qris_url = None
-            try:
-                conn = get_conn()
-                c = conn.cursor()
-                c.execute("SELECT value FROM settings WHERE key = 'qris_url'")
-                row = c.fetchone()
-                conn.close()
-                if row:
-                    qris_url = row["value"]
-            except Exception:
-                pass
-            embed = discord.Embed(
-                title="QRIS PAYMENT",
-                description=(
-                    f"Scan QR Code di bawah untuk membayar.\n\n"
-                    f"Item: **{ticket['item_name']}**\n"
-                    f"Rate: **Rp {rate:,}/Robux**\n"
-                    f"Total: **Rp {total:,}**\n\n"
-                    f"Setelah transfer, kirim bukti pembayaran di sini. Admin akan konfirmasi manual."
-                ),
-                color=0xE91E63,
-            )
-            if qris_url:
-                embed.set_image(url=qris_url)
-            embed.set_footer(text=f"{STORE_NAME} • Pastikan nominal sesuai")
-            payment_embed_msg = await message.channel.send(embed=embed)
-            ticket["payment_embed_msg_id"] = payment_embed_msg.id
-
-        elif method == "DANA":
-            embed = discord.Embed(
-                title="DANA PAYMENT",
-                description=(
-                    f"Transfer ke nomor DANA berikut:\n\n"
-                    f"**`{DANA_NUMBER}`**\n\n"
-                    f"Item: **{ticket['item_name']}**\n"
-                    f"Rate: **Rp {rate:,}/Robux**\n"
-                    f"Total: **Rp {total:,}**\n\n"
-	                    f"Setelah transfer, kirim bukti pembayaran di sini. Admin akan konfirmasi manual."
-                ),
-                color=0xE91E63,
-            )
-            embed.set_footer(text=f"{STORE_NAME} • Pastikan nominal sesuai")
-            payment_embed_msg = await message.channel.send(embed=embed)
-            ticket["payment_embed_msg_id"] = payment_embed_msg.id
-
-        elif method == "BCA":
-            embed = discord.Embed(
-                title="BCA PAYMENT",
-                description=(
-                    f"Transfer ke rekening BCA berikut:\n\n"
-                    f"**`{BCA_NUMBER}`**\n\n"
-                    f"Item: **{ticket['item_name']}**\n"
-                    f"Rate: **Rp {rate:,}/Robux**\n"
-                    f"Total: **Rp {total:,}**\n\n"
-	                    f"Setelah transfer, kirim bukti pembayaran di sini. Admin akan konfirmasi manual."
-                ),
-                color=0xE91E63,
-            )
-            embed.set_footer(text=f"{STORE_NAME} • Pastikan nominal sesuai")
-            payment_embed_msg = await message.channel.send(embed=embed)
-            ticket["payment_embed_msg_id"] = payment_embed_msg.id
-
-        await message.channel.send(
-            content="Sudah transfer? Kirim bukti pembayaran di sini. Admin akan konfirmasi manual."
-        )
-        ticket["payment_embed_method"] = method
-        ticket["payment_msg_id"] = None
         save_robux_ticket(ticket)
 
     @commands.Cog.listener()

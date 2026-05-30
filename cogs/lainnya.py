@@ -760,7 +760,7 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
         "item_name": product["name"],
         "category": product["category"],
         "harga": product["harga"],
-        "payment_method": None,
+        "payment_method": "QRIS",
         "admin_id": None,
         "embed_message_id": None,
         "opened_at": now,
@@ -787,7 +787,11 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
     if info.get("terms"):
         embed.add_field(name="📜 Syarat & Ketentuan", value=info["terms"][:1024], inline=False)
 
-    embed.add_field(name="Metode Bayar", value="*Menunggu konfirmasi...*", inline=False)
+    embed.add_field(
+        name="Metode Bayar",
+        value=f"**QRIS** — silakan bayar **Rp {product['harga']:,}** lalu kirim bukti transfer di sini.",
+        inline=False,
+    )
     embed.set_footer(text=STORE_NAME)
 
     admin_mention = admin_role.mention if admin_role else ""
@@ -883,7 +887,7 @@ async def _create_custom_ticket(interaction, cog, member, guild, item_name, qty_
     ticket = {
         "channel_id": channel.id, "user_id": member.id, "item_id": None,
         "item_name": f"{item_name} (Qty: {qty_int})", "category": "Custom Order",
-        "harga": budget_int, "payment_method": None, "admin_id": None,
+        "harga": budget_int, "payment_method": "QRIS", "admin_id": None,
         "embed_message_id": None, "opened_at": now, "last_activity": now,
         "warned": 0, "warn_message_id": None,
     }
@@ -902,8 +906,8 @@ async def _create_custom_ticket(interaction, cog, member, guild, item_name, qty_
     embed.add_field(name="Budget",    value=f"Rp {budget_int:,}", inline=True)
     if notes_value:
         embed.add_field(name="Catatan", value=notes_value, inline=False)
-    embed.add_field(name="Metode Bayar", value="*Menunggu konfirmasi member...*", inline=False)
-    embed.add_field(name="Status", value="Admin akan mengkonfirmasi ketersediaan & metode pembayaran.", inline=False)
+    embed.add_field(name="Metode Bayar", value="**QRIS**", inline=False)
+    embed.add_field(name="Status", value="Admin akan mengkonfirmasi ketersediaan & harga. Pembayaran via QRIS.", inline=False)
     embed.set_footer(text=STORE_NAME)
 
     admin_mention = admin_role.mention if admin_role else ""
@@ -1174,7 +1178,7 @@ async def _create_lainnya_ticket(interaction: discord.Interaction, cart: list):
 
         "category": categories_label, "harga": total,
 
-        "payment_method": None, "admin_id": None,
+        "payment_method": "QRIS", "admin_id": None,
 
         "embed_message_id": None,
 
@@ -1212,7 +1216,7 @@ async def _create_lainnya_ticket(interaction: discord.Interaction, cart: list):
 
     embed.add_field(name="Total Harga", value=f"Rp {total:,}", inline=True)
 
-    embed.add_field(name="Metode Bayar", value="*Menunggu konfirmasi member...*", inline=False)
+    embed.add_field(name="Metode Bayar", value=f"**QRIS** — silakan bayar **Rp {total:,}** lalu kirim bukti transfer di sini.", inline=False)
 
     embed.add_field(name="Catatan", value="Setelah pembayaran dikonfirmasi, admin akan memproses pesanan.", inline=False)
 
@@ -1539,16 +1543,6 @@ class LainnyaStore(commands.Cog):
         ticket["last_activity"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
         save_lainnya_ticket(ticket)
-
-        if ticket.get("payment_method") is None and message.content.strip() in ["1", "2", "3"]:
-            methods = {"1": "QRIS", "2": "DANA", "3": "Bank Transfer"}
-            ticket["payment_method"] = methods[message.content.strip()]
-            save_lainnya_ticket(ticket)
-            await self._update_embed(message.channel, ticket)
-            await message.channel.send(
-                f"✅ Metode pembayaran: **{ticket['payment_method']}**\n"
-                f"Silakan lakukan pembayaran sebesar **Rp {ticket['harga']:,}** dan kirim bukti transfer."
-            )
 
 
     @commands.command(name="lainnya")
