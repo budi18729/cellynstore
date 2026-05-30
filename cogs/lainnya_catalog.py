@@ -432,10 +432,8 @@ PRODUCTS = [
 
 # -- Catatan tier bersama untuk layanan sosial media (SMM) --------------------
 SMM_TIER_NOTE = (
-    "Basic: tanpa garansi.
-"
-    "Elite: garansi refill 30 hari (jika turun diisi ulang gratis).
-"
+    "Basic: tanpa garansi.\n"
+    "Elite: garansi refill 30 hari (jika turun diisi ulang gratis).\n"
     "Luxury: permanent, garansi refill seumur hidup."
 )
 
@@ -443,103 +441,82 @@ SMM_TIER_NOTE = (
 CATEGORY_INFO = {
     "ALIGHT MOTION": {
         "description": (
-            "- Akun Private, login di mana saja (iOS/Android/PC)
-"
-            "- Semua fitur Pro: keyframe animation, efek visual, color correction
-"
-            "- Tanpa watermark, export kualitas tinggi
-"
+            "- Akun Private, login di mana saja (iOS/Android/PC)\n"
+            "- Semua fitur Pro: keyframe animation, efek visual, color correction\n"
+            "- Tanpa watermark, export kualitas tinggi\n"
             "- Full garansi selama masa aktif"
         ),
         "terms": "Akun bisa dari kami ataupun akunmu sendiri, tergantung stok.",
     },
     "REMINI": {
         "description": (
-            "- Akun dari kami, tinggal login
-"
-            "- Unlimited download, pemulihan detail tertinggi
-"
+            "- Akun dari kami, tinggal login\n"
+            "- Unlimited download, pemulihan detail tertinggi\n"
             "- Sharing = 1 device · Private = bebas device · Pro+ = akses iOS/Android/Web"
         ),
         "terms": (
-            "Akun bisa dari kami ataupun akunmu sendiri (tergantung stok).
-"
+            "Akun bisa dari kami ataupun akunmu sendiri (tergantung stok).\n"
             "Sharing hanya boleh 1 device. Private bebas device (disarankan 1)."
         ),
     },
     "CANVA": {
         "description": (
-            "- Pakai akun kamu, cukup kirim email
-"
-            "- Jutaan template premium, brand kit, font, custom template
-"
-            "- PRO OWNER bisa invite hingga 500 member
-"
+            "- Pakai akun kamu, cukup kirim email\n"
+            "- Jutaan template premium, brand kit, font, custom template\n"
+            "- PRO OWNER bisa invite hingga 500 member\n"
             "- Full garansi selama masa aktif"
         ),
         "terms": "Kirimkan email setelah melakukan pembayaran.",
     },
     "CAPCUT": {
         "description": (
-            "- Akses semua fitur Pro CapCut
-"
+            "- Akses semua fitur Pro CapCut\n"
             "- Sharing = 1 akun dipakai bersama · Private = 1 akun 1 user"
         ),
         "terms": "Sharing hanya boleh 1 device. Private bebas device (disarankan 1).",
     },
     "CHATGPT": {
         "description": (
-            "- Pakai akun kamu/kami, cukup kirim email (Garansi 28 Hari)
-"
-            "- GO: akses GPT-5.3 · PLUS: GPT-5.3 Advanced, render lebih cepat
-"
+            "- Pakai akun kamu/kami, cukup kirim email (Garansi 28 Hari)\n"
+            "- GO: akses GPT-5.3 · PLUS: GPT-5.3 Advanced, render lebih cepat\n"
             "- BUSINESS: GPT-5.4 Pro, untuk analisis bisnis / buat aplikasi"
         ),
         "terms": "Garansi 28 hari. Bisa digunakan di semua device (HP/PC/Tablet).",
     },
     "GROK AI": {
         "description": (
-            "- Akses informasi realtime via X
-"
-            "- Model AI terbaru Grok 3
-"
+            "- Akses informasi realtime via X\n"
+            "- Model AI terbaru Grok 3\n"
             "- Pembuatan gambar tingkat tinggi"
         ),
         "terms": "",
     },
     "GEMINI AI": {
-        "description": "- Akses Gemini 3.1 Pro
-- Integrasi Gmail, Docs, dll",
+        "description": "- Akses Gemini 3.1 Pro\n- Integrasi Gmail, Docs, dll",
         "terms": "Akun buyer/seller tergantung stok.",
     },
     "BSTATION": {
         "description": (
-            "- Akun dari kami, tinggal login. Bebas iklan
-"
-            "- Semua anime premium, kualitas 1080p-4K
-"
+            "- Akun dari kami, tinggal login. Bebas iklan\n"
+            "- Semua anime premium, kualitas 1080p-4K\n"
             "- Android, iOS, Web · Sharing = 1 device · Private = 1 user"
         ),
         "terms": "Garansi selama masa aktif. Sharing hanya 1 device, Private full akses.",
     },
     "YOUTUBE PREMIUM": {
         "description": (
-            "- Tanpa iklan, download video 720p, play di background, YouTube Music
-"
+            "- Tanpa iklan, download video 720p, play di background, YouTube Music\n"
             "- ADMIN: bisa invite 5 orang · INVITE: pakai akunmu · INDIVIDUAL: akun kami/kamu"
         ),
         "terms": (
-            "Admin pakai akun kami. Individual akun kami/kamu (tergantung stok).
-"
+            "Admin pakai akun kami. Individual akun kami/kamu (tergantung stok).\n"
             "Invite: akunmu wajib belum pernah gabung Family sebelumnya."
         ),
     },
     "VIU": {
         "description": (
-            "- Akun legal, fresh dibuat saat order. Kualitas HD/Ultra HD, tanpa iklan
-"
-            "- Bisa download & nonton offline (Android/iOS/Web/Smart TV)
-"
+            "- Akun legal, fresh dibuat saat order. Kualitas HD/Ultra HD, tanpa iklan\n"
+            "- Bisa download & nonton offline (Android/iOS/Web/Smart TV)\n"
             "- Premium+ : Ultra HD + gratis HBO MAX selama masa aktif"
         ),
         "terms": (
@@ -549,10 +526,8 @@ CATEGORY_INFO = {
     },
     "AMAZON PRIME VIDEO": {
         "description": (
-            "- Akun legal, region Indonesia (tanpa VPN)
-"
-            "- Kualitas Ultra HD, tanpa iklan (Android/iOS/Web/Smart TV)
-"
+            "- Akun legal, region Indonesia (tanpa VPN)\n"
+            "- Kualitas Ultra HD, tanpa iklan (Android/iOS/Web/Smart TV)\n"
             "- Sharing = 1 device · Private = hingga 3 device"
         ),
         "terms": (
@@ -562,10 +537,8 @@ CATEGORY_INFO = {
     },
     "WETV": {
         "description": (
-            "- Akun VIP original & legal, garansi kendala login
-"
-            "- Bebas nonton episode VIP, maraton drama
-"
+            "- Akun VIP original & legal, garansi kendala login\n"
+            "- Bebas nonton episode VIP, maraton drama\n"
             "- COIN: untuk unlock episode/konten premium"
         ),
         "terms": (
@@ -575,56 +548,46 @@ CATEGORY_INFO = {
     },
     "IQIYI": {
         "description": (
-            "- Film VIP lengkap, bebas iklan, bisa download VIP
-"
-            "- STANDARD: Bluray 1080p · PREMIUM: 4K Ultra HD + Dolby Atmos
-"
+            "- Film VIP lengkap, bebas iklan, bisa download VIP\n"
+            "- STANDARD: Bluray 1080p · PREMIUM: 4K Ultra HD + Dolby Atmos\n"
             "- Premium Sharing = akun sharing · Premium Private = 1 user"
         ),
         "terms": "Akun dari kami tinggal login. Sharing 1 device, Private bebas device.",
     },
     "HBO MAX": {
         "description": (
-            "- STANDARD: Full HD 1080p, 2 perangkat, 30 unduhan
-"
-            "- ULTIMATE: 4K Ultra HD, Dolby Atmos, 4 perangkat, 100 unduhan
-"
+            "- STANDARD: Full HD 1080p, 2 perangkat, 30 unduhan\n"
+            "- ULTIMATE: 4K Ultra HD, Dolby Atmos, 4 perangkat, 100 unduhan\n"
             "- Harga tertera per bulan (tersedia opsi Sharing & Private)"
         ),
         "terms": "Akun dari seller. Untuk login TV minimal beli 2.",
     },
     "VIDIO": {
         "description": (
-            "- Vidio Platinum: bebas iklan & unduh konten
-"
-            "- Tayangan olahraga (Liga Champions, BRI Liga 1, dll)
-"
+            "- Vidio Platinum: bebas iklan & unduh konten\n"
+            "- Tayangan olahraga (Liga Champions, BRI Liga 1, dll)\n"
             "- Tier: TV Only / Mobile / All Device (Sharing atau Private)"
         ),
         "terms": "Masa aktif sesuai pembelian. Sharing 1 device, Private bebas device.",
     },
     "SPOTIFY": {
         "description": (
-            "- Musik tanpa iklan, download & mode offline, play bebas (no shuffle)
-"
-            "- Kualitas audio tinggi, semua device (HP/PC/Tablet)
-"
+            "- Musik tanpa iklan, download & mode offline, play bebas (no shuffle)\n"
+            "- Kualitas audio tinggi, semua device (HP/PC/Tablet)\n"
             "- Individual / Family / Platinum (full fitur + full garansi)"
         ),
         "terms": "Disarankan 1 device aktif untuk menghindari risiko akun.",
     },
     "APPLE MUSIC": {
         "description": (
-            "- Kualitas audio Lossless, bebas iklan, 100+ juta lagu
-"
+            "- Kualitas audio Lossless, bebas iklan, 100+ juta lagu\n"
             "- Via invite email, tanpa login"
         ),
         "terms": "Tersedia harga akun baru & perpanjang.",
     },
     "GOOGLE DRIVE": {
         "description": (
-            "- Pilihan 100GB / 300GB / Unlimited
-"
+            "- Pilihan 100GB / 300GB / Unlimited\n"
             "- Akun Baru (dari kami, tinggal login) atau Akun Pribadi (kirim Gmail)"
         ),
         "terms": (
@@ -634,8 +597,7 @@ CATEGORY_INFO = {
     },
     "OUTLOOK": {
         "description": (
-            "- Akun fresh dibuat saat order, tinggal login, bebas ganti password
-"
+            "- Akun fresh dibuat saat order, tinggal login, bebas ganti password\n"
             "- Bisa @outlook.com / @hotmail.com"
         ),
         "terms": "Garansi login 1 hari setelah pembelian.",
@@ -646,17 +608,14 @@ CATEGORY_INFO = {
     },
     "RANDOM STEAM KEY": {
         "description": (
-            "- Semua key dijamin berfungsi & mendapatkan games
-"
-            "- Game yang didapat RANDOM (tidak bisa pilih)
-"
+            "- Semua key dijamin berfungsi & mendapatkan games\n"
+            "- Game yang didapat RANDOM (tidak bisa pilih)\n"
             "- Tier: Basic / Elite / Luxury"
         ),
         "terms": "Setiap pembelian key Luxury mendapat bonus key Basic.",
     },
     "XBOX GAMEPASS": {
-        "description": "- Legal 100%, berupa redeem code
-- Akses ratusan game Xbox PC / Console",
+        "description": "- Legal 100%, berupa redeem code\n- Akses ratusan game Xbox PC / Console",
         "terms": "",
     },
     "AKUN STEAM FRESH": {
@@ -665,24 +624,21 @@ CATEGORY_INFO = {
     },
     "AKUN STEAM PREMIUM GAMES": {
         "description": (
-            "- Garansi login, mendapat game utama sesuai pilihan
-"
+            "- Garansi login, mendapat game utama sesuai pilihan\n"
             "- BONUS: isi game random tambahan (bervariasi hingga 30+ game per akun)"
         ),
         "terms": "",
     },
     "AKUN EPIC GAMES": {
         "description": (
-            "- Full Access (bebas ganti email & password)
-"
+            "- Full Access (bebas ganti email & password)\n"
             "- Berisi puluhan hingga ratusan game premium siap main"
         ),
         "terms": "",
     },
     "AKUN ROBLOX": {
         "description": (
-            "- Akun Roblox fresh
-"
+            "- Akun Roblox fresh\n"
             "- 13+ standar · 21+ bisa Voice Chat & masuk server dewasa"
         ),
         "terms": "",
@@ -693,22 +649,18 @@ CATEGORY_INFO = {
     },
     "NITRO BOOST": {
         "description": (
-            "- 500MB upload, custom emoji, HD streaming, 2 server boost, dll
-"
+            "- 500MB upload, custom emoji, HD streaming, 2 server boost, dll\n"
             "- Via Login / Via Gift / Promotion (khusus akun belum pernah Nitro)"
         ),
         "terms": (
-            "PROMOTION: khusus akun yang belum pernah Nitro sama sekali.
-"
-            "GIFT: untuk semua akun, tanpa login, dikirim link gift.
-"
+            "PROMOTION: khusus akun yang belum pernah Nitro sama sekali.\n"
+            "GIFT: untuk semua akun, tanpa login, dikirim link gift.\n"
             "VIA LOGIN: untuk semua akun, perlu login."
         ),
     },
     "NITRO BASIC": {
         "description": (
-            "- 50MB upload, custom emoji, unlimited super reactions, badge Nitro
-"
+            "- 50MB upload, custom emoji, unlimited super reactions, badge Nitro\n"
             "- Via Login / Via Gift"
         ),
         "terms": "GIFT tanpa login (dikirim link), Via Login perlu login.",
@@ -719,10 +671,8 @@ CATEGORY_INFO = {
     },
     "JASA BOOST SERVER": {
         "description": (
-            "- Boost server pakai akun dari kami
-"
-            "- Paket 1 Bulan / 3 Bulan, pilihan jumlah boost / level server
-"
+            "- Boost server pakai akun dari kami\n"
+            "- Paket 1 Bulan / 3 Bulan, pilihan jumlah boost / level server\n"
             "- Cukup share link server"
         ),
         "terms": (
@@ -732,18 +682,15 @@ CATEGORY_INFO = {
     },
     "SUNTIK MEMBER": {
         "description": (
-            "- Full otomatis (tinggal add bot, member masuk sendiri), jumlah bisa custom
-"
-            "- Offline / Online (garansi 1 bln) / Aktif (orang asli) / Reaction (seumur hidup)
-"
+            "- Full otomatis (tinggal add bot, member masuk sendiri), jumlah bisa custom\n"
+            "- Offline / Online (garansi 1 bln) / Aktif (orang asli) / Reaction (seumur hidup)\n"
             "- Voice (24/7, 1 bln) / Chat (random, 1 bln) / NFT (online + profil NFT)"
         ),
         "terms": "Profil realistic (username, avatar, HypeSquad, bio).",
     },
     "TOKEN DISCORD": {
         "description": (
-            "- Token akun Discord: Fresh / 1 Bulan+ / 4 Bulan+ / Nitro
-"
+            "- Token akun Discord: Fresh / 1 Bulan+ / 4 Bulan+ / Nitro\n"
             "- Dijual satuan atau paket 100"
         ),
         "terms": "Akun di atas belum pernah Nitro, bisa untuk Nitro Promotion.",
@@ -754,14 +701,11 @@ CATEGORY_INFO = {
     },
     "YOUTUBE SUBSCRIBER": {
         "description": (
-            "- Tanpa login, hanya butuh link channel
-"
-            "- Subscriber tidak boleh di-hide
-"
+            "- Tanpa login, hanya butuh link channel\n"
+            "- Subscriber tidak boleh di-hide\n"
             "- Luxury terbaik untuk monetize YouTube"
         ),
-        "terms": "Tidak ada refund kecuali pesanan gagal.
-" + SMM_TIER_NOTE,
+        "terms": "Tidak ada refund kecuali pesanan gagal.\n" + SMM_TIER_NOTE,
     },
     "YOUTUBE LIKES": {
         "description": "- Tanpa login, hanya butuh link video.",
@@ -777,87 +721,74 @@ CATEGORY_INFO = {
     },
     "YOUTUBE LIVE VIEWERS": {
         "description": (
-            "- Instant proses 1-3 menit
-"
+            "- Instant proses 1-3 menit\n"
             "- Basic nonton 15 menit · Elite 60 menit · Luxury 120 menit"
         ),
         "terms": SMM_TIER_NOTE,
     },
     "YOUTUBE JAM TAYANG": {
         "description": (
-            "- Sangat direkomendasikan untuk monetize YouTube
-"
+            "- Sangat direkomendasikan untuk monetize YouTube\n"
             "- Basic: video min durasi 8 jam · Elite: min 3 jam · Luxury: min 1 jam"
         ),
         "terms": SMM_TIER_NOTE,
     },
     "INSTAGRAM FOLLOWERS": {
         "description": (
-            "- Tanpa login, butuh link profil/username
-"
+            "- Tanpa login, butuh link profil/username\n"
             "- Tersedia followers Region Indonesia & Global (Basic/Elite/Luxury)"
         ),
         "terms": (
-            "Akun tidak boleh di-private atau ganti username setelah pengisian.
-"
+            "Akun tidak boleh di-private atau ganti username setelah pengisian.\n"
             + SMM_TIER_NOTE
         ),
     },
     "INSTAGRAM LIKE": {
         "description": (
-            "- Tanpa login, butuh link postingan
-"
+            "- Tanpa login, butuh link postingan\n"
             "- Tersedia like Region Indonesia & Global"
         ),
         "terms": (
-            "Akun tidak boleh di-private sebelum maupun sesudah pengisian.
-"
+            "Akun tidak boleh di-private sebelum maupun sesudah pengisian.\n"
             + SMM_TIER_NOTE
         ),
     },
     "INSTAGRAM VIEWS": {
         "description": (
-            "- Tanpa login, butuh link video
-"
+            "- Tanpa login, butuh link video\n"
             "- Semua paket full garansi, makin tinggi paket makin besar bonus"
         ),
         "terms": SMM_TIER_NOTE,
     },
     "INSTAGRAM LIVE VIEWERS": {
         "description": (
-            "- Instant proses 1-3 menit
-"
+            "- Instant proses 1-3 menit\n"
             "- Basic nonton 30 menit · Elite 60 menit · Luxury 120 menit"
         ),
         "terms": SMM_TIER_NOTE,
     },
     "TIKTOK FOLLOWERS": {
         "description": "- Tanpa login, butuh link profil/username.",
-        "terms": "Akun tidak boleh di-private.
-" + SMM_TIER_NOTE,
+        "terms": "Akun tidak boleh di-private.\n" + SMM_TIER_NOTE,
     },
     "TIKTOK LIKE": {
         "description": "- Tanpa login, butuh link postingan.",
-        "terms": "Akun dilarang di-private sebelum maupun sesudah pengisian.
-" + SMM_TIER_NOTE,
+        "terms": "Akun dilarang di-private sebelum maupun sesudah pengisian.\n" + SMM_TIER_NOTE,
     },
     "TIKTOK VIEWS": {
         "description": (
-            "- Tanpa login, butuh link postingan
-"
+            "- Tanpa login, butuh link postingan\n"
             "- Elite: + reach + bonus · Luxury: peluang FYP + like/followers asli (algoritma khusus)"
         ),
         "terms": SMM_TIER_NOTE,
     },
     "TIKTOK SHARE": {
         "description": "- Menambah jumlah share pada postingan TikTok.",
-        "terms": "Akun dilarang di-private.
-" + SMM_TIER_NOTE,
+        "terms": "Akun dilarang di-private.\n" + SMM_TIER_NOTE,
     },
     "TIKTOK LIVE VIEWERS": {
         "description": (
-            "- Instant proses 1-3 menit
-"
+            "- Instant proses 1-3 menit\n"
             "- Basic nonton 30 menit · Elite 60 menit · Luxury 180 menit"
         ),
         "terms": SMM_TIER_NOTE,

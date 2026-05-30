@@ -21,6 +21,13 @@ from utils.counter import next_ticket_number
 
 from utils.transcript import generate as generate_transcript
 
+# Data katalog produk "lainnya" (PRODUCTS, CATEGORY_INFO, grup, dst).
+from cogs import lainnya_catalog
+from cogs.lainnya_catalog import GROUP_ORDER, GROUP_EMOJI, group_of, get_category_info
+
+# Kunci bot_state untuk menandai katalog sudah di-seed sekali-jalan.
+SEED_GUARD_KEY = "lainnya_seed_catalog_v1"
+
 
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
@@ -141,9 +148,63 @@ def _init_db():
 
                       (pid, cat, name, harga))
 
+    # Tabel info kategori (deskripsi + S&K) untuk embed tiket & auto-reply.
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS lainnya_category_info (
+            category    TEXT PRIMARY KEY,
+            description TEXT,
+            terms       TEXT
+        )
+    ''')
+
+    # Seed katalog (PRODUCTS + CATEGORY_INFO) sekali-jalan, dijaga bot_state.
+    _seed_catalog_once(conn, c)
+
     conn.commit()
 
     conn.close()
+
+
+def _seed_catalog_once(conn, c):
+    """Seed produk & info kategori dari cogs/lainnya_catalog.py SATU KALI.
+
+    - Dijaga oleh bot_state[SEED_GUARD_KEY]; bila sudah ada, langsung berhenti.
+    - Produk: anti-duplikat berdasarkan (category, name). Harga yang sudah ada
+      (mis. sudah diubah admin) TIDAK ditimpa karena baris existing dilewati.
+    - Info kategori: INSERT OR IGNORE -> tidak menimpa baris yang sudah ada.
+    """
+    c.execute("SELECT value FROM bot_state WHERE key=?", (SEED_GUARD_KEY,))
+    if c.fetchone():
+        return  # sudah pernah di-seed
+
+    c.execute("SELECT category, name FROM lainnya_products")
+    existing = {(r["category"], r["name"]) for r in c.fetchall()}
+
+    inserted = 0
+    for cat, name, harga in lainnya_catalog.PRODUCTS:
+        if (cat, name) in existing:
+            continue
+        c.execute(
+            "INSERT INTO lainnya_products (category, name, harga, active) VALUES (?,?,?,1)",
+            (cat, name, harga),
+        )
+        existing.add((cat, name))
+        inserted += 1
+
+    info_rows = 0
+    for cat, info in lainnya_catalog.CATEGORY_INFO.items():
+        c.execute(
+            "INSERT OR IGNORE INTO lainnya_category_info (category, description, terms) VALUES (?,?,?)",
+            (cat, info.get("description", ""), info.get("terms", "")),
+        )
+        if c.rowcount and c.rowcount > 0:
+            info_rows += 1
+
+    c.execute(
+        "INSERT OR REPLACE INTO bot_state (key, value) VALUES (?, ?)",
+        (SEED_GUARD_KEY, str(inserted)),
+    )
+    print(f"[LainnyaStore] Seed katalog: +{inserted} produk baru, {info_rows} info kategori.")
 
 
 
@@ -277,15 +338,53 @@ def _set_catalog_msg_id(msg_id):
 
 
 
+# ── CATALOG HELPERS ────────────────────────────────────────────────────────────
+def load_category_info(category: str) -> dict:
+    """Ambil deskripsi + S&K kategori dari DB (lainnya_category_info).
+
+    Fallback ke data statis lainnya_catalog.get_category_info bila belum ada di DB.
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT description, terms FROM lainnya_category_info WHERE category=?", (category,))
+    row = c.fetchone()
+    conn.close()
+    if row and (row["description"] or row["terms"]):
+        return {"description": row["description"] or "", "terms": row["terms"] or ""}
+    return get_category_info(category)
+
+
+def _groups_with_products(products):
+    """Daftar (grup, jumlah_produk) yang punya >=1 produk aktif, urut GROUP_ORDER.
+
+    Grup di luar GROUP_ORDER (mis. LAINNYA) diletakkan paling akhir.
+    """
+    from collections import Counter
+    counts = Counter(group_of(p["category"]) for p in products)
+    ordered = [(g, counts[g]) for g in GROUP_ORDER if counts.get(g)]
+    extras = sorted((g, n) for g, n in counts.items() if g not in GROUP_ORDER)
+    return ordered + extras
+
+
+def _categories_in_group(products, group):
+    """Daftar (kategori, jumlah_produk) di sebuah grup, urut nama kategori."""
+    from collections import Counter
+    counts = Counter()
+    for p in products:
+        if group_of(p["category"]) == group:
+            counts[p["category"]] += 1
+    return sorted(counts.items())
+
+
 # ── CATALOG EMBED & VIEW ───────────────────────────────────────────────────────
 
 def build_catalog_embed(products):
 
-    categories = list(dict.fromkeys(p["category"] for p in products))
+    groups = _groups_with_products(products)
 
-    cat_list = "\n".join(f"{CATEGORY_EMOJIS.get(cat, DEFAULT_CAT_EMOJI)} {cat}" for cat in categories)
-
-    
+    grp_list = "\n".join(
+        f"{GROUP_EMOJI.get(g, DEFAULT_CAT_EMOJI)} **{g}** — {n} produk" for g, n in groups
+    ) or "_Belum ada produk tersedia._"
 
     embed = discord.Embed(
 
@@ -293,11 +392,11 @@ def build_catalog_embed(products):
 
         description=(
 
-            "Pilih kategori untuk melihat produk.\n"
+            "Pilih **grup layanan** di bawah, lalu pilih kategori & produk.\n"
 
-            f"Atau klik custom order untuk pesanan khusus.\n\n"
+            "Atau klik **Custom Order** untuk pesanan khusus.\n\n"
 
-            f"**Kategori tersedia:**\n{cat_list}\n\n"
+            f"**Grup tersedia:**\n{grp_list}\n\n"
 
             "💳 Pembayaran: QRIS • DANA • Bank Transfer"
 
@@ -382,7 +481,7 @@ class CatalogView(discord.ui.View):
 
         self.clear_items()
 
-        self.add_item(CategorySelect(products, self._guild))
+        self.add_item(GroupSelect(products))
 
         self.add_item(CustomOrderButton())
 
@@ -420,295 +519,191 @@ CATEGORY_EMOJIS = {
 
 
 
-class CategorySelect(discord.ui.Select):
+class GroupSelect(discord.ui.Select):
+    """Level 1 navigasi: pilih GRUP layanan (maks 8 grup, jauh di bawah batas 25)."""
 
-    def __init__(self, products, guild=None):
-
-        by_category = {}
-
-        for p in products:
-
-            if p["category"] not in by_category:
-
-                by_category[p["category"]] = []
-
-            by_category[p["category"]].append(p)
-
-        
-
-        options = []
-
-        for cat, items in by_category.items():
-
-            options.append(
-
-                discord.SelectOption(label=cat, description=f"{len(items)} produk", value=cat)
-
+    def __init__(self, products):
+        groups = _groups_with_products(products)
+        options = [
+            discord.SelectOption(
+                label=g,
+                emoji=GROUP_EMOJI.get(g),
+                description=f"{n} produk",
+                value=g,
             )
-
-        
-
-        super().__init__(
-
-            placeholder="Pilih kategori...",
-
-            min_values=1,
-
-            max_values=1,
-
-            options=options,
-
-            custom_id="lainnya_category"
-
-        )
-
-        self.products = products
-
-
-
-    async def callback(self, interaction: discord.Interaction):
-
-        selected_cat = self.values[0]
-
-        items = [p for p in self.products if p["category"] == selected_cat]
-
-        
-
-        if not items:
-
-            await interaction.response.send_message("Tidak ada produk.", ephemeral=True)
-
-            return
-
-        
-
-        product_options = [
-
-            discord.SelectOption(label=with_price(p["name"], f"Rp {p['harga']:,}"), description=p["category"], value=str(p["id"]))
-
-            for p in items
-
+            for g, n in groups
         ]
-
-        
-
-        view = PaginatedSelectView(
-            product_options,
-            select_factory=lambda opts: ProdukSelect(opts, selected_cat),
-            placeholder=f"Pilih produk {selected_cat}",
-            owner_id=interaction.user.id,
-        )
-
-        await interaction.response.send_message(
-
-            f"📦 **{selected_cat}** — Pilih produk:",
-
-            view=view,
-
-            ephemeral=True
-
-        )
-
-
-
-
-
-class ProdukSelect(discord.ui.Select):
-
-    def __init__(self, options, category):
-
+        if not options:
+            options = [discord.SelectOption(label="Belum ada produk", value="__none__")]
         super().__init__(
-
-            placeholder="Pilih produk...",
-
+            placeholder="Pilih grup layanan...",
             min_values=1,
-
             max_values=1,
-
             options=options,
-
-            custom_id=f"lainnya_produk_{category}"
-
+            custom_id="lainnya_group",
         )
-
-        self.category = category
-
-        self.options = options
-
-
 
     async def callback(self, interaction: discord.Interaction):
-
-        products = load_lainnya_products()
-
-        product_id = int(self.values[0])
-
-        product = next((p for p in products if p["id"] == product_id), None)
-
-        
-
-        if not product:
-
-            await interaction.response.send_message("Produk tidak ditemukan.", ephemeral=True)
-
+        if self.values[0] == "__none__":
+            await interaction.response.send_message("Belum ada produk tersedia.", ephemeral=True)
             return
-
-        
-
-        cog = interaction.client.cogs.get("LainnyaStore")
-
-        if not cog:
-
-            return
-
-        
-
-        member = interaction.user
-
-        guild = interaction.guild
-
-        
-
-        for ch_id, t in cog.active_tickets.items():
-
-            if t["user_id"] == member.id:
-
-                existing = guild.get_channel(ch_id)
-
-                if existing:
-
-                    await interaction.response.send_message(
-
-                        f"Kamu masih punya tiket aktif di {existing.mention}!",
-
-                        ephemeral=True
-
-                    )
-
-                    return
-
-        
-
-        await interaction.response.defer(ephemeral=True)
-
-        
-
-        cat_channel = guild.get_channel(TICKET_CATEGORY_ID)
-
-        admin_role = guild.get_role(ADMIN_ROLE_ID)
-
-        overwrites = {
-
-            guild.default_role: discord.PermissionOverwrite(read_messages=False),
-
-            member: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-
-            guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-
-        }
-
-        if admin_role:
-
-            overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
+        await _show_categories(interaction, self.values[0])
 
 
-
-        channel = await guild.create_text_channel(
-
-            name=f"order-{member.name}",
-
-            category=cat_channel,
-
-            overwrites=overwrites
-
+async def _show_categories(interaction: discord.Interaction, group: str):
+    """Level 2 navigasi: tampilkan KATEGORI dalam grup (paginated)."""
+    products = load_lainnya_products()
+    cats = _categories_in_group(products, group)
+    if not cats:
+        await interaction.response.send_message(
+            f"Belum ada kategori aktif di grup **{group}**.", ephemeral=True
         )
+        return
+
+    options = [
+        discord.SelectOption(label=cat[:100], description=f"{cnt} produk", value=cat)
+        for cat, cnt in cats
+    ]
+
+    async def on_category(inter: discord.Interaction, value: str):
+        await _show_products(inter, value)
+
+    emoji = GROUP_EMOJI.get(group, "")
+    view = PaginatedSelectView(
+        options,
+        on_select=on_category,
+        placeholder=f"Pilih kategori {group}..."[:150],
+        owner_id=interaction.user.id,
+    )
+    await interaction.response.send_message(
+        f"{emoji} **{group}** — pilih kategori:", view=view, ephemeral=True
+    )
 
 
-
-        now = datetime.datetime.now(datetime.timezone.utc).isoformat()
-
-        ticket = {
-
-            "channel_id": channel.id,
-
-            "user_id": member.id,
-
-            "item_id": product["id"],
-
-            "item_name": product["name"],
-
-            "category": product["category"],
-
-            "harga": product["harga"],
-
-            "payment_method": None,
-
-            "admin_id": None,
-
-            "embed_message_id": None,
-
-            "opened_at": now,
-
-            "last_activity": now,
-
-            "warned": 0,
-
-            "warn_message_id": None,
-
-        }
-
-        cog.active_tickets[channel.id] = ticket
-
-        save_lainnya_ticket(ticket)
-
-
-
-        embed = discord.Embed(
-
-            title=f"ORDER {product['category']} — {STORE_NAME}",
-
-            color=COLOR_LAINNYA,
-
-            timestamp=datetime.datetime.now(datetime.timezone.utc)
-
+async def _show_products(interaction: discord.Interaction, category: str):
+    """Level 3 navigasi: tampilkan PRODUK dalam kategori (paginated)."""
+    products = load_lainnya_products()
+    items = [p for p in products if p["category"] == category]
+    if not items:
+        await interaction.response.send_message(
+            f"Belum ada produk aktif di kategori **{category}**.", ephemeral=True
         )
+        return
 
-        embed.add_field(name="Member", value=member.mention, inline=True)
-
-        embed.add_field(name="Item", value=product["name"], inline=True)
-
-        embed.add_field(name="Harga", value=f"Rp {product['harga']:,}", inline=True)
-
-        embed.add_field(name="Metode Bayar", value="*Menunggu konfirmasi...*", inline=False)
-
-        embed.set_footer(text=STORE_NAME)
-
-
-
-        admin_mention = admin_role.mention if admin_role else ""
-
-        msg = await channel.send(
-
-            content=f"{member.mention} {admin_mention}\nPesanan baru!",
-
-            embed=embed
-
+    options = [
+        discord.SelectOption(
+            label=with_price(p["name"], f"Rp {p['harga']:,}"),
+            description=category[:100],
+            value=str(p["id"]),
         )
+        for p in items
+    ]
 
-        ticket["embed_message_id"] = msg.id
+    async def on_product(inter: discord.Interaction, value: str):
+        await open_product_ticket(inter, int(value))
 
-        save_lainnya_ticket(ticket)
+    view = PaginatedSelectView(
+        options,
+        on_select=on_product,
+        placeholder=f"Pilih produk {category}..."[:150],
+        owner_id=interaction.user.id,
+    )
+    await interaction.response.send_message(
+        f"📦 **{category}** — pilih produk:", view=view, ephemeral=True
+    )
 
-        await interaction.followup.send(
 
-            f"Pesanan dibuat di {channel.mention}!\n{product['name']} - Rp {product['harga']:,}",
+async def open_product_ticket(interaction: discord.Interaction, product_id: int):
+    """Buat tiket order 1 produk + tampilkan deskripsi & S&K kategori di embed tiket."""
+    products = load_lainnya_products()
+    product = next((p for p in products if p["id"] == product_id), None)
+    if not product:
+        await interaction.response.send_message("Produk tidak ditemukan.", ephemeral=True)
+        return
 
-            ephemeral=True
+    cog = interaction.client.cogs.get("LainnyaStore")
+    if not cog:
+        return
 
-        )
+    member = interaction.user
+    guild = interaction.guild
 
+    for ch_id, t in cog.active_tickets.items():
+        if t["user_id"] == member.id:
+            existing = guild.get_channel(ch_id)
+            if existing:
+                await interaction.response.send_message(
+                    f"Kamu masih punya tiket aktif di {existing.mention}!", ephemeral=True
+                )
+                return
 
+    await interaction.response.defer(ephemeral=True)
 
+    cat_channel = guild.get_channel(TICKET_CATEGORY_ID)
+    admin_role = guild.get_role(ADMIN_ROLE_ID)
+    overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        member: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+        guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+    }
+    if admin_role:
+        overwrites[admin_role] = discord.PermissionOverwrite(read_messages=True, send_messages=True)
+
+    channel = await guild.create_text_channel(
+        name=f"order-{member.name}",
+        category=cat_channel,
+        overwrites=overwrites,
+    )
+
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    ticket = {
+        "channel_id": channel.id,
+        "user_id": member.id,
+        "item_id": product["id"],
+        "item_name": product["name"],
+        "category": product["category"],
+        "harga": product["harga"],
+        "payment_method": None,
+        "admin_id": None,
+        "embed_message_id": None,
+        "opened_at": now,
+        "last_activity": now,
+        "warned": 0,
+        "warn_message_id": None,
+    }
+    cog.active_tickets[channel.id] = ticket
+    save_lainnya_ticket(ticket)
+
+    embed = discord.Embed(
+        title=f"ORDER {product['category']} — {STORE_NAME}",
+        color=COLOR_LAINNYA,
+        timestamp=datetime.datetime.now(datetime.timezone.utc),
+    )
+    embed.add_field(name="Member", value=member.mention, inline=True)
+    embed.add_field(name="Item", value=product["name"], inline=True)
+    embed.add_field(name="Harga", value=f"Rp {product['harga']:,}", inline=True)
+
+    # Inject deskripsi + S&K kategori (dari lainnya_category_info / get_category_info).
+    info = load_category_info(product["category"])
+    if info.get("description"):
+        embed.add_field(name="📋 Deskripsi", value=info["description"][:1024], inline=False)
+    if info.get("terms"):
+        embed.add_field(name="📜 Syarat & Ketentuan", value=info["terms"][:1024], inline=False)
+
+    embed.add_field(name="Metode Bayar", value="*Menunggu konfirmasi...*", inline=False)
+    embed.set_footer(text=STORE_NAME)
+
+    admin_mention = admin_role.mention if admin_role else ""
+    msg = await channel.send(
+        content=f"{member.mention} {admin_mention}\nPesanan baru!",
+        embed=embed,
+    )
+    ticket["embed_message_id"] = msg.id
+    save_lainnya_ticket(ticket)
+    await interaction.followup.send(
+        f"Pesanan dibuat di {channel.mention}!\n{product['name']} - Rp {product['harga']:,}",
+        ephemeral=True,
+    )
 
 
 class CustomOrderButton(discord.ui.Button):
@@ -1392,6 +1387,16 @@ class LainnyaStore(commands.Cog):
             embed.add_field(name="Item", value=ticket.get("item_name", "-"), inline=True)
 
             embed.add_field(name="Harga", value=f"Rp {ticket.get('harga', 0):,}", inline=True)
+
+            _info = load_category_info(ticket.get("category") or "")
+
+            if _info.get("description"):
+
+                embed.add_field(name="📋 Deskripsi", value=_info["description"][:1024], inline=False)
+
+            if _info.get("terms"):
+
+                embed.add_field(name="📜 Syarat & Ketentuan", value=_info["terms"][:1024], inline=False)
 
             embed.add_field(
 
