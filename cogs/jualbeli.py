@@ -70,22 +70,6 @@ def load_jb_tickets() -> dict:
 
 def _sep(): return "─" * 32
 
-def embed_menunggu_admin(store_name, p1_mention, deskripsi, harga):
-    e = discord.Embed(title=f"MIDMAN JUAL BELI — {store_name}", color=COLOR_WAIT,
-                      timestamp=datetime.datetime.now(datetime.timezone.utc))
-    e.add_field(name="\u200b", value=(
-        f"Penjual  : {p1_mention}\n"
-        f"Pembeli  : -\n"
-        f"Admin    : -\n\n"
-        f"Item     : {deskripsi}\n"
-        f"Harga    : {format_nominal(harga)}\n\n"
-        f"Status   : Menunggu admin bergabung\n"
-        f"{_sep()}\n"
-        f"Tiket tidak aktif 2 jam akan otomatis ditutup."
-    ), inline=False)
-    e.set_footer(text=store_name)
-    return e
-
 def embed_setup(store_name, ticket, p1, p2, admin):
     fee = ticket.get("fee_final")
     fee_str = format_nominal(fee) if fee else "-"

@@ -72,15 +72,6 @@ def _calc_total(robux: int, rate: int) -> int:
     return robux * rate
 
 
-def _sanitize_channel_name(name: str) -> str:
-    name = name.lower().strip()
-    name = re.sub(r"[^a-z0-9\-]+", "-", name)
-    name = re.sub(r"-{2,}", "-", name).strip("-")
-    if not name:
-        return "member"
-    return name[:60]
-
-
 def build_catalog_embed(rate: int) -> discord.Embed:
     price_lines = []
     if rate > 0:

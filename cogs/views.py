@@ -4,27 +4,6 @@ from utils.fee import format_nominal
 from utils.tickets import save_tickets
 from utils.store_hours import is_store_open
 
-def build_embed_awal(store_name, p1_mention, item_p1, item_p2):
-    embed = discord.Embed(
-        title=f"MIDMAN TRADE — {store_name}",
-        color=0xFFD700,
-        timestamp=datetime.datetime.now(datetime.timezone.utc)
-    )
-    embed.add_field(
-        name="​",
-        value=(
-            f"Pihak 1 : {p1_mention}  (item : {item_p1})\n"
-            f"Pihak 2 : -      (item : {item_p2})\n"
-            f"Admin   : -\n\n"
-            f"Status  : Menunggu konfirmasi admin\n"
-            f"──────────────────────────────\n"
-            f"Tiket yang tidak aktif selama 2 jam akan otomatis ditutup dan transaksi dianggap batal."
-        ),
-        inline=False
-    )
-    embed.set_footer(text=store_name)
-    return embed
-
 def build_embed_setup(store_name, ticket, user2, fee_str):
     sep = "─" * 30
     embed = discord.Embed(
