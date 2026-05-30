@@ -17,7 +17,7 @@ BOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 COGS = [
     "cogs.midman", "cogs.selfroles", "cogs.robux", "cogs.ml",
-    "cogs.jualbeli", "cogs.testimoni", "cogs.giveaway", "cogs.welcome",
+    "cogs.jualbeli", "cogs.reviews", "cogs.giveaway", "cogs.welcome",
     "cogs.broadcast", "cogs.auto_react", "cogs.server_stats", "cogs.lainnya",
     "cogs.orders", "cogs.qr", "cogs.poll", "cogs.embed_builder",
     "cogs.autoposter", "cogs.gp", "cogs.afk", "cogs.relay",
