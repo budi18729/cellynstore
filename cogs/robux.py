@@ -15,7 +15,7 @@ from utils.robux_stock import (
     add_available as add_robux_stock_available,
 )
 from utils.store_hours import is_store_open
-from utils.paginator import PaginatedSelectView
+from utils.paginator import PaginatedSelectView, with_price
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
 
@@ -27,6 +27,27 @@ def load_robux_products():
     conn.close()
     return [{"id": r["id"], "category": r["category"], "name": r["name"], "robux": r["robux"]} for r in rows]
 
+
+def get_robux_product(item_id: int):
+    """Ambil 1 produk Robux aktif langsung dari DB (selalu fresh, tanpa cache).
+
+    Dipakai saat member memilih item agar produk yang baru ditambah lewat admin
+    panel langsung bisa dipilih tanpa perlu refresh cache (mis. command !rate).
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        "SELECT id, category, name, robux FROM robux_products WHERE id = ? AND active = 1",
+        (item_id,),
+    )
+    row = c.fetchone()
+    conn.close()
+    if not row:
+        return None
+    return {"id": row["id"], "category": row["category"], "name": row["name"], "robux": row["robux"]}
+
+
+# Cache ringan untuk catalog; pemilihan item kini dibaca live via get_robux_product().
 PRODUCTS = load_robux_products()
 
 def load_categories():
@@ -118,8 +139,8 @@ class CategoryButton(discord.ui.Button):
         for item in items:
             harga_str = harga(item["robux"], rate)
             options.append(discord.SelectOption(
-                label=f"{item['name']}",
-                description=f"{item['robux']} Robux — {harga_str}",
+                label=with_price(item["name"], harga_str),
+                description=f"{item['robux']} Robux",
                 value=str(item["id"]),
             ))
         if not options:
@@ -286,7 +307,7 @@ class CartView(discord.ui.View):
 async def _robux_handle_item(interaction: discord.Interaction, value: str):
     """Tambahkan item terpilih ke keranjang lalu tampilkan CartView."""
     item_id = int(value)
-    item = next((p for p in PRODUCTS if p["id"] == item_id), None)
+    item = get_robux_product(item_id)
     if not item:
         await interaction.response.send_message("Item tidak ditemukan!", ephemeral=True)
         return
