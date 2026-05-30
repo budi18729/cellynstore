@@ -16,6 +16,7 @@ from utils.config import (
 
 from utils.db import get_conn
 from utils.store_hours import is_store_open
+from utils.paginator import PaginatedSelectView
 from utils.counter import next_ticket_number
 
 from utils.transcript import generate as generate_transcript
@@ -352,9 +353,12 @@ class CategoryButton(discord.ui.Button):
 
         ]
 
-        view = discord.ui.View(timeout=60)
-
-        view.add_item(ItemSelect(options, self.category))
+        view = PaginatedSelectView(
+            options,
+            select_factory=lambda opts: ItemSelect(opts, self.category),
+            placeholder=f"Pilih item {self.category}",
+            owner_id=interaction.user.id,
+        )
 
         await interaction.response.send_message(f"Pilih item **{self.category}**:", view=view, ephemeral=True)
 
@@ -488,9 +492,12 @@ class CategorySelect(discord.ui.Select):
 
         
 
-        view = discord.ui.View()
-
-        view.add_item(ProdukSelect(product_options, selected_cat))
+        view = PaginatedSelectView(
+            product_options,
+            select_factory=lambda opts: ProdukSelect(opts, selected_cat),
+            placeholder=f"Pilih produk {selected_cat}",
+            owner_id=interaction.user.id,
+        )
 
         await interaction.response.send_message(
 
