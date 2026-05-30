@@ -1,0 +1,17 @@
+{
+  "webhook_url": "PASTE_WEBHOOK_URL",
+  "interval_seconds": 0,
+  "mode": "rotate",
+  "username": "Cellyn Store",
+  "avatar_url": "",
+  "messages": [
+    {
+      "content": "🔥 Promo hari ini: Topup ML murah!\nHubungi admin sekarang.",
+      "embeds": []
+    },
+    {
+      "content": "💎 Stock Nitro & Cloud Phone ready!\nCek katalog di server kami.",
+      "embeds": []
+    }
+  ]
+}
