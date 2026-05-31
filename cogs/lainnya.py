@@ -19,6 +19,7 @@ from utils.store_hours import is_store_open
 from utils.paginator import PaginatedSelectView, with_price
 from utils.counter import next_ticket_number
 from utils import ticket_ui
+from utils import reviews as reviews_data
 
 
 # Data katalog produk "lainnya" (PRODUCTS, CATEGORY_INFO, grup, dst).
@@ -500,6 +501,12 @@ def build_catalog_embed(products):
         color=COLOR_LAINNYA,
 
     )
+
+    _rating = reviews_data.rating_line("lainnya")
+
+    if _rating:
+
+        embed.add_field(name="⭐ Rating Pembeli", value=_rating, inline=False)
 
     embed.set_footer(text=f"{STORE_NAME}")
 

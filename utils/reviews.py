@@ -326,3 +326,21 @@ def count_user_reviews(user_id: int) -> int:
     row = c.fetchone()
     conn.close()
     return row["n"] or 0
+
+
+def rating_line(layanan: str = None) -> str:
+    """Baris ringkas rata-rata rating untuk ditempel di embed katalog (social proof).
+
+    Mengembalikan '' bila belum ada rating, atau mis. '⭐ 4.8/5 · 120 ulasan'.
+    Aman dipanggil tanpa Discord (murni SQLite)."""
+    try:
+        stats = get_stats(layanan)
+    except Exception:
+        return ""
+    if not stats or not stats.get("count"):
+        return ""
+    avg = stats["average"]
+    n = stats["count"]
+    full = int(round(avg))
+    stars = "⭐" * max(0, min(5, full))
+    return f"{stars} **{avg:.1f}/5** · {n} ulasan"

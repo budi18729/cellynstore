@@ -27,6 +27,7 @@ from utils.robux_stock import get_available as get_robux_stock_available, get_ou
 from utils.store_hours import is_store_open
 from utils.counter import next_ticket_number
 from utils import ticket_ui
+from utils import reviews as reviews_data
 
 COLOR = 0xF1C40F
 
@@ -112,6 +113,9 @@ def build_catalog_embed(rate: int) -> discord.Embed:
         ),
         inline=False,
     )
+    _rating = reviews_data.rating_line("vilog")
+    if _rating:
+        embed.add_field(name="⭐ Rating Pembeli", value=_rating, inline=False)
     embed.set_footer(text=f"{STORE_NAME} • Support kelipatan {STEP_ROBUX} (max {MAX_ROBUX})")
     return embed
 

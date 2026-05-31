@@ -23,6 +23,10 @@ ML_CATALOG_CHANNEL_ID = int(os.getenv('ML_CATALOG_CHANNEL_ID'))
 LAINNYA_AUTOREPLY_CHANNEL_ID = int(os.getenv('LAINNYA_AUTOREPLY_CHANNEL_ID', '1508564472141447389'))
 # Channel publikasi ulasan/rating member (dipakai sistem reviews)
 TESTIMONI_CHANNEL_ID = int(os.getenv('TESTIMONI_CHANNEL_ID', 0))
+# Role badge untuk reviewer aktif (opsional; 0 = nonaktif). Diberikan otomatis
+# saat member mencapai ambang jumlah rating tertentu.
+REVIEWER_BADGE_ROLE_ID = int(os.getenv('REVIEWER_BADGE_ROLE_ID', 0))
+REVIEWER_BADGE_THRESHOLD = int(os.getenv('REVIEWER_BADGE_THRESHOLD', 3))
 
 INVITE_REWARD_CHANNEL_ID = int(os.getenv('INVITE_REWARD_CHANNEL_ID', '1482464579085799435'))
 AUTOPOSTER_TOKEN = os.getenv('AUTOPOSTER_TOKEN', '')
