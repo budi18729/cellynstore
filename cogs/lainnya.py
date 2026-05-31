@@ -1342,9 +1342,11 @@ class LainnyaStore(commands.Cog):
 
 
 
-    @commands.Cog.listener(name="on_message")
-
-    async def autoreply_listener(self, message: discord.Message):
+    # Auto-reply lama (Fase 2) DINONAKTIFKAN — digantikan cog ProductSearch
+    # (cogs/product_search.py): pencarian lintas-toko ML + Robux + Lainnya,
+    # fuzzy match, alias, dan tombol "Buka Tiket"/katalog. Method di bawah
+    # sengaja TIDAK didaftarkan sebagai listener (dipertahankan sbg referensi).
+    async def _legacy_autoreply_listener(self, message: discord.Message):
         # Fase 2: auto-reply kata kunci di channel khusus.
         if message.author.bot or message.guild is None:
             return
