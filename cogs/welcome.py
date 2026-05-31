@@ -141,7 +141,6 @@ class WelcomeCog(commands.Cog):
         channel = self.bot.get_channel(self._welcome_channel_id)
         if not channel:
             return
-        member_count = sum(1 for m in member.guild.members if not m.bot)
         now = datetime.datetime.now(datetime.timezone.utc)
         joined = member.joined_at
         if joined:
@@ -162,10 +161,10 @@ class WelcomeCog(commands.Cog):
         else:
             durasi_str = "tidak diketahui"
         embed = discord.Embed(
-            title=f"{member.display_name} meninggalkan server. 🍃",
+            title=f"{member.display_name} pamit dulu 🍃",
             description=(
-                f"Bergabung selama **{durasi_str}** — semoga sampai jumpa lagi.\n"
-                f"Total member sekarang: **{member_count}**"
+                f"Terima kasih atas kebersamaannya selama **{durasi_str}**. "
+                f"Semoga kita ketemu lagi ya — take care! 🤍"
             ),
             color=0x808080,
         )
@@ -209,10 +208,12 @@ class WelcomeCog(commands.Cog):
         guild = member.guild
         member_count = sum(1 for m in guild.members if not m.bot)
         embed = discord.Embed(
-            title=f"Selamat datang di {STORE_NAME}, {member.display_name}! 👋",
+            title=f"Halo {member.display_name}, selamat datang di {STORE_NAME}! 🤍",
             description=(
-                f"Senang kamu bergabung! Kamu adalah member ke-**{member_count}**.\n\n"
-                f"Silakan baca rules dan info penting agar transaksi aman & nyaman."
+                f"Makasih ya udah mampir dan gabung bareng kami 🙏\n"
+                f"Sekarang kamu jadi bagian ke-**{member_count}** dari keluarga kecil ini.\n\n"
+                f"Santai aja, anggap rumah sendiri. Kalau mau tanya-tanya produk atau "
+                f"butuh bantuan, jangan sungkan — kami siap bantu kapan pun. 🤝"
             ),
             color=0x00BFFF,
         )
@@ -243,11 +244,10 @@ class WelcomeCog(commands.Cog):
         if not channel:
             return
         embed = discord.Embed(
-            title="🚀 Server di-boost!",
+            title="Ada yang baik hati nih! 💜",
             description=(
-                f"**{member.mention}** baru saja boost {STORE_NAME}!\n\n"
-                f"Terima kasih banyak atas dukungannya. Kontribusimu bikin komunitas ini makin hidup dan solid. 🙌\n"
-                f"Semoga betah dan terus bareng kita di sini. Kalau ada request/masukan, jangan ragu ya. 🥳"
+                f"{member.mention} baru aja boost server 🚀 Makasih banyak ya, kamu keren! 🙏\n"
+                f"Dukungan kecilmu bikin {STORE_NAME} makin hidup. Sehat & sukses selalu! 🤍"
             ),
             color=0xFF73FA,
         )
