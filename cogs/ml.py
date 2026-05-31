@@ -189,14 +189,17 @@ class GameFormModal(discord.ui.Modal):
         game = self.game
         product = self.product
         cog = interaction.client.cogs.get("MLStore")
-        for ch_id, t in cog.active_tickets.items():
-            if t["user_id"] == user.id:
-                existing = guild.get_channel(ch_id)
-                if existing:
-                    await interaction.response.send_message(
-                        f"Kamu masih punya tiket aktif di {existing.mention}!", ephemeral=True
-                    )
-                    return
+        from utils.config import MAX_TICKETS_PER_SERVICE
+        _user_active = sum(
+            1 for _cid, _t in cog.active_tickets.items()
+            if _t.get("user_id") == user.id and guild.get_channel(_cid)
+        )
+        if _user_active >= MAX_TICKETS_PER_SERVICE:
+            await interaction.response.send_message(
+                f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
+                ephemeral=True
+            )
+            return
         admin_role = guild.get_role(ADMIN_ROLE_ID)
         category = guild.get_channel(TICKET_CATEGORY_ID)
         overwrites = {

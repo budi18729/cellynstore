@@ -243,9 +243,15 @@ class VilogCatalogView(discord.ui.View):
             )
             return
         # Cegah ticket dobel per user
-        if any(t.get("user_id") == interaction.user.id for t in self.cog.active_tickets.values()):
+        from utils.config import MAX_TICKETS_PER_SERVICE
+        _guild = interaction.guild
+        _user_active = sum(
+            1 for _cid, _t in self.cog.active_tickets.items()
+            if _t.get("user_id") == interaction.user.id and _guild.get_channel(_cid)
+        )
+        if _user_active >= MAX_TICKETS_PER_SERVICE:
             await interaction.response.send_message(
-                "Kamu masih punya tiket Vilog yang aktif. Selesaikan dulu tiket itu.",
+                f"Kamu sudah punya {_user_active} tiket Vilog aktif (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
                 ephemeral=True,
             )
             return

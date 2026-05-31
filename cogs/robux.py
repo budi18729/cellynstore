@@ -228,15 +228,17 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
     member = interaction.user
     cog = interaction.client.cogs.get("RobuxStore")
 
-    for ch_id, t in cog.active_tickets.items():
-        if t["user_id"] == member.id:
-            existing = guild.get_channel(ch_id)
-            if existing:
-                await interaction.response.edit_message(
-                    content=f"Kamu masih punya tiket aktif di {existing.mention}!",
-                    embed=None, view=None
-                )
-                return
+    from utils.config import MAX_TICKETS_PER_SERVICE
+    _user_active = sum(
+        1 for _cid, _t in cog.active_tickets.items()
+        if _t.get("user_id") == member.id and guild.get_channel(_cid)
+    )
+    if _user_active >= MAX_TICKETS_PER_SERVICE:
+        await interaction.response.edit_message(
+            content=f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
+            embed=None, view=None
+        )
+        return
 
     await interaction.response.edit_message(content="Membuat tiket...", embed=None, view=None)
 
@@ -430,15 +432,18 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
         member = interaction.user
         cog = interaction.client.cogs.get("RobuxStore")
 
-        # Cek tiket aktif
-        for ch_id, t in cog.active_tickets.items():
-            if t["user_id"] == member.id:
-                existing = guild.get_channel(ch_id)
-                if existing:
-                    await interaction.response.send_message(
-                        f"Kamu masih punya tiket aktif di {existing.mention}!", ephemeral=True
-                    )
-                    return
+        # Cek tiket aktif (maks per layanan)
+        from utils.config import MAX_TICKETS_PER_SERVICE
+        _user_active = sum(
+            1 for _cid, _t in cog.active_tickets.items()
+            if _t.get("user_id") == member.id and guild.get_channel(_cid)
+        )
+        if _user_active >= MAX_TICKETS_PER_SERVICE:
+            await interaction.response.send_message(
+                f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
+                ephemeral=True
+            )
+            return
 
         await interaction.response.send_message("Membuat tiket...", ephemeral=True)
 
