@@ -19,7 +19,12 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-from utils.config import GUILD_ID, STORE_NAME, TESTIMONI_CHANNEL_ID, REVIEWER_BADGE_ROLE_ID, REVIEWER_BADGE_THRESHOLD
+from utils.config import (
+    GUILD_ID, STORE_NAME, TESTIMONI_CHANNEL_ID,
+    REVIEWER_BADGE_ROLE_ID, REVIEWER_BADGE_THRESHOLD,
+    ROBUX_CATALOG_CHANNEL_ID, ML_CATALOG_CHANNEL_ID,
+    VILOG_CATALOG_CHANNEL_ID, MIDMAN_CHANNEL_ID,
+)
 from utils import reviews as rv
 
 COLOR_REVIEW = 0xFFC107  # kuning/emas
@@ -28,6 +33,41 @@ POLL_INTERVAL_SECONDS = 60
 # Role member loyal (didapat otomatis dari transaksi). Dipakai gating /riwayat.
 # Konsisten dengan cog lain yang assign role by-name saat transaksi selesai.
 ROYAL_CUSTOMER_ROLE_NAME = "Royal Customer"
+
+# Channel katalog per layanan (untuk tombol "Order Lagi" di prompt rating).
+# gp & lainnya pakai channel hardcoded (sesuai cog masing-masing).
+GP_CATALOG_CHANNEL_ID = 1478917118715236603
+LAINNYA_CATALOG_CHANNEL_ID = 1476349829113315489
+
+ORDER_AGAIN = {
+    "robux": (ROBUX_CATALOG_CHANNEL_ID, "🛒 Order Robux Lagi"),
+    "vilog": (VILOG_CATALOG_CHANNEL_ID, "🛒 Order Robux Via Login Lagi"),
+    "ml": (ML_CATALOG_CHANNEL_ID, "🛒 Order Mobile Legends Lagi"),
+    "ff": (ML_CATALOG_CHANNEL_ID, "🛒 Order Free Fire Lagi"),
+    "gp": (GP_CATALOG_CHANNEL_ID, "🛒 Order Robux Gamepass Lagi"),
+    "lainnya": (LAINNYA_CATALOG_CHANNEL_ID, "🛒 Order Layanan Lainnya Lagi"),
+    "jualbeli": (MIDMAN_CHANNEL_ID, "🛒 Jual Beli Lagi"),
+    "midman": (MIDMAN_CHANNEL_ID, "🛒 Middleman Lagi"),
+}
+
+
+def _order_again_button(layanan: str | None) -> discord.ui.Button | None:
+    """Tombol link 'Order Lagi' yang mengarah ke channel katalog layanan terkait.
+
+    Memetakan layanan transaksi (mis. 'vilog', 'lainnya:editing') -> channel +
+    label. Mengembalikan None bila layanan/channel tidak diketahui.
+    """
+    if not layanan:
+        return None
+    base = layanan.split(":", 1)[0].lower()
+    entry = ORDER_AGAIN.get(base)
+    if not entry:
+        return None
+    channel_id, label = entry
+    if not channel_id:
+        return None
+    url = f"https://discord.com/channels/{GUILD_ID}/{channel_id}"
+    return discord.ui.Button(label=label, style=discord.ButtonStyle.link, url=url)
 
 # Nama layanan ramah-tampilan untuk embed.
 LAYANAN_LABEL = {
@@ -110,11 +150,20 @@ class ReviewModal(discord.ui.Modal):
                 ephemeral=True,
             )
             return
-        await interaction.response.send_message(
-            f"Makasih banyak! Rating **{self.rating}/5** {_stars(self.rating)} kamu sudah tercatat "
-            "dan jadi garansi transaksimu. 💛",
-            ephemeral=True,
-        )
+        if self.rating == 5:
+            # Auto-thank spesial untuk rating sempurna.
+            await interaction.response.send_message(
+                f"🎉✨ WAH, RATING SEMPURNA {_stars(5)}! ✨🎉\n"
+                f"Makasih banyak udah kasih **5/5** — kamu the best! 💛\n"
+                f"Garansi transaksimu **aktif**, dan ditunggu next order-nya di {STORE_NAME}! 🛍️",
+                ephemeral=True,
+            )
+        else:
+            await interaction.response.send_message(
+                f"Makasih banyak! Rating **{self.rating}/5** {_stars(self.rating)} kamu sudah tercatat "
+                "dan jadi garansi transaksimu. 💛",
+                ephemeral=True,
+            )
         cog = interaction.client.cogs.get("Reviews")
         if cog:
             await cog.update_success_log(self.review_id)
@@ -181,11 +230,14 @@ class StarButton(
         await interaction.response.send_modal(ReviewModal(self.review_id, self.stars))
 
 
-def build_rating_view(review_id: int) -> discord.ui.View:
-    """View berisi 5 tombol bintang untuk sebuah review."""
+def build_rating_view(review_id: int, layanan: str = None) -> discord.ui.View:
+    """View berisi 5 tombol bintang + tombol 'Order Lagi' (link) untuk sebuah review."""
     view = discord.ui.View(timeout=None)
     for s in (1, 2, 3, 4, 5):
         view.add_item(StarButton(review_id, s))
+    btn = _order_again_button(layanan)
+    if btn is not None:
+        view.add_item(btn)
     return view
 
 
@@ -295,10 +347,12 @@ class Reviews(commands.Cog):
         self.bot.add_dynamic_items(StarButton)
         self.poll_transactions.start()
         self.expire_pending.start()
+        self.remind_pending.start()
 
     def cog_unload(self):
         self.poll_transactions.cancel()
         self.expire_pending.cancel()
+        self.remind_pending.cancel()
 
     # ── Poller transaksi baru ─────────────────────
     @tasks.loop(seconds=POLL_INTERVAL_SECONDS)
@@ -340,6 +394,67 @@ class Reviews(commands.Cog):
     @expire_pending.before_loop
     async def _before_expire(self):
         await self.bot.wait_until_ready()
+
+    # ── Poller pengingat rating (sebelum deadline) ─
+    @tasks.loop(minutes=30)
+    async def remind_pending(self):
+        try:
+            due = rv.fetch_due_for_reminder()
+            for review in due:
+                if rv.mark_reminded(review["id"]):
+                    await self._send_reminder(review)
+        except Exception as e:
+            print(f"[Reviews] reminder loop error: {e}")
+
+    @remind_pending.before_loop
+    async def _before_remind(self):
+        await self.bot.wait_until_ready()
+
+    async def _send_reminder(self, review: dict):
+        """Kirim pengingat agar member rating sebelum garansi hangus."""
+        deadline_txt = ""
+        if review.get("deadline_at"):
+            try:
+                ts = int(datetime.datetime.fromisoformat(review["deadline_at"]).timestamp())
+                deadline_txt = f"\n\n⏳ **Sisa waktu: <t:{ts}:R>** — setelah itu garansi hangus."
+            except Exception:
+                deadline_txt = ""
+        embed = discord.Embed(
+            title="⏰ Jangan Lupa Beri Rating!",
+            description=(
+                f"Transaksimu di **{STORE_NAME}** belum kamu beri rating.\n"
+                f"**Rating = Garansi.** Beri rating sekarang agar garansimu aktif "
+                f"sebelum batas waktu habis. 💛{deadline_txt}"
+            ),
+            color=COLOR_REVIEW,
+        )
+        if review.get("item"):
+            embed.add_field(name="Item", value=str(review["item"])[:256], inline=True)
+        embed.set_footer(text=f"{STORE_NAME} • Tanpa rating = tanpa garansi")
+
+        view = build_rating_view(review["id"], layanan=review.get("layanan"))
+        user = self.bot.get_user(review["user_id"])
+        if user is None:
+            try:
+                user = await self.bot.fetch_user(review["user_id"])
+            except Exception:
+                user = None
+        if user is not None:
+            try:
+                await user.send(embed=embed, view=view)
+                return
+            except discord.Forbidden:
+                pass
+            except Exception as e:
+                print(f"[Reviews] reminder DM error {review['user_id']}: {e}")
+        # Fallback ke channel testimoni.
+        if TESTIMONI_CHANNEL_ID:
+            channel = self.bot.get_channel(TESTIMONI_CHANNEL_ID)
+            if channel is not None:
+                try:
+                    await channel.send(content=f"<@{review['user_id']}>", embed=embed, view=view)
+                except Exception as e:
+                    print(f"[Reviews] reminder channel error: {e}")
 
     async def _notify_expired(self, review: dict):
         """Beri tahu buyer bahwa waktu rating habis & garansi hangus."""
@@ -389,7 +504,7 @@ class Reviews(commands.Cog):
                 user = None
 
         embed = build_prompt_embed(review, avatar_url=(user.display_avatar.url if user else None))
-        view = build_rating_view(review_id)
+        view = build_rating_view(review_id, layanan=tx.get("layanan"))
 
         # Coba DM dulu.
         if user is not None:

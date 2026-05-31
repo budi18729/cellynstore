@@ -30,6 +30,7 @@ RECOMMENDED = {
     "TESTIMONI_CHANNEL_ID": "publikasi rating/ulasan & fallback prompt rating",
     "LAINNYA_AUTOREPLY_CHANNEL_ID": "auto-reply kata kunci layanan lainnya",
     "WARRANTY_CHANNEL_ID": "panel klaim garansi",
+    "DAILY_REPORT_CHANNEL_ID": "laporan harian otomatis",
     "DANA_NUMBER": "info pembayaran DANA",
     "BCA_NUMBER": "info pembayaran BCA",
 }
@@ -42,6 +43,7 @@ NUMERIC = [
     "ML_CATALOG_CHANNEL_ID", "TESTIMONI_CHANNEL_ID", "LAINNYA_AUTOREPLY_CHANNEL_ID",
     "VILOG_CHANNEL_ID", "VILOG_CATALOG_CHANNEL_ID", "INVITE_REWARD_CHANNEL_ID",
     "REVIEWER_BADGE_ROLE_ID", "REVIEWER_BADGE_THRESHOLD", "WARRANTY_CHANNEL_ID",
+    "DAILY_REPORT_CHANNEL_ID",
 ]
 
 

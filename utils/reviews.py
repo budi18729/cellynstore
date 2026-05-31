@@ -60,6 +60,12 @@ def init_reviews_db():
     except Exception as e:
         if "duplicate column" not in str(e).lower():
             print(f"[Reviews] migrasi deadline_at: {e}")
+    # Migrasi: kolom reminded_at (penanda pengingat rating sudah dikirim).
+    try:
+        c.execute("ALTER TABLE reviews ADD COLUMN reminded_at TEXT")
+    except Exception as e:
+        if "duplicate column" not in str(e).lower():
+            print(f"[Reviews] migrasi reminded_at: {e}")
     conn.commit()
     conn.close()
 
@@ -236,6 +242,52 @@ def mark_expired(review_id: int) -> bool:
     c.execute(
         "UPDATE reviews SET status=? WHERE id=? AND status=?",
         (STATUS_EXPIRED, review_id, STATUS_PENDING),
+    )
+    changed = c.rowcount
+    conn.commit()
+    conn.close()
+    return changed > 0
+
+
+# ── Pengingat rating (sebelum deadline) ───────────────────────────────────────────
+# Kirim pengingat bila sisa waktu <= REMINDER_BEFORE_HOURS sebelum deadline.
+REMINDER_BEFORE_HOURS = 6
+
+
+def fetch_due_for_reminder() -> list[dict]:
+    """Ambil review 'pending' yang mendekati deadline & belum pernah diingatkan.
+
+    Kriteria: status pending, belum reminded_at, dan deadline_at berada dalam
+    rentang (sekarang, sekarang + REMINDER_BEFORE_HOURS]. Tidak mengirim
+    pengingat untuk yang sudah lewat deadline (itu ditangani expiry).
+    """
+    now = datetime.datetime.now(datetime.timezone.utc)
+    window_end = (now + datetime.timedelta(hours=REMINDER_BEFORE_HOURS)).isoformat()
+    now_iso = now.isoformat()
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        """
+        SELECT * FROM reviews
+        WHERE status = ? AND reminded_at IS NULL
+          AND deadline_at IS NOT NULL
+          AND deadline_at > ? AND deadline_at <= ?
+        ORDER BY id ASC
+        """,
+        (STATUS_PENDING, now_iso, window_end),
+    )
+    rows = c.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def mark_reminded(review_id: int) -> bool:
+    """Tandai bahwa pengingat sudah dikirim (hanya bila masih pending & belum reminded)."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        "UPDATE reviews SET reminded_at=? WHERE id=? AND status=? AND reminded_at IS NULL",
+        (_now_iso(), review_id, STATUS_PENDING),
     )
     changed = c.rowcount
     conn.commit()
@@ -425,3 +477,62 @@ def has_valid_warranty(user_id: int) -> bool:
     row = c.fetchone()
     conn.close()
     return row is not None
+
+
+# ── Laporan harian (#7) ────────────────────────────────────────────────────────────
+def get_daily_report(date_str: str) -> dict:
+    """Ringkasan transaksi pada satu tanggal (UTC, format 'YYYY-MM-DD').
+
+    Return {
+      'date', 'total_tx', 'total_omzet',
+      'per_layanan': [{layanan, count, omzet}...],
+      'rating_count', 'rating_avg'
+    }
+    Berbasis transaction_log.closed_at (prefix tanggal) & reviews.rated_at.
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    like = f"{date_str}%"
+
+    c.execute(
+        "SELECT COUNT(*) AS n, COALESCE(SUM(nominal),0) AS omzet "
+        "FROM transaction_log WHERE closed_at LIKE ?",
+        (like,),
+    )
+    row = c.fetchone()
+    total_tx = row["n"] or 0
+    total_omzet = row["omzet"] or 0
+
+    c.execute(
+        """
+        SELECT layanan, COUNT(*) AS count, COALESCE(SUM(nominal),0) AS omzet
+        FROM transaction_log
+        WHERE closed_at LIKE ?
+        GROUP BY layanan
+        ORDER BY omzet DESC
+        """,
+        (like,),
+    )
+    per_layanan = [
+        {"layanan": r["layanan"], "count": r["count"], "omzet": r["omzet"] or 0}
+        for r in c.fetchall()
+    ]
+
+    c.execute(
+        "SELECT COUNT(*) AS n, AVG(rating) AS avg FROM reviews "
+        "WHERE rating IS NOT NULL AND rated_at LIKE ?",
+        (like,),
+    )
+    rr = c.fetchone()
+    rating_count = rr["n"] or 0
+    rating_avg = round(rr["avg"], 2) if rr["avg"] is not None else 0.0
+
+    conn.close()
+    return {
+        "date": date_str,
+        "total_tx": total_tx,
+        "total_omzet": total_omzet,
+        "per_layanan": per_layanan,
+        "rating_count": rating_count,
+        "rating_avg": rating_avg,
+    }
