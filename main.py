@@ -4,10 +4,12 @@ import asyncio
 from dotenv import load_dotenv
 import os
 import re
+import shutil
 import subprocess
 import sys
 import threading
 import time
+import urllib.request
 
 load_dotenv()
 
@@ -63,8 +65,29 @@ def install_cloudflared():
         arch = subprocess.check_output(["uname", "-m"]).decode().strip()
         cf_bin = "cloudflared-linux-amd64" if "x86_64" in arch else "cloudflared-linux-arm64"
         url = f"https://github.com/cloudflare/cloudflared/releases/latest/download/{cf_bin}"
-        subprocess.run(["wget", "-q", "-O", cf_path, url], check=True)
-        subprocess.run(["chmod", "+x", cf_path], check=True)
+
+        # Unduh tanpa bergantung pada 'wget' (tidak selalu tersedia, mis. Endercloud).
+        # Utamakan urllib bawaan Python; fallback ke curl bila ada.
+        downloaded = False
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=120) as resp, open(cf_path, "wb") as out:
+                shutil.copyfileobj(resp, out)
+            downloaded = True
+        except Exception as e:
+            print(f"[CF] urllib download gagal ({e}); coba curl...")
+            if shutil.which("curl"):
+                subprocess.run(["curl", "-fsSL", "-o", cf_path, url], check=True)
+                downloaded = True
+            elif shutil.which("wget"):
+                subprocess.run(["wget", "-q", "-O", cf_path, url], check=True)
+                downloaded = True
+
+        if not downloaded:
+            print("[CF] Tidak ada metode unduh tersedia (urllib/curl/wget).")
+            return None
+
+        os.chmod(cf_path, 0o755)
         print("[CF] cloudflared installed.")
         return cf_path
     except Exception as e:
