@@ -34,3 +34,8 @@ DAILY_REPORT_CHANNEL_ID = int(os.getenv('DAILY_REPORT_CHANNEL_ID', '147635103741
 
 INVITE_REWARD_CHANNEL_ID = int(os.getenv('INVITE_REWARD_CHANNEL_ID', '1482464579085799435'))
 AUTOPOSTER_TOKEN = os.getenv('AUTOPOSTER_TOKEN', '')
+
+
+# Batas maksimal tiket AKTIF per member untuk SETIAP layanan
+# (Midman, ML, Robux, GP, Lainnya, JualBeli, Vilog). Hitungannya per-layanan.
+MAX_TICKETS_PER_SERVICE = int(os.getenv('MAX_TICKETS_PER_SERVICE', 5))

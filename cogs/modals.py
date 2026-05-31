@@ -15,20 +15,17 @@ class MidmanTradeModal(discord.ui.Modal, title="Buka Tiket Midman Trade"):
         cog = interaction.client.cogs.get("Midman")
         guild = interaction.guild
 
-        for ch_id, t in cog.active_tickets.items():
-            if t["pihak1"] and t["pihak1"].id == interaction.user.id:
-                ch = guild.get_channel(ch_id)
-                if ch:
-                    await interaction.response.send_message(
-                        f"Kamu masih memiliki tiket aktif: {ch.mention}\nSelesaikan tiket tersebut sebelum membuka yang baru.",
-                        ephemeral=True
-                    )
-                else:
-                    await interaction.response.send_message(
-                        "Kamu masih memiliki tiket aktif. Selesaikan tiket tersebut sebelum membuka yang baru.",
-                        ephemeral=True
-                    )
-                return
+        from utils.config import MAX_TICKETS_PER_SERVICE
+        _user_active = sum(
+            1 for _cid, _t in cog.active_tickets.items()
+            if _t.get("pihak1") and _t["pihak1"].id == interaction.user.id and guild.get_channel(_cid)
+        )
+        if _user_active >= MAX_TICKETS_PER_SERVICE:
+            await interaction.response.send_message(
+                f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya sebelum membuka yang baru.",
+                ephemeral=True
+            )
+            return
 
         category = guild.get_channel(TICKET_CATEGORY_ID)
         admin_role = guild.get_role(ADMIN_ROLE_ID)

@@ -679,14 +679,17 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
     member = interaction.user
     guild = interaction.guild
 
-    for ch_id, t in cog.active_tickets.items():
-        if t["user_id"] == member.id:
-            existing = guild.get_channel(ch_id)
-            if existing:
-                await interaction.response.send_message(
-                    f"Kamu masih punya tiket aktif di {existing.mention}!", ephemeral=True
-                )
-                return
+    from utils.config import MAX_TICKETS_PER_SERVICE
+    _user_active = sum(
+        1 for _cid, _t in cog.active_tickets.items()
+        if _t.get("user_id") == member.id and guild.get_channel(_cid)
+    )
+    if _user_active >= MAX_TICKETS_PER_SERVICE:
+        await interaction.response.send_message(
+            f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
+            ephemeral=True
+        )
+        return
 
     await interaction.response.defer(ephemeral=True)
 
@@ -927,23 +930,17 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order"):
 
 
 
-        for ch_id, t in cog.active_tickets.items():
-
-            if t["user_id"] == member.id:
-
-                existing = guild.get_channel(ch_id)
-
-                if existing:
-
-                    await interaction.response.send_message(
-
-                        f"Kamu masih punya tiket aktif di {existing.mention}!",
-
-                        ephemeral=True
-
-                    )
-
-                    return
+        from utils.config import MAX_TICKETS_PER_SERVICE
+        _user_active = sum(
+            1 for _cid, _t in cog.active_tickets.items()
+            if _t.get("user_id") == member.id and guild.get_channel(_cid)
+        )
+        if _user_active >= MAX_TICKETS_PER_SERVICE:
+            await interaction.response.send_message(
+                f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
+                ephemeral=True
+            )
+            return
 
 
 
@@ -1019,23 +1016,17 @@ async def _create_lainnya_ticket(interaction: discord.Interaction, cart: list):
     cog = interaction.client.cogs.get("LainnyaStore")
 
 
-    for ch_id, t in cog.active_tickets.items():
-
-        if t["user_id"] == member.id:
-
-            existing = guild.get_channel(ch_id)
-
-            if existing:
-
-                await interaction.response.edit_message(
-
-                    content=f"Kamu masih punya tiket aktif di {existing.mention}!",
-
-                    embed=None, view=None
-
-                )
-
-                return
+    from utils.config import MAX_TICKETS_PER_SERVICE
+    _user_active = sum(
+        1 for _cid, _t in cog.active_tickets.items()
+        if _t.get("user_id") == member.id and guild.get_channel(_cid)
+    )
+    if _user_active >= MAX_TICKETS_PER_SERVICE:
+        await interaction.response.edit_message(
+            content=f"Kamu sudah punya {_user_active} tiket aktif di layanan ini (maks {MAX_TICKETS_PER_SERVICE}). Selesaikan salah satunya dulu.",
+            embed=None, view=None
+        )
+        return
 
 
 
