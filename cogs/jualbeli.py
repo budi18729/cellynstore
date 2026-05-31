@@ -315,6 +315,9 @@ class JBTradeModal(discord.ui.Modal, title="Midman Jual Beli"):
         ticket["embed_message_id"] = msg.id
         save_jb_ticket(ticket)
 
+        from utils.customer_insight import send_insight
+        await send_insight(interaction.client, channel, user)
+
         await interaction.response.send_message(
             f"Tiket jual beli berhasil dibuat di {channel.mention}!", ephemeral=True
         )

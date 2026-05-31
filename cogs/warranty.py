@@ -148,8 +148,12 @@ class Warranty(commands.Cog):
             print(f"[Warranty] create channel error: {e}")
             return None
 
-        # Daftar transaksi yang bergaransi (sudah dirating).
+        # Daftar transaksi yang bergaransi (sudah dirating) + sisa masa garansi.
+        from utils.config import WARRANTY_DEFAULT_DAYS
+        from utils import subscription as sub
+
         txs = rv.get_warranty_transactions(member.id)
+        active_items = []  # produk yang garansinya masih aktif (untuk template klaim)
         if txs:
             lines = []
             for t in txs[:10]:
@@ -157,12 +161,40 @@ class Warranty(commands.Cog):
                 item = t.get("item") or "-"
                 nominal = t.get("nominal") or 0
                 stars = "⭐" * int(t.get("rating") or 0)
-                lines.append(f"• `{when}` **{item}** — Rp {nominal:,} · {stars}")
+                # Sisa masa garansi dihitung dari closed_at + durasi langganan
+                # (atau WARRANTY_DEFAULT_DAYS untuk produk non-langganan).
+                start = t.get("closed_at") or t.get("rated_at")
+                sisa = sub.days_remaining(start, item, default_days=WARRANTY_DEFAULT_DAYS)
+                if sisa is None:
+                    status = "♾️ tanpa batas"
+                elif sisa > 0:
+                    status = f"🟢 garansi {sisa} hari lagi"
+                    active_items.append(item)
+                else:
+                    status = "🔴 garansi habis"
+                lines.append(f"• `{when}` **{item}** — Rp {nominal:,} · {stars}\n  └ {status}")
             tx_text = "\n".join(lines)
             if len(txs) > 10:
                 tx_text += f"\n… dan {len(txs) - 10} transaksi lain."
         else:
             tx_text = "_(tidak ada detail transaksi)_"
+
+        # Template klaim yang sudah terisi (memudahkan member & admin).
+        if active_items:
+            produk_aktif = ", ".join(dict.fromkeys(active_items))  # unik, jaga urutan
+            claim_template = (
+                "Silakan lengkapi klaimmu:\n"
+                f"```\nProduk      : {produk_aktif[:300]}\n"
+                "Kendala     : (jelaskan masalahnya di sini)\n"
+                "Bukti       : (lampirkan screenshot/video bila ada)\n```"
+            )
+        else:
+            claim_template = (
+                "Silakan lengkapi klaimmu:\n"
+                "```\nProduk      : (nama produk)\n"
+                "Kendala     : (jelaskan masalahnya di sini)\n"
+                "Bukti       : (lampirkan screenshot/video bila ada)\n```"
+            )
 
         embed = discord.Embed(
             title=f"TIKET KLAIM GARANSI · #{ticket_ui.format_number(ticket_number)}",
@@ -176,6 +208,7 @@ class Warranty(commands.Cog):
         embed.add_field(name="Member", value=member.mention, inline=True)
         embed.add_field(name="Tiket", value=f"#{ticket_ui.format_number(ticket_number)}", inline=True)
         embed.add_field(name="Transaksi Bergaransi", value=tx_text[:1024], inline=False)
+        embed.add_field(name="Form Klaim", value=claim_template[:1024], inline=False)
         embed.add_field(
             name="Admin",
             value="Gunakan `!garansiclose` untuk menutup tiket setelah selesai.",

@@ -445,7 +445,9 @@ WARRANTY_VALID_STATUSES = (STATUS_RATED, STATUS_PUBLISHED)
 def get_warranty_transactions(user_id: int) -> list[dict]:
     """Transaksi member yang BERHAK garansi (sudah dirating dalam 24 jam).
 
-    Return list {tx_id, layanan, item, nominal, rating, rated_at}, terbaru dulu.
+    Return list {tx_id, layanan, item, nominal, rating, rated_at, closed_at},
+    terbaru dulu. `closed_at` (dari transaction_log) dipakai menghitung sisa
+    masa garansi; bisa None bila tx_id tidak punya pasangan di transaction_log.
     """
     conn = get_conn()
     c = conn.cursor()
@@ -453,8 +455,10 @@ def get_warranty_transactions(user_id: int) -> list[dict]:
     c.execute(
         f"""
         SELECT r.tx_id AS tx_id, r.layanan AS layanan, r.item AS item,
-               r.nominal AS nominal, r.rating AS rating, r.rated_at AS rated_at
+               r.nominal AS nominal, r.rating AS rating, r.rated_at AS rated_at,
+               t.closed_at AS closed_at
         FROM reviews r
+        LEFT JOIN transaction_log t ON t.id = r.tx_id
         WHERE r.user_id = ? AND r.status IN ({placeholders})
         ORDER BY r.id DESC
         """,

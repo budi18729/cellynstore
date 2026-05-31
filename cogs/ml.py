@@ -244,6 +244,8 @@ class GameFormModal(discord.ui.Modal):
             await channel.send(content=admin_role.mention, embed=embed)
         else:
             await channel.send(embed=embed)
+        from utils.customer_insight import send_insight
+        await send_insight(interaction.client, channel, user)
         await interaction.response.send_message(
             f"Tiket berhasil dibuat di {channel.mention}!", ephemeral=True
         )

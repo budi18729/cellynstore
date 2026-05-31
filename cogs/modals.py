@@ -82,6 +82,9 @@ class MidmanTradeModal(discord.ui.Modal, title="Buka Tiket Midman Trade"):
         cog.active_tickets[channel.id]["embed_message_id"] = msg.id
         save_tickets(cog.active_tickets)
 
+        from utils.customer_insight import send_insight
+        await send_insight(interaction.client, channel, interaction.user)
+
 class AdminSetupModal(discord.ui.Modal, title="Setup Data Trade"):
     pihak2_id = discord.ui.TextInput(label="ID Pihak 2", placeholder="Paste user ID pihak 2")
 

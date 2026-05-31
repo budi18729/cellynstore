@@ -291,6 +291,8 @@ class ConfirmView(discord.ui.View):
             content=f"Halo {member.mention}! Tiket topup Robux via gamepass telah dibuat. {ping}",
             embed=embed
         )
+        from utils.customer_insight import send_insight
+        await send_insight(interaction.client, channel, member)
         await interaction.followup.send(f"Tiket dibuat! {channel.mention}", ephemeral=True)
 
     @discord.ui.button(label="❌ Batal", style=discord.ButtonStyle.danger, custom_id="gp_cancel_confirm")
