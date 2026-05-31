@@ -27,6 +27,8 @@ TESTIMONI_CHANNEL_ID = int(os.getenv('TESTIMONI_CHANNEL_ID', 0))
 # saat member mencapai ambang jumlah rating tertentu.
 REVIEWER_BADGE_ROLE_ID = int(os.getenv('REVIEWER_BADGE_ROLE_ID', 0))
 REVIEWER_BADGE_THRESHOLD = int(os.getenv('REVIEWER_BADGE_THRESHOLD', 3))
+# Channel tempat panel klaim garansi (tombol). 0 = nonaktif.
+WARRANTY_CHANNEL_ID = int(os.getenv('WARRANTY_CHANNEL_ID', 0))
 
 INVITE_REWARD_CHANNEL_ID = int(os.getenv('INVITE_REWARD_CHANNEL_ID', '1482464579085799435'))
 AUTOPOSTER_TOKEN = os.getenv('AUTOPOSTER_TOKEN', '')

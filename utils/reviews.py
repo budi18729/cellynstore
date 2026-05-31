@@ -344,3 +344,84 @@ def rating_line(layanan: str = None) -> str:
     full = int(round(avg))
     stars = "⭐" * max(0, min(5, full))
     return f"{stars} **{avg:.1f}/5** · {n} ulasan"
+
+
+
+# ── Riwayat order member (#4) ─────────────────────────────────────────────────────
+def get_user_transactions(user_id: int, limit: int = 15) -> list[dict]:
+    """Riwayat transaksi seorang member dari transaction_log, terbaru dulu.
+
+    Tiap item dilengkapi status rating dari tabel reviews (via tx_id):
+    'rated'/'published' (sudah rating), 'pending' (menunggu), 'expired'
+    (lewat 24 jam, garansi hangus), atau None (tak ada baris review).
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        """
+        SELECT t.id, t.layanan, t.nominal, t.item, t.closed_at,
+               r.status AS review_status, r.rating AS rating
+        FROM transaction_log t
+        LEFT JOIN reviews r ON r.tx_id = t.id
+        WHERE t.user_id = ?
+        ORDER BY t.id DESC
+        LIMIT ?
+        """,
+        (user_id, limit),
+    )
+    rows = c.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def count_user_transactions(user_id: int) -> int:
+    """Jumlah total transaksi seorang member (untuk ringkasan riwayat)."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) AS n FROM transaction_log WHERE user_id = ?", (user_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["n"] or 0
+
+
+# ── Garansi / klaim (#6) ───────────────────────────────────────────────────────────
+# Garansi berlaku bila member sudah memberi rating (status 'rated' atau
+# 'published') — yang hanya mungkin bila dilakukan dalam batas 24 jam.
+WARRANTY_VALID_STATUSES = (STATUS_RATED, STATUS_PUBLISHED)
+
+
+def get_warranty_transactions(user_id: int) -> list[dict]:
+    """Transaksi member yang BERHAK garansi (sudah dirating dalam 24 jam).
+
+    Return list {tx_id, layanan, item, nominal, rating, rated_at}, terbaru dulu.
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    placeholders = ",".join("?" for _ in WARRANTY_VALID_STATUSES)
+    c.execute(
+        f"""
+        SELECT r.tx_id AS tx_id, r.layanan AS layanan, r.item AS item,
+               r.nominal AS nominal, r.rating AS rating, r.rated_at AS rated_at
+        FROM reviews r
+        WHERE r.user_id = ? AND r.status IN ({placeholders})
+        ORDER BY r.id DESC
+        """,
+        (user_id, *WARRANTY_VALID_STATUSES),
+    )
+    rows = c.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def has_valid_warranty(user_id: int) -> bool:
+    """True bila member punya minimal satu transaksi yang bergaransi (sudah rating)."""
+    conn = get_conn()
+    c = conn.cursor()
+    placeholders = ",".join("?" for _ in WARRANTY_VALID_STATUSES)
+    c.execute(
+        f"SELECT 1 FROM reviews WHERE user_id = ? AND status IN ({placeholders}) LIMIT 1",
+        (user_id, *WARRANTY_VALID_STATUSES),
+    )
+    row = c.fetchone()
+    conn.close()
+    return row is not None

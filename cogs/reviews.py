@@ -25,6 +25,10 @@ from utils import reviews as rv
 COLOR_REVIEW = 0xFFC107  # kuning/emas
 POLL_INTERVAL_SECONDS = 60
 
+# Role member loyal (didapat otomatis dari transaksi). Dipakai gating /riwayat.
+# Konsisten dengan cog lain yang assign role by-name saat transaksi selesai.
+ROYAL_CUSTOMER_ROLE_NAME = "Royal Customer"
+
 # Nama layanan ramah-tampilan untuk embed.
 LAYANAN_LABEL = {
     "robux": "Robux",
@@ -58,6 +62,28 @@ def _pretty_layanan(layanan: str | None) -> str:
 def _stars(rating: int) -> str:
     rating = max(0, min(5, int(rating or 0)))
     return "⭐" * rating + "☆" * (5 - rating)
+
+
+def _warranty_emoji(review_status: str | None) -> str:
+    """Emoji status garansi untuk baris riwayat."""
+    if review_status in (rv.STATUS_RATED, rv.STATUS_PUBLISHED):
+        return "🟢"  # sudah rating -> garansi aktif
+    if review_status == rv.STATUS_PENDING:
+        return "🟡"  # menunggu rating
+    if review_status == rv.STATUS_EXPIRED:
+        return "🔴"  # lewat 24 jam -> garansi hangus
+    return "⚪"      # tidak ada data review
+
+
+def _warranty_label(review_status: str | None) -> str:
+    """Label status garansi yang mudah dibaca member."""
+    if review_status in (rv.STATUS_RATED, rv.STATUS_PUBLISHED):
+        return "garansi aktif (sudah rating)"
+    if review_status == rv.STATUS_PENDING:
+        return "belum rating (segera, batas 24 jam)"
+    if review_status == rv.STATUS_EXPIRED:
+        return "garansi hangus (tidak rating dalam 24 jam)"
+    return "tanpa garansi"
 
 
 # ── Modal ulasan teks ────────────────────────────────────────────────────────────
@@ -486,6 +512,49 @@ class Reviews(commands.Cog):
         else:
             embed.set_footer(text=STORE_NAME)
         await interaction.response.send_message(embed=embed)
+
+    # ── Riwayat order member (khusus Royal Customer) ──
+    @app_commands.command(name="riwayat", description="Lihat riwayat transaksimu (khusus Royal Customer).")
+    async def riwayat(self, interaction: discord.Interaction):
+        # Gating: hanya member dengan role "Royal Customer" (didapat dari transaksi).
+        member = interaction.user
+        roles = getattr(member, "roles", [])
+        has_royal = any(getattr(r, "name", "") == ROYAL_CUSTOMER_ROLE_NAME for r in roles)
+        if not has_royal:
+            await interaction.response.send_message(
+                f"Fitur **/riwayat** khusus member **{ROYAL_CUSTOMER_ROLE_NAME}**.\n"
+                "Role ini otomatis kamu dapatkan setelah melakukan transaksi di Cellyn Store. 💛",
+                ephemeral=True,
+            )
+            return
+
+        txs = rv.get_user_transactions(member.id, limit=15)
+        total = rv.count_user_transactions(member.id)
+        if not txs:
+            await interaction.response.send_message(
+                "Belum ada riwayat transaksi atas akunmu.", ephemeral=True
+            )
+            return
+
+        lines = []
+        for t in txs:
+            when = (t.get("closed_at") or "")[:10]
+            lay = _pretty_layanan(t.get("layanan"))
+            item = (t.get("item") or "-")
+            nominal = t.get("nominal") or 0
+            lines.append(
+                f"{_warranty_emoji(t.get('review_status'))} `{when}` · **{lay}**\n"
+                f"   {item} — Rp {nominal:,} · {_warranty_label(t.get('review_status'))}"
+            )
+
+        embed = discord.Embed(
+            title="🧾 Riwayat Transaksimu",
+            description="\n".join(lines)[:4000],
+            color=COLOR_REVIEW,
+        )
+        embed.add_field(name="Total Transaksi", value=str(total), inline=True)
+        embed.set_footer(text=f"{STORE_NAME} • menampilkan {len(txs)} terbaru")
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
 async def setup(bot: commands.Bot):
