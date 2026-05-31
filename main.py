@@ -149,6 +149,13 @@ async def setup_and_run(bot):
 
 
 async def main():
+    # Self-check .env lebih awal: error jelas bila variabel wajib kosong,
+    # peringatan untuk variabel opsional yang mati diam-diam.
+    from utils.env_check import run_startup_check
+    if not run_startup_check():
+        print("[ENV] Variabel wajib belum lengkap. Perbaiki .env lalu jalankan ulang.")
+        return
+
     init_database()
 
     threading.Thread(target=start_admin_panel, daemon=True).start()
