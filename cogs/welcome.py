@@ -8,10 +8,21 @@ from utils.config import ADMIN_ROLE_ID, STORE_NAME
 from utils.db import get_conn
 
 THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
-WELCOME_GIF_PATH = "data/welcome.gif"
-BOOST_GIF_PATH = "data/boost.gif"
+DATA_DIR = "data"
+WELCOME_IMAGE_BASE = "welcome"
+BOOST_IMAGE_BASE = "boost"
+ALLOWED_IMAGE_EXTS = (".png", ".jpg", ".jpeg", ".gif", ".webp")
 BOOST_ROLE_ID = 1476362606552809683
 CUSTOMER_ROLE_ID = 1476360559048786083
+
+
+def _find_image(base: str):
+    """Cari file gambar (welcome/boost) berdasarkan ekstensi yang didukung."""
+    for ext in ALLOWED_IMAGE_EXTS:
+        path = os.path.join(DATA_DIR, base + ext)
+        if os.path.exists(path):
+            return path
+    return None
 
 
 def _get_setting(key):
@@ -36,8 +47,8 @@ class WelcomeCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self._welcome_channel_id = None
-        self._has_gif = os.path.exists(WELCOME_GIF_PATH)
-        self._has_boost_gif = os.path.exists(BOOST_GIF_PATH)
+        self._welcome_image = _find_image(WELCOME_IMAGE_BASE)
+        self._boost_image = _find_image(BOOST_IMAGE_BASE)
 
     async def cog_load(self):
         self.bot.loop.create_task(self._load_settings())
@@ -48,34 +59,50 @@ class WelcomeCog(commands.Cog):
             ch_id = _get_setting("welcome_channel_id")
             if ch_id:
                 self._welcome_channel_id = int(ch_id)
-            self._has_gif = os.path.exists(WELCOME_GIF_PATH)
-            self._has_boost_gif = os.path.exists(BOOST_GIF_PATH)
-            print(f"[Welcome] Channel: {self._welcome_channel_id}, GIF: {self._has_gif}, BoostGIF: {self._has_boost_gif}")
+            self._welcome_image = _find_image(WELCOME_IMAGE_BASE)
+            self._boost_image = _find_image(BOOST_IMAGE_BASE)
+            print(f"[Welcome] Channel: {self._welcome_channel_id}, Image: {self._welcome_image}, BoostImage: {self._boost_image}")
         except Exception as e:
             print(f"[Welcome] Load settings error: {e}")
 
-    async def _download_gif(self, url: str, path: str) -> bool:
+    async def _save_image(self, attachment: discord.Attachment, base: str):
+        """Download & simpan gambar (PNG/JPG/dll) dengan ekstensi sesuai file upload.
+
+        Mengembalikan path file yang tersimpan, atau None jika gagal / format tidak didukung.
+        """
+        ext = os.path.splitext(attachment.filename)[1].lower()
+        if ext not in ALLOWED_IMAGE_EXTS:
+            return None
         try:
-            os.makedirs("data", exist_ok=True)
+            os.makedirs(DATA_DIR, exist_ok=True)
+            # Hapus gambar lama dengan base yang sama supaya tidak ada dobel format
+            for old_ext in ALLOWED_IMAGE_EXTS:
+                old_path = os.path.join(DATA_DIR, base + old_ext)
+                if os.path.exists(old_path):
+                    try:
+                        os.remove(old_path)
+                    except Exception:
+                        pass
+            path = os.path.join(DATA_DIR, base + ext)
             async with aiohttp.ClientSession() as session:
-                async with session.get(url) as resp:
+                async with session.get(attachment.url) as resp:
                     if resp.status == 200:
                         with open(path, "wb") as f:
                             f.write(await resp.read())
-                        return True
-            return False
+                        return path
+            return None
         except Exception as e:
             print(f"[Welcome] Download error: {e}")
-            return False
+            return None
 
-    @app_commands.command(name="setwelcome", description="[ADMIN] Set channel dan GIF welcome/boost")
+    @app_commands.command(name="setwelcome", description="[ADMIN] Set channel & gambar welcome/boost (PNG/JPG)")
     @app_commands.describe(
-        action="channel / gif / boostgif / test / testboost / off",
+        action="channel / image / boostimage / test / testboost / off",
         channel="Channel untuk pesan welcome",
-        gif="File GIF (upload langsung)"
+        image="File gambar PNG/JPG (upload langsung)"
     )
     async def set_welcome(self, interaction: discord.Interaction, action: str,
-                          channel: discord.TextChannel = None, gif: discord.Attachment = None):
+                          channel: discord.TextChannel = None, image: discord.Attachment = None):
         await interaction.response.defer(ephemeral=True)
         if not any(r.id == ADMIN_ROLE_ID for r in interaction.user.roles):
             await interaction.followup.send("❌ Admin only!", ephemeral=True)
@@ -88,26 +115,26 @@ class WelcomeCog(commands.Cog):
             self._welcome_channel_id = channel.id
             _set_setting("welcome_channel_id", str(channel.id))
             await interaction.followup.send(f"✅ Welcome channel diset ke {channel.mention}", ephemeral=True)
-        elif action == "gif":
-            if not gif or not gif.filename.lower().endswith(".gif"):
-                await interaction.followup.send("Sertakan file .gif untuk welcome.", ephemeral=True)
+        elif action in ("image", "gif"):
+            if not image:
+                await interaction.followup.send("Sertakan file gambar (PNG/JPG) untuk welcome.", ephemeral=True)
                 return
-            ok = await self._download_gif(gif.url, WELCOME_GIF_PATH)
-            if ok:
-                self._has_gif = True
-                await interaction.followup.send("✅ GIF welcome berhasil diupload!", ephemeral=True)
+            path = await self._save_image(image, WELCOME_IMAGE_BASE)
+            if path:
+                self._welcome_image = path
+                await interaction.followup.send("✅ Gambar welcome berhasil diupload!", ephemeral=True)
             else:
-                await interaction.followup.send("❌ Gagal upload GIF.", ephemeral=True)
-        elif action == "boostgif":
-            if not gif or not gif.filename.lower().endswith(".gif"):
-                await interaction.followup.send("Sertakan file .gif untuk boost.", ephemeral=True)
+                await interaction.followup.send("❌ Format tidak didukung. Gunakan PNG/JPG.", ephemeral=True)
+        elif action in ("boostimage", "boostgif"):
+            if not image:
+                await interaction.followup.send("Sertakan file gambar (PNG/JPG) untuk boost.", ephemeral=True)
                 return
-            ok = await self._download_gif(gif.url, BOOST_GIF_PATH)
-            if ok:
-                self._has_boost_gif = True
-                await interaction.followup.send("✅ GIF boost berhasil diupload!", ephemeral=True)
+            path = await self._save_image(image, BOOST_IMAGE_BASE)
+            if path:
+                self._boost_image = path
+                await interaction.followup.send("✅ Gambar boost berhasil diupload!", ephemeral=True)
             else:
-                await interaction.followup.send("❌ Gagal upload GIF boost.", ephemeral=True)
+                await interaction.followup.send("❌ Format tidak didukung. Gunakan PNG/JPG.", ephemeral=True)
         elif action == "test":
             await self._send_welcome(interaction.user, test=True, interaction=interaction)
         elif action == "testboost":
@@ -118,7 +145,7 @@ class WelcomeCog(commands.Cog):
             await interaction.followup.send("✅ Welcome message dinonaktifkan.", ephemeral=True)
         else:
             await interaction.followup.send(
-                "Action tidak dikenal. Gunakan: `channel`, `gif`, `boostgif`, `test`, `testboost`, `off`",
+                "Action tidak dikenal. Gunakan: `channel`, `image`, `boostimage`, `test`, `testboost`, `off`",
                 ephemeral=True
             )
 
@@ -221,16 +248,17 @@ class WelcomeCog(commands.Cog):
         except Exception:
             pass
         embed.set_footer(text=STORE_NAME)
-        if self._has_gif:
-            file = discord.File(WELCOME_GIF_PATH, filename="welcome.gif")
-            embed.set_image(url="attachment://welcome.gif")
+        if self._welcome_image and os.path.exists(self._welcome_image):
+            fname = os.path.basename(self._welcome_image)
+            file = discord.File(self._welcome_image, filename=fname)
+            embed.set_image(url=f"attachment://{fname}")
             if test and interaction:
                 await interaction.followup.send(embed=embed, file=file)
             else:
                 await channel.send(embed=embed, file=file)
         else:
             if test and interaction:
-                await interaction.followup.send("GIF belum diupload. Preview embed:", embed=embed)
+                await interaction.followup.send("Gambar belum diupload. Preview embed:", embed=embed)
             else:
                 await channel.send(embed=embed)
 
@@ -256,16 +284,17 @@ class WelcomeCog(commands.Cog):
         except Exception:
             pass
         embed.set_footer(text=STORE_NAME)
-        if self._has_boost_gif:
-            file = discord.File(BOOST_GIF_PATH, filename="boost.gif")
-            embed.set_image(url="attachment://boost.gif")
+        if self._boost_image and os.path.exists(self._boost_image):
+            fname = os.path.basename(self._boost_image)
+            file = discord.File(self._boost_image, filename=fname)
+            embed.set_image(url=f"attachment://{fname}")
             if test and interaction:
                 await interaction.followup.send(embed=embed, file=file)
             else:
                 await channel.send(embed=embed, file=file)
         else:
             if test and interaction:
-                await interaction.followup.send("GIF boost belum diupload. Preview embed:", embed=embed)
+                await interaction.followup.send("Gambar boost belum diupload. Preview embed:", embed=embed)
             else:
                 await channel.send(embed=embed)
 
