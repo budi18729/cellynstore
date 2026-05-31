@@ -553,6 +553,7 @@ class MLStore(commands.Cog):
                 total=f"Rp {ticket['harga']:,}",
                 payment="QRIS",
                 extra_fields=_extra,
+                thumbnail_url=ticket_ui.avatar_url(member),
             )
             await log_ch.send(embed=log_embed)
         try:

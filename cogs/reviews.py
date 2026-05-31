@@ -161,7 +161,7 @@ def build_rating_view(review_id: int) -> discord.ui.View:
     return view
 
 
-def build_prompt_embed(review: dict) -> discord.Embed:
+def build_prompt_embed(review: dict, avatar_url: str = None) -> discord.Embed:
     deadline_txt = ""
     if review.get("deadline_at"):
         try:
@@ -185,6 +185,8 @@ def build_prompt_embed(review: dict) -> discord.Embed:
         ),
         color=COLOR_REVIEW,
     )
+    if avatar_url:
+        embed.set_thumbnail(url=avatar_url)
     embed.add_field(name="Layanan", value=_pretty_layanan(review.get("layanan")), inline=True)
     if review.get("item"):
         embed.add_field(name="Item", value=str(review["item"])[:256], inline=True)
@@ -222,6 +224,7 @@ def build_published_embed(review: dict, member: discord.abc.User | None) -> disc
     )
     if member:
         embed.set_author(name=name, icon_url=member.display_avatar.url)
+        embed.set_thumbnail(url=member.display_avatar.url)
     else:
         embed.set_author(name=name)
     embed.add_field(name="Layanan", value=_pretty_layanan(review.get("layanan")), inline=True)
@@ -327,8 +330,6 @@ class Reviews(commands.Cog):
             return  # sudah pernah diproses (tx_id UNIQUE)
 
         review = rv.get_review(review_id)
-        embed = build_prompt_embed(review)
-        view = build_rating_view(review_id)
 
         user = self.bot.get_user(tx["user_id"])
         if user is None:
@@ -336,6 +337,9 @@ class Reviews(commands.Cog):
                 user = await self.bot.fetch_user(tx["user_id"])
             except Exception:
                 user = None
+
+        embed = build_prompt_embed(review, avatar_url=(user.display_avatar.url if user else None))
+        view = build_rating_view(review_id)
 
         # Coba DM dulu.
         if user is not None:

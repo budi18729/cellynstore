@@ -447,6 +447,7 @@ class GPStore(commands.Cog):
                     ("Robux Diterima", f"{ticket['robux']} Robux (after tax)", True),
                     ("Harga Gamepass", f"{ticket['gp_price']} Robux", True),
                 ],
+                thumbnail_url=ticket_ui.avatar_url(member),
             )
             await log_ch.send(embed=log_embed)
 
