@@ -422,9 +422,6 @@ class GPStore(commands.Cog):
         opened_at = datetime.datetime.fromisoformat(ticket["opened_at"])
         durasi_secs = int((now - opened_at).total_seconds())
 
-        from utils.counter import next_ticket_number
-        nomor = ticket.get("ticket_number") or next_ticket_number()
-
         transcript_ch = ctx.guild.get_channel(TRANSCRIPT_CHANNEL_ID)
         if transcript_ch:
             try:
@@ -437,37 +434,41 @@ class GPStore(commands.Cog):
             except Exception as e:
                 print(f"[GP] Gagal kirim transcript: {e}")
 
-        log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
-        if log_ch:
-            log_embed = ticket_ui.success_log_embed(
-                "gp", nomor,
-                subtitle="Gamepass berhasil dibeli. Robux masuk 3-7 hari.",
-                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
-                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
-                item=f"{ticket['robux']} Robux via Gamepass",
-                total=f"Rp {ticket['total']:,}",
-                payment="QRIS",
-                extra_fields=[
-                    ("Robux Diterima", f"{ticket['robux']} Robux (after tax)", True),
-                    ("Harga Gamepass", f"{ticket['gp_price']} Robux", True),
-                ],
-                thumbnail_url=ticket_ui.avatar_url(member),
-            )
-            await log_ch.send(embed=log_embed)
-
+        from utils.db import log_transaction, set_transaction_log_message
+        from utils.config import TESTIMONI_CHANNEL_ID
+        item_str = f"{ticket.get('robux', 0)} Robux via Gamepass"
+        tx_id = None
         try:
-            from utils.db import log_transaction
-            log_transaction(
+            tx_id = log_transaction(
                 layanan="gp_topup",
                 nominal=ticket.get("total", 0),
-                item=f"{ticket.get('robux', 0)} Robux via Gamepass",
+                item=item_str,
                 admin_id=ctx.author.id,
                 user_id=ticket.get("user_id"),
                 closed_at=now,
-                durasi_detik=durasi_secs
+                durasi_detik=durasi_secs,
+                qty=1,
             )
         except Exception as e:
             print(f"[GP] Gagal log transaksi: {e}")
+
+        log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
+        if log_ch:
+            text = ticket_ui.success_log_text(
+                seller=ctx.author.mention,
+                buyer=member.mention if member else f"<@{ticket['user_id']}>",
+                product=item_str,
+                qty=1,
+                harga=ticket.get("total", 0),
+                rating=None,
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
+            )
+            try:
+                msg = await log_ch.send(text)
+                if tx_id:
+                    set_transaction_log_message(tx_id, log_ch.id, msg.id)
+            except Exception as e:
+                print(f"[GP] Gagal kirim log: {e}")
 
         # Stock Robux (global)
         try:

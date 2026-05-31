@@ -3,7 +3,6 @@ import datetime
 import discord
 from discord.ext import commands
 from utils.config import ADMIN_ROLE_ID, LOG_CHANNEL_ID, STORE_NAME, TRANSCRIPT_CHANNEL_ID
-from utils.counter import next_ticket_number
 from utils.transcript import generate as generate_transcript
 from utils import ticket_ui
 
@@ -61,7 +60,6 @@ class OrdersAdmin(commands.Cog):
             return
 
         member = ctx.guild.get_member(ticket["user_id"])
-        nomor = ticket.get("ticket_number") or next_ticket_number()
         closed_at = datetime.datetime.now(datetime.timezone.utc)
         opened_at_dt = datetime.datetime.fromisoformat(ticket["opened_at"])
         if opened_at_dt.tzinfo is None:
@@ -94,35 +92,41 @@ class OrdersAdmin(commands.Cog):
         item_str = ticket.get("item_name", "-")
 
         # Log embed
-        log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
-        if log_ch:
-            log_embed = ticket_ui.success_log_embed(
-                "lainnya", nomor,
-                subtitle=f"Layanan Lainnya — {kategori}",
-                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
-                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
-                item=item_str,
-                total=f"Rp {nominal:,}",
-                payment=ticket.get("payment_method", "QRIS"),
-                extra_fields=[("Kategori", kategori, True)],
-                thumbnail_url=ticket_ui.avatar_url(member),
-            )
-            await log_ch.send(embed=log_embed)
-
-        # Transaction log
+        # Log transaksi (flat text + status garansi auto-update setelah rating)
+        from utils.db import log_transaction, set_transaction_log_message
+        from utils.config import TESTIMONI_CHANNEL_ID
+        tx_id = None
         try:
-            from utils.db import log_transaction
-            log_transaction(
+            tx_id = log_transaction(
                 layanan=layanan,
                 nominal=nominal,
                 item=item_str,
                 admin_id=ctx.author.id,
                 user_id=ticket.get("user_id"),
                 closed_at=closed_at,
-                durasi_detik=durasi_secs
+                durasi_detik=durasi_secs,
+                qty=1,
             )
         except Exception as e:
             print(f"[Orders] Log error: {e}")
+
+        log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
+        if log_ch:
+            text = ticket_ui.success_log_text(
+                seller=ctx.author.mention,
+                buyer=member.mention if member else f"<@{ticket['user_id']}>",
+                product=item_str,
+                qty=1,
+                harga=nominal,
+                rating=None,
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
+            )
+            try:
+                msg = await log_ch.send(text)
+                if tx_id:
+                    set_transaction_log_message(tx_id, log_ch.id, msg.id)
+            except Exception as e:
+                print(f"[Orders] Log send error: {e}")
 
         # Royal Customer
         try:

@@ -25,7 +25,7 @@ from utils.counter import next_ticket_number
 from utils import reviews as rv
 from utils import ticket_ui
 
-THUMBNAIL = "https://i.imgur.com/CWtUCzj.png"
+THUMBNAIL = "https://i.imgur.com/CX8PHWk.png"
 COLOR_WARRANTY = 0x2ECC71
 CLAIM_BUTTON_ID = "warranty_claim_open"
 

@@ -187,3 +187,50 @@ def success_log_embed(
         )
     embed.set_footer(text=f"{STORE_NAME} · {_today_str()}")
     return embed
+
+
+
+def warranty_status_line(rating: int | None) -> str:
+    """Baris status garansi untuk pesan log transaksi (flat text).
+
+    rating None/0 -> belum aktif; 1-5 -> aktif dengan jumlah bintang.
+    """
+    if rating:
+        r = max(1, min(5, int(rating)))
+        return f"✅ *Aktif (Sudah DiRating {r} ⭐)*"
+    return "❎ *Belum Aktif (belum DiRating ⭐)*"
+
+
+def success_log_text(
+    *,
+    seller: str,
+    buyer: str,
+    product: str,
+    qty=1,
+    harga=0,
+    rating: int | None = None,
+    rating_channel_id: int = 0,
+) -> str:
+    """Pesan log 'transaksi berhasil' dalam bentuk TEKS FLAT.
+
+    Status garansi otomatis menyesuaikan: 'belum aktif' bila belum dirating,
+    'aktif' bila sudah. `seller`/`buyer` boleh mention (mis. '<@123>') atau teks.
+    Dipakai juga untuk merender ulang pesan setelah member memberi rating.
+    """
+    rating_ref = f"<#{rating_channel_id}>" if rating_channel_id else "channel rating"
+    try:
+        # Format ribuan gaya Indonesia: 11000 -> 11.000
+        harga_str = f"Rp {int(harga):,}".replace(",", ".")
+    except (TypeError, ValueError):
+        harga_str = f"Rp {harga}"
+    return (
+        f"**TERIMA KASIH SUDAH ORDER DI {STORE_NAME.upper()} COMMUNITY**\n"
+        f"**Seller** : {seller}\n"
+        f"**Buyer** : {buyer}\n"
+        f"**Product** : {product}\n"
+        f"**Jumlah** : {qty}\n"
+        f"**Harga** : {harga_str}\n"
+        f"**Status Garansi** : {warranty_status_line(rating)}\n"
+        f"**Jangan lupa feedbacknya di {rating_ref} agar bisa claim garansi "
+        f"dan ditunggu next ordernya**"
+    )

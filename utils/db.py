@@ -253,6 +253,17 @@ def init_db():
             if 'duplicate column' not in str(e).lower():
                 print(f"[DB] Migration {table} ticket_number: {e}")
 
+    # Kolom tambahan transaction_log: qty + referensi pesan log (untuk auto-update
+    # status garansi pada pesan log setelah member memberi rating).
+    for col, decl in (('qty', 'INTEGER DEFAULT 1'),
+                      ('log_channel_id', 'INTEGER'),
+                      ('log_message_id', 'INTEGER')):
+        try:
+            c.execute(f'ALTER TABLE transaction_log ADD COLUMN {col} {decl}')
+        except Exception as e:
+            if 'duplicate column' not in str(e).lower():
+                print(f"[DB] Migration transaction_log {col}: {e}")
+
     conn.commit()
     conn.close()
     print("[DB] Database diinisialisasi.")
@@ -260,7 +271,8 @@ def init_db():
 
 def log_transaction(layanan: str, nominal: int = 0, item: str = None,
                     admin_id: int = None, user_id: int = None,
-                    closed_at=None, durasi_detik: int = 0):
+                    closed_at=None, durasi_detik: int = 0, qty: int = 1):
+    """Catat transaksi & kembalikan id baris (untuk dikaitkan ke pesan log)."""
     import datetime
     if closed_at is None:
         closed_at = datetime.datetime.now(datetime.timezone.utc)
@@ -268,8 +280,32 @@ def log_transaction(layanan: str, nominal: int = 0, item: str = None,
     conn = get_conn()
     c = conn.cursor()
     c.execute(
-        "INSERT INTO transaction_log (layanan, nominal, item, admin_id, user_id, closed_at, durasi_detik) VALUES (?,?,?,?,?,?,?)",
-        (layanan, nominal, item, admin_id, user_id, closed_at_str, durasi_detik)
+        "INSERT INTO transaction_log (layanan, nominal, item, admin_id, user_id, closed_at, durasi_detik, qty) VALUES (?,?,?,?,?,?,?,?)",
+        (layanan, nominal, item, admin_id, user_id, closed_at_str, durasi_detik, qty)
+    )
+    tx_id = c.lastrowid
+    conn.commit()
+    conn.close()
+    return tx_id
+
+
+def set_transaction_log_message(tx_id: int, channel_id: int, message_id: int):
+    """Simpan referensi pesan log (channel+message) untuk transaksi tertentu."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        "UPDATE transaction_log SET log_channel_id=?, log_message_id=? WHERE id=?",
+        (channel_id, message_id, tx_id)
     )
     conn.commit()
     conn.close()
+
+
+def get_transaction(tx_id: int):
+    """Ambil satu baris transaction_log sebagai dict (atau None)."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT * FROM transaction_log WHERE id=?", (tx_id,))
+    row = c.fetchone()
+    conn.close()
+    return dict(row) if row else None

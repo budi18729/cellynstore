@@ -519,7 +519,6 @@ class MLStore(commands.Cog):
             return
         ticket = self.active_tickets[channel_id]
         member = ctx.guild.get_member(ticket["user_id"])
-        nomor = ticket.get("ticket_number") or next_ticket_number()
         closed_at = datetime.datetime.now(datetime.timezone.utc)
         await ctx.send(
             f"{member.mention if member else ''}\n"
@@ -538,37 +537,37 @@ class MLStore(commands.Cog):
             except Exception as e:
                 print(f"[WARNING] Gagal kirim transcript ML: {e}")
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
-        game_info = _get_game(ticket.get("game", "ML")) or {}
-        game_name = game_info.get("name", ticket.get("game", "ML"))
-        if log_ch:
-            _extra = [(game_info.get("id_label", "Player ID"), f"`{ticket['id_ml']}`", True)]
-            if game_info.get("needs_server") and ticket.get("server_id", "-") != "-":
-                _extra.append(("Server ID", f"`{ticket['server_id']}`", True))
-            log_embed = ticket_ui.success_log_embed(
-                ticket.get("game", "ml").lower(), nomor,
-                subtitle=f"{game_name} — Topup",
-                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
-                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
-                item=ticket.get("item_label", f"{ticket['dm']} Diamond"),
-                total=f"Rp {ticket['harga']:,}",
-                payment="QRIS",
-                extra_fields=_extra,
-                thumbnail_url=ticket_ui.avatar_url(member),
-            )
-            await log_ch.send(embed=log_embed)
+        item_str = ticket.get("item_label", f"{ticket.get('dm', 0)} Diamond")
+        from utils.db import log_transaction, set_transaction_log_message
+        from utils.config import TESTIMONI_CHANNEL_ID
+        tx_id = None
         try:
-            from utils.db import log_transaction
             opened_at_dt = datetime.datetime.fromisoformat(ticket["opened_at"]) if ticket.get("opened_at") else None
             durasi = int((closed_at - opened_at_dt).total_seconds()) if opened_at_dt else 0
-            layanan = ticket.get("game", "ML").lower()
-            log_transaction(
-                layanan=layanan, nominal=ticket.get("harga", 0) or 0,
-                item=ticket.get("item_label", f"{ticket.get('dm', 0)} Diamond"),
+            tx_id = log_transaction(
+                layanan=ticket.get("game", "ML").lower(), nominal=ticket.get("harga", 0) or 0,
+                item=item_str,
                 admin_id=ctx.author.id, user_id=ticket.get("user_id"),
-                closed_at=closed_at, durasi_detik=durasi
+                closed_at=closed_at, durasi_detik=durasi, qty=1,
             )
         except Exception as e:
             print(f"[LOG] Gagal log transaksi ml: {e}")
+        if log_ch:
+            text = ticket_ui.success_log_text(
+                seller=ctx.author.mention,
+                buyer=member.mention if member else f"<@{ticket['user_id']}>",
+                product=item_str,
+                qty=1,
+                harga=ticket.get("harga", 0) or 0,
+                rating=None,
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
+            )
+            try:
+                msg = await log_ch.send(text)
+                if tx_id:
+                    set_transaction_log_message(tx_id, log_ch.id, msg.id)
+            except Exception as e:
+                print(f"[ML] Gagal kirim log: {e}")
         try:
             royal_role = discord.utils.get(ctx.guild.roles, name="Royal Customer")
             if royal_role and member:
