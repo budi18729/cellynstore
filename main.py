@@ -24,7 +24,7 @@ COGS = [
     "cogs.orders", "cogs.qr", "cogs.poll", "cogs.embed_builder",
     "cogs.autoposter", "cogs.gp", "cogs.afk", "cogs.relay",
     "cogs.vilog", "cogs.store_status", "cogs.free_game_notifier", "cogs.mobile_game_notifier", "cogs.genshin_notifier", "cogs.top_spender", "cogs.warranty", "cogs.daily_report",
-    "cogs.product_search"
+    "cogs.product_search", "cogs.sub_followup"
 ]
 
 

@@ -257,7 +257,8 @@ def init_db():
     # status garansi pada pesan log setelah member memberi rating).
     for col, decl in (('qty', 'INTEGER DEFAULT 1'),
                       ('log_channel_id', 'INTEGER'),
-                      ('log_message_id', 'INTEGER')):
+                      ('log_message_id', 'INTEGER'),
+                      ('followup_sent_at', 'TEXT')):
         try:
             c.execute(f'ALTER TABLE transaction_log ADD COLUMN {col} {decl}')
         except Exception as e:
@@ -309,3 +310,46 @@ def get_transaction(tx_id: int):
     row = c.fetchone()
     conn.close()
     return dict(row) if row else None
+
+
+
+def fetch_followup_candidates():
+    """Ambil transaksi yang BELUM dikirimi follow-up langganan.
+
+    Hanya transaksi dengan user_id & item terisi yang relevan; penyaringan
+    'langganan / sudah dekat kedaluwarsa' dilakukan di lapisan pemanggil
+    (utils.subscription) supaya logikanya murni & gampang dites.
+    Return list dict baris transaction_log.
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        """
+        SELECT id, layanan, item, user_id, closed_at, followup_sent_at
+        FROM transaction_log
+        WHERE followup_sent_at IS NULL AND user_id IS NOT NULL AND item IS NOT NULL
+        ORDER BY id ASC
+        """
+    )
+    rows = c.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def mark_followup_sent(tx_id: int) -> bool:
+    """Tandai transaksi sudah dikirimi follow-up (idempoten).
+
+    Return True bila baris berubah (belum pernah ditandai sebelumnya).
+    """
+    import datetime
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        "UPDATE transaction_log SET followup_sent_at=? WHERE id=? AND followup_sent_at IS NULL",
+        (now, tx_id),
+    )
+    changed = c.rowcount
+    conn.commit()
+    conn.close()
+    return changed > 0

@@ -39,3 +39,19 @@ AUTOPOSTER_TOKEN = os.getenv('AUTOPOSTER_TOKEN', '')
 # Batas maksimal tiket AKTIF per member untuk SETIAP layanan
 # (Midman, ML, Robux, GP, Lainnya, JualBeli, Vilog). Hitungannya per-layanan.
 MAX_TICKETS_PER_SERVICE = int(os.getenv('MAX_TICKETS_PER_SERVICE', 5))
+
+
+
+# Masa garansi default (hari) untuk produk TANPA durasi langganan di namanya
+# (mis. Robux, diamond). Produk langganan ("... 1 Bulan") garansinya mengikuti
+# durasi langganan. Dipakai fitur garansi pintar.
+WARRANTY_DEFAULT_DAYS = int(os.getenv('WARRANTY_DEFAULT_DAYS', 7))
+
+# Berapa hari SEBELUM langganan habis bot mengirim DM follow-up perpanjangan.
+SUB_FOLLOWUP_LEAD_DAYS = int(os.getenv('SUB_FOLLOWUP_LEAD_DAYS', 3))
+
+
+
+# Channel ADMIN untuk insight pelanggan saat tiket dibuka (0 = pakai LOG_CHANNEL_ID).
+# Data belanja member sengaja dikirim ke channel admin, bukan ke channel tiket.
+CUSTOMER_INSIGHT_CHANNEL_ID = int(os.getenv('CUSTOMER_INSIGHT_CHANNEL_ID', 0))

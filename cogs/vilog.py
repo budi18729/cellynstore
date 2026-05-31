@@ -374,6 +374,8 @@ class Vilog(commands.Cog):
 
         ping = admin_role.mention if admin_role else ""
         await channel.send(content=f"{ping} Tiket Vilog baru dibuat.", embed=info_embed)
+        from utils.customer_insight import send_insight
+        await send_insight(self.bot, channel, interaction.user)
         await interaction.followup.send(f"Tiket dibuat: {channel.mention}", ephemeral=True)
 
     @commands.command(name="vilogcatalog")

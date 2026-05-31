@@ -305,6 +305,8 @@ async def _create_robux_ticket(interaction: discord.Interaction, cart: list, rat
         embed=embed
     )
     await send_qris_payment(channel, ticket)
+    from utils.customer_insight import send_insight
+    await send_insight(interaction.client, channel, member)
     await interaction.followup.send(f"Tiket dibuat! {channel.mention}", ephemeral=True)
 
 
@@ -503,6 +505,8 @@ class CustomOrderModal(discord.ui.Modal, title="Custom Order Robux"):
             embed=embed
         )
         await send_qris_payment(channel, ticket)
+        from utils.customer_insight import send_insight
+        await send_insight(interaction.client, channel, member)
         await interaction.edit_original_response(content=f"Tiket dibuat! {channel.mention}")
 
 

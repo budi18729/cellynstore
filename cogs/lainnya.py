@@ -775,6 +775,8 @@ async def open_product_ticket(interaction: discord.Interaction, product_id: int)
     )
     ticket["embed_message_id"] = msg.id
     save_lainnya_ticket(ticket)
+    from utils.customer_insight import send_insight
+    await send_insight(interaction.client, channel, member)
     await interaction.followup.send(
         f"Pesanan dibuat di {channel.mention}!\n{product['name']} - Rp {product['harga']:,}",
         ephemeral=True,
@@ -889,6 +891,9 @@ async def _create_custom_ticket(interaction, cog, member, guild, item_name, qty_
     )
     ticket["embed_message_id"] = msg.id
     save_lainnya_ticket(ticket)
+
+    from utils.customer_insight import send_insight
+    await send_insight(interaction.client, channel, member)
 
     await interaction.followup.send(
         f"✅ Custom order kamu dibuat di {channel.mention}!\nBudget: Rp {budget_int:,}",
