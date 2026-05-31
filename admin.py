@@ -131,23 +131,37 @@ a{color:var(--gold);text-decoration:none;}
 .page-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
 
 /* ── CARDS ── */
-.card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)), var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.25rem;box-shadow:0 18px 40px rgba(0,0,0,.24);backdrop-filter:blur(6px);}
-.card-header{padding:.9rem 1.35rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2);}
-.card-title{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.card{position:relative;background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.006)), var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.25rem;box-shadow:0 18px 44px rgba(0,0,0,.28);backdrop-filter:blur(8px);transition:border-color .25s, transform .25s, box-shadow .25s;}
+.card:hover{transform:translateY(-3px);box-shadow:0 26px 60px rgba(0,0,0,.4);border-color:var(--border2);}
+.card-header{padding:1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);}
+.card-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:.55rem;}
+.card-title svg{width:15px;height:15px;color:var(--gold);}
 .card-body{padding:1.25rem;}
 
 /* ── STAT CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:1.5rem;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:relative;overflow:hidden;transition:border-color .2s, transform .2s;}
-.stat-card:hover{border-color:var(--border2);transform:translateY(-2px);}
-.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
-.stat-card.ml::after{background:linear-gradient(90deg,#3498DB,transparent);}
-.stat-card.ff::after{background:linear-gradient(90deg,#FF6B35,transparent);}
-.stat-card.robux::after{background:linear-gradient(90deg,#E91E63,transparent);}
-.stat-card.gp::after{background:linear-gradient(90deg,#9B59B6,transparent);}
-.stat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;font-size:1rem;}
-.stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.2em;font-weight:500;}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;margin-top:.15rem;line-height:1;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.15rem;margin-bottom:1.6rem;}
+.stat-card{position:relative;background:radial-gradient(120% 120% at 100% 0%, var(--glow,rgba(201,168,76,.10)), transparent 55%),linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.008)), var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.45rem;overflow:hidden;transition:border-color .25s, transform .25s, box-shadow .25s;}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 22px 50px rgba(0,0,0,.38);}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--bar,linear-gradient(90deg,var(--gold),transparent));}
+.stat-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;}
+.stat-card.ml{--glow:rgba(52,152,219,.14);--bar:linear-gradient(90deg,#3498DB,transparent);--ic-bg:rgba(52,152,219,.12);--ic-bd:rgba(52,152,219,.3);--ic-fg:#6cb8e8;}
+.stat-card.ff{--glow:rgba(255,107,53,.14);--bar:linear-gradient(90deg,#FF6B35,transparent);--ic-bg:rgba(255,107,53,.12);--ic-bd:rgba(255,107,53,.3);--ic-fg:#ff8c5e;}
+.stat-card.robux{--glow:rgba(233,30,99,.14);--bar:linear-gradient(90deg,#E91E63,transparent);--ic-bg:rgba(233,30,99,.12);--ic-bd:rgba(233,30,99,.3);--ic-fg:#f15c8a;}
+.stat-card.gp{--glow:rgba(155,89,182,.14);--bar:linear-gradient(90deg,#9B59B6,transparent);--ic-bg:rgba(155,89,182,.12);--ic-bd:rgba(155,89,182,.3);--ic-fg:#b97fd0;}
+.stat-card.gold{--glow:rgba(201,168,76,.16);--bar:linear-gradient(90deg,var(--gold),transparent);--ic-bg:rgba(201,168,76,.12);--ic-bd:rgba(201,168,76,.3);--ic-fg:var(--gold2);}
+.stat-card.green{--glow:rgba(77,187,138,.16);--bar:linear-gradient(90deg,var(--success),transparent);--ic-bg:rgba(77,187,138,.12);--ic-bd:rgba(77,187,138,.3);--ic-fg:#5dd4a0;}
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;}
+.qa-card{display:flex;align-items:center;gap:.9rem;padding:1.1rem 1.2rem;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), transparent), var(--surface);border:1px solid var(--border);transition:transform .2s, border-color .2s, box-shadow .2s;}
+.qa-card:hover{transform:translateY(-3px);border-color:var(--gold3);box-shadow:0 18px 40px rgba(0,0,0,.35);}
+.qa-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.22);color:var(--gold2);flex-shrink:0;}
+.qa-ic svg{width:20px;height:20px;}
+.qa-tx{display:flex;flex-direction:column;}
+.qa-tt{font-size:.86rem;font-weight:600;color:var(--text);}
+.qa-sb{font-size:.7rem;color:var(--muted);margin-top:.1rem;}
+.stat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--ic-bg,rgba(201,168,76,.12));border:1px solid var(--ic-bd,rgba(201,168,76,.25));color:var(--ic-fg,var(--gold2));flex-shrink:0;box-shadow:0 8px 20px rgba(0,0,0,.25);}
+.stat-icon svg{width:22px;height:22px;}
+.stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.18em;font-weight:600;margin-top:1rem;}
+.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;margin-top:.2rem;line-height:1;letter-spacing:.01em;}
 .stat-sub{font-size:.72rem;color:var(--muted);margin-top:.3rem;}
 
 /* ── TABLE ── */
@@ -393,9 +407,21 @@ def logout():
 
 
 # ── DASHBOARD ─────────────────────────────────────────────────────────────────
+ICONS = {
+  "ml": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><line x1="7" y1="11" x2="7" y2="13"/><line x1="6" y1="12" x2="8" y2="12"/><circle cx="16" cy="11" r="1"/><circle cx="18.5" cy="13.5" r="1"/></svg>',
+  "ff": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-1 4-2 6-1 2 0 4 2 4s3-2 2-4c3 1 5 4 5 7a7 7 0 0 1-14 0c0-2 1-4 3-5"/></svg>',
+  "robux": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l1.5 14h11L19 5z"/><path d="M5 9h14"/><path d="M10 5l-1 14M14 5l1 14"/></svg>',
+  "money": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
+  "star": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9 12 2"/></svg>',
+  "cart": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L22 7H6"/></svg>',
+  "bolt": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 4 14 11 14 11 22 20 10 13 10 13 2"/></svg>',
+  "tag": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4L13 21a2 2 0 0 1-2.8 0L3 13.8V4h9.8z"/><circle cx="8" cy="8" r="1.3"/></svg>',
+}
+
 @app.route("/")
 @login_required
 def index():
+    import datetime as _dt
     conn = get_conn()
     ml_count = conn.execute("SELECT COUNT(*) FROM ml_products").fetchone()[0]
     ff_count = conn.execute("SELECT COUNT(*) FROM ff_products").fetchone()[0]
@@ -403,22 +429,46 @@ def index():
     row = conn.execute("SELECT rate FROM robux_rate WHERE id=1").fetchone()
     rate = row[0] if row else 0
     conn.close()
-    rate_str = f"Rp {rate:,}" if rate else "Belum diset"
+    rate_str = f"Rp {rate:,}".replace(",", ".") if rate else "Belum diset"
+    # Ringkasan transaksi & rating hari ini (dari utils.reviews).
+    try:
+        from utils import reviews as _rv
+        _today = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%d")
+        _rep = _rv.get_daily_report(_today)
+        tx_today = _rep["total_tx"]; omzet_today = _rep["total_omzet"]
+        _st = _rv.get_stats()
+        rating_avg = _st["average"]; rating_n = _st["count"]
+    except Exception:
+        tx_today = omzet_today = rating_n = 0; rating_avg = 0.0
+    omzet_str = ("Rp " + f"{omzet_today:,}".replace(",", ".")) if omzet_today else "Rp 0"
+    rating_str = f"{rating_avg:.1f}/5" if rating_n else "-"
+    def _stat(cls, icon, label, value, sub):
+        return f'''<div class="stat-card {cls}">
+          <div class="stat-top"><div class="stat-icon">{ICONS[icon]}</div></div>
+          <div class="stat-label">{label}</div>
+          <div class="stat-value">{value}</div>
+          <div class="stat-sub">{sub}</div>
+        </div>'''
+    def _qa(href, icon, title, sub):
+        return f'''<a class="qa-card" href="{href}"><div class="qa-ic">{ICONS[icon]}</div>
+          <div class="qa-tx"><span class="qa-tt">{title}</span><span class="qa-sb">{sub}</span></div></a>'''
     content = f"""
 <div class="page-header">
-  <div class="page-title">Dashboard <small>Ringkasan produk aktif</small></div>
+  <div class="page-title">Dashboard <small>Ringkasan toko hari ini</small></div>
 </div>
 <div class="stats-grid">
-  <div class="stat-card ml"><div class="stat-label">Mobile Legends</div>
-    <div class="stat-value">{ml_count}</div><div class="stat-sub">produk aktif</div></div>
-  <div class="stat-card ff"><div class="stat-label">Free Fire</div>
-    <div class="stat-value">{ff_count}</div><div class="stat-sub">produk aktif</div></div>
-  <div class="stat-card robux"><div class="stat-label">Robux Store</div>
-    <div class="stat-value">{robux_count}</div><div class="stat-sub">item aktif</div></div>
+  {_stat("green", "cart", "Transaksi Hari Ini", tx_today, "transaksi selesai")}
+  {_stat("gold", "money", "Omzet Hari Ini", omzet_str, "total pemasukan")}
+  {_stat("robux", "star", "Rating Toko", rating_str, f"{rating_n} ulasan total")}
+</div>
+<div class="stats-grid">
+  {_stat("ml", "ml", "Mobile Legends", ml_count, "produk aktif")}
+  {_stat("ff", "ff", "Free Fire", ff_count, "produk aktif")}
+  {_stat("robux", "robux", "Robux Store", robux_count, "item aktif")}
 </div>
 <div class="card">
-  <div class="card-header"><span class="card-title">Rate Robux</span></div>
-  <div style="padding:1.5rem;">
+  <div class="card-header"><span class="card-title">{ICONS["robux"]} Rate Robux</span></div>
+  <div class="card-body">
     <div class="rate-display">
       <div>
         <div style="font-size:.75rem;color:var(--muted);margin-bottom:.25rem;">Rate saat ini</div>
@@ -428,6 +478,18 @@ def index():
         <input type="number" name="rate" placeholder="Rate baru" min="1" style="width:140px;" required>
         <button type="submit" class="btn btn-primary btn-sm">Update</button>
       </form>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header"><span class="card-title">{ICONS["bolt"]} Akses Cepat</span></div>
+  <div class="card-body">
+    <div class="qa-grid">
+      {_qa("/robux", "robux", "Kelola Robux", "produk & rate")}
+      {_qa("/ml", "ml", "Kelola ML/FF", "produk topup")}
+      {_qa("/lainnya", "tag", "Layanan Lainnya", "katalog produk")}
+      {_qa("/reviews", "star", "Rating & Ulasan", "feedback member")}
+      {_qa("/stats", "money", "Statistik", "omzet & transaksi")}
     </div>
   </div>
 </div>"""
