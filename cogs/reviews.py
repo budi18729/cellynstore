@@ -19,7 +19,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-from utils.config import GUILD_ID, STORE_NAME, TESTIMONI_CHANNEL_ID
+from utils.config import GUILD_ID, STORE_NAME, TESTIMONI_CHANNEL_ID, REVIEWER_BADGE_ROLE_ID, REVIEWER_BADGE_THRESHOLD
 from utils import reviews as rv
 
 COLOR_REVIEW = 0xFFC107  # kuning/emas
@@ -92,6 +92,7 @@ class ReviewModal(discord.ui.Modal):
         cog = interaction.client.cogs.get("Reviews")
         if cog:
             await cog.publish_review(self.review_id)
+            await cog.maybe_award_badge(interaction.user)
         # Bersihkan tombol di prompt (kalau bisa diakses).
         try:
             await interaction.message.edit(view=None)
@@ -434,6 +435,56 @@ class Reviews(commands.Cog):
                 lines.append(f"{_stars(r['rating'])} — {txt or '_(tanpa ulasan)_'}")
             embed.add_field(name="Ulasan Terbaru", value="\n".join(lines)[:1024], inline=False)
         embed.set_footer(text=STORE_NAME)
+        await interaction.response.send_message(embed=embed)
+
+    # ── Badge reviewer ────────────────────────────
+    async def maybe_award_badge(self, user):
+        """Beri role badge reviewer bila member mencapai ambang jumlah rating."""
+        if not REVIEWER_BADGE_ROLE_ID:
+            return
+        try:
+            total = rv.count_user_reviews(user.id)
+            if total < REVIEWER_BADGE_THRESHOLD:
+                return
+            guild = self.bot.get_guild(GUILD_ID)
+            if guild is None:
+                return
+            member = guild.get_member(user.id)
+            role = guild.get_role(REVIEWER_BADGE_ROLE_ID)
+            if member is None or role is None or role in member.roles:
+                return
+            await member.add_roles(role, reason="Reviewer aktif (badge)")
+        except Exception as e:
+            print(f"[Reviews] award badge error: {e}")
+
+    # ── Command leaderboard reviewer ──────────────
+    @app_commands.command(name="topreviewer", description="Lihat member paling rajin memberi rating.")
+    async def topreviewer(self, interaction: discord.Interaction):
+        top = rv.get_top_reviewers(limit=10)
+        if not top:
+            await interaction.response.send_message(
+                "Belum ada yang memberi rating.", ephemeral=True
+            )
+            return
+        medals = {0: "🥇", 1: "🥈", 2: "🥉"}
+        lines = []
+        for i, r in enumerate(top):
+            prefix = medals.get(i, f"`#{i+1}`")
+            lines.append(
+                f"{prefix} <@{r['user_id']}> — **{r['count']}** ulasan "
+                f"(rata-rata {r['avg_rating']:.1f}⭐)"
+            )
+        embed = discord.Embed(
+            title="🏆 Top Reviewer",
+            description="\n".join(lines),
+            color=COLOR_REVIEW,
+        )
+        if REVIEWER_BADGE_ROLE_ID:
+            embed.set_footer(
+                text=f"{STORE_NAME} • Beri {REVIEWER_BADGE_THRESHOLD}+ rating untuk dapat badge reviewer!"
+            )
+        else:
+            embed.set_footer(text=STORE_NAME)
         await interaction.response.send_message(embed=embed)
 
 

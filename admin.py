@@ -325,6 +325,7 @@ def render_page(content, **ctx):
     {_a("Lainnya", "/lainnya", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>', "page_lainnya")}
     {_a("QRIS", "/qr", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM17 17h3v3h-3zM14 20h3"/></svg>', "page_qr")}
     {_a("Statistik", "/stats", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', "page_stats")}
+    {_a("Rating &amp; Ulasan", "/reviews", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>', "page_reviews")}
     {_a("Info Layanan", "/service-info", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>', "page_service_info")}
     {_a("Embed Builder", "/embeds", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 10h8M8 14h5"/></svg>', "page_embeds")}
     {_a("AutoPost", "/autopost", '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>', "page_autopost")}
@@ -980,6 +981,110 @@ def gp_rate_save():
 
 
 # ── STATISTIK ─────────────────────────────────────────────────────────────────
+@app.route("/reviews")
+def page_reviews():
+    if not session.get("logged_in"):
+        return redirect(url_for("login"))
+    from utils import reviews as rv
+    rv.init_reviews_db()
+    stats = rv.get_stats()
+    recent = rv.get_recent_reviews(limit=15)
+    top = rv.get_top_reviewers(limit=10)
+
+    avg = stats["average"]
+    total = stats["count"]
+    dist = stats["distribution"]
+
+    def _stars(n):
+        n = max(0, min(5, int(round(n or 0))))
+        return "★" * n + "☆" * (5 - n)
+
+    summary = f"""
+    <div class="stat-grid" style="margin-bottom:1.25rem;">
+      <div class="stat-card robux">
+        <div class="card-title">Rata-rata Rating</div>
+        <div style="font-size:1.8rem;font-weight:700;color:#FFC107;">{avg:.2f}/5</div>
+        <div style="color:#FFC107;font-size:1.1rem;">{_stars(avg)}</div>
+      </div>
+      <div class="stat-card ml">
+        <div class="card-title">Total Ulasan</div>
+        <div style="font-size:1.8rem;font-weight:700;">{total}</div>
+      </div>
+    </div>
+    """
+
+    dist_rows = ""
+    for s_ in (5, 4, 3, 2, 1):
+        cnt = dist.get(s_, 0)
+        pct = round((cnt / total) * 100) if total else 0
+        dist_rows += f"""
+        <div style="display:flex;align-items:center;gap:.6rem;margin:.3rem 0;">
+          <span style="width:36px;color:#FFC107;">{s_}★</span>
+          <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;height:14px;overflow:hidden;">
+            <div style="width:{pct}%;height:100%;background:linear-gradient(90deg,#FFC107,#FF8C00);"></div>
+          </div>
+          <span style="width:60px;text-align:right;color:var(--muted);">{cnt} ({pct}%)</span>
+        </div>"""
+
+    review_rows = ""
+    for r in recent:
+        txt = (r.get("review_text") or "").strip() or "<i>(tanpa ulasan teks)</i>"
+        lay = r.get("layanan") or "-"
+        when = (r.get("rated_at") or "")[:10]
+        review_rows += f"""
+        <tr>
+          <td style="color:#FFC107;white-space:nowrap;">{_stars(r['rating'])}</td>
+          <td><code>{r['user_id']}</code></td>
+          <td>{lay}</td>
+          <td>{txt}</td>
+          <td style="color:var(--muted);white-space:nowrap;">{when}</td>
+        </tr>"""
+    if not review_rows:
+        review_rows = '<tr><td colspan="5" style="text-align:center;color:var(--muted);">Belum ada ulasan.</td></tr>'
+
+    top_rows = ""
+    for i, t in enumerate(top):
+        medal = {0:"🥇",1:"🥈",2:"🥉"}.get(i, f"#{i+1}")
+        top_rows += f"""
+        <tr>
+          <td style="white-space:nowrap;">{medal}</td>
+          <td><code>{t['user_id']}</code></td>
+          <td>{t['count']}</td>
+          <td style="color:#FFC107;">{t['avg_rating']:.1f}★</td>
+        </tr>"""
+    if not top_rows:
+        top_rows = '<tr><td colspan="4" style="text-align:center;color:var(--muted);">Belum ada data.</td></tr>'
+
+    content = f"""
+    <div class="page-header">
+      <div class="page-title">Rating &amp; Ulasan <small>statistik & ulasan member</small></div>
+    </div>
+    {summary}
+    <div class="card">
+      <div class="card-header"><span class="card-title">Sebaran Bintang</span></div>
+      <div class="card-body">{dist_rows or '<span style=&quot;color:var(--muted);&quot;>Belum ada rating.</span>'}</div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Top Reviewer</span></div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>Peringkat</th><th>User ID</th><th>Jumlah</th><th>Rata-rata</th></tr></thead>
+          <tbody>{top_rows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Ulasan Terbaru</span></div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead><tr><th>Rating</th><th>User ID</th><th>Layanan</th><th>Ulasan</th><th>Tanggal</th></tr></thead>
+          <tbody>{review_rows}</tbody>
+        </table>
+      </div>
+    </div>
+    """
+    return render_page(content)
+
 @app.route("/stats")
 def page_stats():
     if not session.get("logged_in"):

@@ -21,6 +21,7 @@ from utils.robux_stock import get_available as get_robux_stock_available, get_ou
 from utils.store_hours import is_store_open
 from utils.counter import next_ticket_number
 from utils import ticket_ui
+from utils import reviews as reviews_data
 
 GP_CATALOG_CHANNEL_ID = 1478917118715236603
 MIN_ROBUX = 300
@@ -112,6 +113,9 @@ def build_catalog_embed(rate: int) -> discord.Embed:
         ),
         inline=False
     )
+    _rating = reviews_data.rating_line("gp")
+    if _rating:
+        embed.add_field(name="⭐ Rating Pembeli", value=_rating, inline=False)
     embed.set_footer(text=f"{STORE_NAME} • Rate dapat berubah sewaktu-waktu")
     return embed
 
