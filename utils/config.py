@@ -29,6 +29,8 @@ REVIEWER_BADGE_ROLE_ID = int(os.getenv('REVIEWER_BADGE_ROLE_ID', 0))
 REVIEWER_BADGE_THRESHOLD = int(os.getenv('REVIEWER_BADGE_THRESHOLD', 3))
 # Channel tempat panel klaim garansi (tombol). 0 = nonaktif.
 WARRANTY_CHANNEL_ID = int(os.getenv('WARRANTY_CHANNEL_ID', 0))
+# Channel laporan harian otomatis (omzet & rating). 0 = nonaktif.
+DAILY_REPORT_CHANNEL_ID = int(os.getenv('DAILY_REPORT_CHANNEL_ID', '1476351037412610048'))
 
 INVITE_REWARD_CHANNEL_ID = int(os.getenv('INVITE_REWARD_CHANNEL_ID', '1482464579085799435'))
 AUTOPOSTER_TOKEN = os.getenv('AUTOPOSTER_TOKEN', '')
