@@ -262,12 +262,22 @@ class MLConfirmView(discord.ui.View):
         await interaction.response.edit_message(content="Order dibatalkan.", embed=None, view=None)
 
 
+# Emoji custom per game (berdasarkan kode) untuk dropdown katalog ML.
+GAME_EMOJI = {
+    "ML": "<:mole:1497007406415220857>",
+    "WDP": "<:mole:1497007406415220857>",
+    "FF": "<:Garena:1496829013967241388>",
+}
+DIAMOND_EMOJI = "<:diamond:1510720539403096267>"
+
+
 def _build_product_options(game: dict) -> list:
     """Bangun daftar lengkap SelectOption produk untuk sebuah game (tanpa batas 25)."""
     products = _load_products(game["code"])
     return [
         discord.SelectOption(
             label=with_price(p["label"], f"Rp {p['harga']:,}"),
+            emoji=DIAMOND_EMOJI,
             description=game["name"],
             value=str(p["id"]),
         ) for p in products
@@ -307,7 +317,11 @@ class GameSelect(discord.ui.Select):
     def __init__(self):
         games = _load_games()
         options = [
-            discord.SelectOption(label=g["name"], value=g["code"], description=f"Topup {g['name']}")
+            discord.SelectOption(
+                label=g["name"], value=g["code"],
+                emoji=GAME_EMOJI.get(g["code"], DIAMOND_EMOJI),
+                description=f"Topup {g['name']}",
+            )
             for g in games[:25]
         ] or [discord.SelectOption(label="Tidak ada game aktif", value="none")]
         super().__init__(

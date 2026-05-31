@@ -548,24 +548,47 @@ class CatalogView(discord.ui.View):
 
 
 
-CATEGORY_EMOJIS = {
-
-    "CLOUD PHONE": "•",
-
-    "DISCORD NITRO": "•",
-
-    "NETFLIX": "•",
-
-    "SPOTIFY": "•",
-
-    "CAPCUT": "•",
-
-    "YOUTUBE": "•",
-
-    "SOSMED": "•",
-
-    "TIKTOK": "•",
-
+CATEGORY_EMOJI = {
+    # AI
+    "CHATGPT": "<:NewChatGPTlogo_Round:1485497156629696653>",
+    "GEMINI AI": "<:gemini_ai:1510724751944056984>",
+    # Streaming
+    "NETFLIX": "<:SCM_netflix:1481991841560789079>",
+    # Musik
+    "SPOTIFY": "<:Music:1510720973656031232>",
+    "APPLE MUSIC": "<:Music:1510720973656031232>",
+    # Editing
+    "CANVA": "<:SCM_canva:1485497715637883013>",
+    # Gaming
+    "AKUN ROBLOX": "<:RobloxVerifiedBadge:1479498873641762837>",
+    "ROBUX GIFT CARD": "<:Robux:1480480351611654224>",
+    # Discord
+    "DISCORD NITRO": "<:Discord:1510719862396293390>",
+    "NITRO BASIC": "<:Discord:1510719862396293390>",
+    "NITRO CODE": "<:Discord:1510719862396293390>",
+    "TOKEN DISCORD": "<:Discord:1510719862396293390>",
+    "QUEST ORBS": "<:Discord:1510719862396293390>",
+    "NITRO BOOST": "<a:dcboost:1481992932692070585>",
+    "JASA BOOST SERVER": "<a:dcboost:1481992932692070585>",
+    # YouTube (premium + sosmed)
+    "YOUTUBE PREMIUM": "<:Youtubelogo:1485497230960889951>",
+    "YOUTUBE SUBSCRIBER": "<:Youtubelogo:1485497230960889951>",
+    "YOUTUBE LIKES": "<:Youtubelogo:1485497230960889951>",
+    "YOUTUBE VIEWS": "<:Youtubelogo:1485497230960889951>",
+    "YOUTUBE SHORT": "<:Youtubelogo:1485497230960889951>",
+    "YOUTUBE LIVE VIEWERS": "<:Youtubelogo:1485497230960889951>",
+    "YOUTUBE JAM TAYANG": "<:Youtubelogo:1485497230960889951>",
+    # Instagram
+    "INSTAGRAM FOLLOWERS": "<:Instagram:1510719283825742066>",
+    "INSTAGRAM LIKE": "<:Instagram:1510719283825742066>",
+    "INSTAGRAM VIEWS": "<:Instagram:1510719283825742066>",
+    "INSTAGRAM LIVE VIEWERS": "<:Instagram:1510719283825742066>",
+    # TikTok
+    "TIKTOK FOLLOWERS": "<:tiktok:1510719541875834991>",
+    "TIKTOK LIKE": "<:tiktok:1510719541875834991>",
+    "TIKTOK VIEWS": "<:tiktok:1510719541875834991>",
+    "TIKTOK SHARE": "<:tiktok:1510719541875834991>",
+    "TIKTOK LIVE VIEWERS": "<:tiktok:1510719541875834991>",
 }
 
 
@@ -612,7 +635,12 @@ async def _show_categories(interaction: discord.Interaction, group: str):
         return
 
     options = [
-        discord.SelectOption(label=cat[:100], description=f"{cnt} produk", value=cat)
+        discord.SelectOption(
+            label=cat[:100],
+            emoji=CATEGORY_EMOJI.get(cat) or GROUP_EMOJI.get(group),
+            description=f"{cnt} produk",
+            value=cat,
+        )
         for cat, cnt in cats
     ]
 
