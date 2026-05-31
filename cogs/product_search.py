@@ -51,13 +51,13 @@ COLOR_RESULT = 0x8B5CF6     # ungu lembut
 COLOR_SUGGEST = 0x64748B    # abu kebiruan
 
 # Emoji estetik (sengaja bukan emoji standar keyboard) — tampil sebagai glyph rapi.
-EM_TITLE = "\u2726"     # ✦
-EM_BULLET = "\u2727"    # ✧
-EM_PRICE = "\u21B3"     # ↳
-EM_STOCK = "\u274F"     # ❏
-EM_ML = "\u27E1"        # ⟡
-EM_ROBUX = "\u25C8"     # ◈
-EM_LAINNYA = "\u2756"   # ❖
+EM_TITLE = "\u2726"     # ✦ (penanda judul, dekoratif)
+EM_BULLET = "\u2727"    # ✧ (bullet item, dekoratif)
+EM_PRICE = "\u21B3"     # ↳ (penanda harga, dekoratif)
+EM_STOCK = "<:Robux:1480480351611654224>"    # stok Robux
+EM_ML = "<:diamond:1510720539403096267>"     # Topup Game
+EM_ROBUX = "<:Robux:1480480351611654224>"    # Robux Store
+EM_LAINNYA = "\u2756"   # ❖ (Layanan Lainnya — tak ada emoji custom khusus)
 EM_SUGGEST = "\u2727"   # ✧
 EM_FOOT = "\u2727"      # ✧
 
