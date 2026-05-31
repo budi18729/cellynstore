@@ -537,29 +537,45 @@ class JualBeli(commands.Cog):
         except Exception:
             pass
 
-        # Log
+        # Log transaksi (flat text + auto-update garansi setelah rating)
+        from utils.db import log_transaction, set_transaction_log_message
+        from utils.config import TESTIMONI_CHANNEL_ID
+        import datetime as _dt
+        opened_at_dt = _dt.datetime.fromisoformat(ticket["opened_at"]) if ticket.get("opened_at") else None
+        now_dt = _dt.datetime.now(_dt.timezone.utc)
+        durasi = int((now_dt - opened_at_dt).total_seconds()) if opened_at_dt else 0
+        tx_id = None
+        try:
+            tx_id = log_transaction(
+                layanan="jualbeli",
+                nominal=ticket.get("harga", 0) or 0,
+                item=ticket.get("deskripsi", "-"),
+                admin_id=ctx.author.id,
+                user_id=ticket.get("p1_id"),
+                closed_at=now_dt,
+                durasi_detik=durasi,
+                qty=1,
+            )
+        except Exception as e:
+            print(f"[LOG] Gagal log transaksi jualbeli: {e}")
+
         log_ch = guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            fee = ticket.get("fee_final")
-            penanggung = ticket.get("fee_penanggung", "-")
-            release = format_nominal(ticket["harga"] - fee) if fee and penanggung == "penjual" else format_nominal(ticket["harga"])
-            nomor = ticket.get("ticket_number") or next_ticket_number()
-            log_e = ticket_ui.success_log_embed(
-                "jualbeli", nomor,
-                subtitle="Midman jual beli selesai. Item & dana telah diserahkan.",
-                admin_value=f"{admin.mention}\n`{admin.id}`",
-                item=ticket["deskripsi"],
-                total=format_nominal(ticket["harga"]),
-                payment="QRIS",
-                extra_fields=[
-                    ("Penjual", f"{p1.mention if p1 else '-'}\n`{ticket['p1_id']}`", True),
-                    ("Pembeli", f"{p2.mention if p2 else '-'}\n`{ticket.get('p2_id', '-')}`", True),
-                    ("Fee", f"{format_nominal(fee)} (ditanggung {penanggung})" if fee else "-", False),
-                    ("Dana ke Penjual", release, True),
-                ],
-                thumbnail_url=ticket_ui.avatar_url(p2),
+            text = ticket_ui.success_log_text(
+                seller=p1.mention if p1 else f"<@{ticket.get('p1_id')}>",
+                buyer=p2.mention if p2 else f"<@{ticket.get('p2_id')}>",
+                product=ticket.get("deskripsi", "-"),
+                qty=1,
+                harga=ticket.get("harga", 0) or 0,
+                rating=None,
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
             )
-            await log_ch.send(embed=log_e)
+            try:
+                msg = await log_ch.send(text)
+                if tx_id:
+                    set_transaction_log_message(tx_id, log_ch.id, msg.id)
+            except Exception as e:
+                print(f"[JualBeli] Gagal kirim log: {e}")
 
         # Transcript
         transcript_ch = guild.get_channel(TRANSCRIPT_CHANNEL_ID)
@@ -573,24 +589,6 @@ class JualBeli(commands.Cog):
             except Exception as ex:
                 print(f"[WARNING] JualBeli transcript: {ex}")
 
-        # Log transaksi
-        try:
-            from utils.db import log_transaction
-            import datetime as _dt
-            opened_at_dt = _dt.datetime.fromisoformat(ticket["opened_at"]) if ticket.get("opened_at") else None
-            now_dt = _dt.datetime.now(_dt.timezone.utc)
-            durasi = int((now_dt - opened_at_dt).total_seconds()) if opened_at_dt else 0
-            log_transaction(
-                layanan="jualbeli",
-                nominal=ticket.get("harga", 0) or 0,
-                item=ticket.get("deskripsi", "-"),
-                admin_id=ctx.author.id,
-                user_id=ticket.get("p1_id"),
-                closed_at=now_dt,
-                durasi_detik=durasi
-            )
-        except Exception as e:
-            print(f"[LOG] Gagal log transaksi jualbeli: {e}")
         # Assign Royal Customer
         try:
             royal_role = discord.utils.get(ctx.guild.roles, name="Royal Customer")

@@ -117,6 +117,7 @@ class ReviewModal(discord.ui.Modal):
         )
         cog = interaction.client.cogs.get("Reviews")
         if cog:
+            await cog.update_success_log(self.review_id)
             await cog.publish_review(self.review_id)
             await cog.maybe_award_badge(interaction.user)
         # Bersihkan tombol di prompt (kalau bisa diakses).
@@ -242,22 +243,44 @@ def build_expired_embed(review: dict) -> discord.Embed:
 
 
 def build_published_embed(review: dict, member: discord.abc.User | None) -> discord.Embed:
+    """Embed ulasan yang diposting ke channel rating setelah member memberi rating.
+
+    Format: title = nama member (thumbnail = foto profilnya), lalu bintang,
+    ulasan, produk, tanggal, dan baris terima kasih.
+    """
     name = member.display_name if member else f"User {review['user_id']}"
+    rating = int(review.get("rating") or 0)
+
+    ulasan = (review.get("review_text") or "").strip()
+    ulasan_line = f'Ulasan: "{ulasan}"' if ulasan else "Ulasan: -"
+
+    # Tanggal DD/MM/YY dari rated_at (fallback hari ini).
+    tgl = datetime.datetime.now(datetime.timezone.utc)
+    if review.get("rated_at"):
+        try:
+            tgl = datetime.datetime.fromisoformat(review["rated_at"])
+        except Exception:
+            pass
+    tgl_str = tgl.strftime("%d/%m/%y")
+
+    product = review.get("item") or _pretty_layanan(review.get("layanan"))
+
+    desc = (
+        f"{_stars(rating)} ({rating}/5)\n"
+        f"{ulasan_line}\n"
+        f"Product: {product}\n"
+        f"{tgl_str}\n"
+        f"**Rating & ulasan diterima, Terimakasih**"
+    )
     embed = discord.Embed(
-        title=f"{_stars(review['rating'])}  ({review['rating']}/5)",
-        description=review.get("review_text") or "_(tanpa ulasan teks)_",
+        title=name,
+        description=desc,
         color=COLOR_REVIEW,
         timestamp=discord.utils.utcnow(),
     )
     if member:
-        embed.set_author(name=name, icon_url=member.display_avatar.url)
         embed.set_thumbnail(url=member.display_avatar.url)
-    else:
-        embed.set_author(name=name)
-    embed.add_field(name="Layanan", value=_pretty_layanan(review.get("layanan")), inline=True)
-    if review.get("item"):
-        embed.add_field(name="Item", value=str(review["item"])[:256], inline=True)
-    embed.set_footer(text=f"{STORE_NAME} • Ulasan Member")
+    embed.set_footer(text=STORE_NAME)
     return embed
 
 
@@ -393,6 +416,47 @@ class Reviews(commands.Cog):
             rv.set_prompt_msg_id(review_id, msg.id)
         except Exception as e:
             print(f"[Reviews] channel prompt error: {e}")
+
+    # ── Update pesan log transaksi setelah rating ──
+    async def update_success_log(self, review_id: int):
+        """Edit pesan log 'transaksi berhasil' agar status garansi jadi 'Aktif'.
+
+        Mencari pesan via transaction_log (tx_id -> log_channel_id/log_message_id),
+        lalu merender ulang teks flat dengan rating yang baru.
+        """
+        try:
+            from utils.db import get_transaction
+            from utils import ticket_ui
+
+            review = rv.get_review(review_id)
+            if not review or not review.get("tx_id") or review.get("rating") is None:
+                return
+            tx = get_transaction(review["tx_id"])
+            if not tx or not tx.get("log_channel_id") or not tx.get("log_message_id"):
+                return
+
+            channel = self.bot.get_channel(tx["log_channel_id"])
+            if channel is None:
+                return
+            try:
+                msg = await channel.fetch_message(tx["log_message_id"])
+            except Exception:
+                return
+
+            seller = f"<@{tx['admin_id']}>" if tx.get("admin_id") else "Admin"
+            buyer = f"<@{tx['user_id']}>" if tx.get("user_id") else "-"
+            new_text = ticket_ui.success_log_text(
+                seller=seller,
+                buyer=buyer,
+                product=tx.get("item") or "-",
+                qty=tx.get("qty") or 1,
+                harga=tx.get("nominal") or 0,
+                rating=review["rating"],
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
+            )
+            await msg.edit(content=new_text)
+        except Exception as e:
+            print(f"[Reviews] update success log error: {e}")
 
     # ── Publikasi ulasan ──────────────────────────
     async def publish_review(self, review_id: int):

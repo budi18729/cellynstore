@@ -54,18 +54,34 @@ def test_open_ticket_embed_basic():
     assert "Member" in names and "Item" in names
 
 
-def test_success_log_embed_thumbnail_and_green():
-    class M:
-        class display_avatar:
-            url = "https://cdn/y.png"
-    e = tu.success_log_embed(
-        "robux", 42,
-        member_value="@budi", admin_value="@admin",
-        item="1000 Robux", total="Rp 150.000",
-        thumbnail_url=tu.avatar_url(M()),
+def test_warranty_status_line():
+    # Belum rating -> belum aktif
+    assert "Belum Aktif" in tu.warranty_status_line(None)
+    assert "Belum Aktif" in tu.warranty_status_line(0)
+    # Sudah rating -> aktif + jumlah bintang
+    s = tu.warranty_status_line(5)
+    assert "Aktif" in s and "5" in s and "Belum" not in s
+
+
+def test_success_log_text_belum_dan_sudah_rating():
+    common = dict(
+        seller="<@1>", buyer="<@2>",
+        product="Apple Music 1 Bulan All Device",
+        qty=1, harga=11000, rating_channel_id=999,
     )
-    assert e.kwargs["color"] == tu.NEON_GREEN
-    assert e.thumbnail == "https://cdn/y.png"
-    # reminder rating ada
-    joined = " ".join(f["value"] for f in e.fields)
-    assert "rating" in joined.lower()
+    # Belum rating
+    belum = tu.success_log_text(rating=None, **common)
+    assert "TERIMA KASIH SUDAH ORDER" in belum
+    assert "**Seller** : <@1>" in belum
+    assert "**Buyer** : <@2>" in belum
+    assert "**Product** : Apple Music 1 Bulan All Device" in belum
+    assert "**Jumlah** : 1" in belum
+    assert "Rp 11.000" in belum
+    assert "Belum Aktif" in belum
+    assert "<#999>" in belum  # mention channel rating
+
+    # Sudah rating -> teks otomatis berubah
+    sudah = tu.success_log_text(rating=5, **common)
+    assert "✅" in sudah and "Aktif (Sudah DiRating 5" in sudah
+    assert "Belum Aktif" not in sudah
+

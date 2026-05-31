@@ -418,9 +418,6 @@ class Vilog(commands.Cog):
         opened_at = datetime.datetime.fromisoformat(ticket["opened_at"])
         durasi_secs = int((now - opened_at).total_seconds())
 
-        from utils.counter import next_ticket_number
-        nomor = ticket.get("ticket_number") or next_ticket_number()
-
         # Transcript
         transcript_ch = ctx.guild.get_channel(TRANSCRIPT_CHANNEL_ID)
         if transcript_ch:
@@ -434,37 +431,42 @@ class Vilog(commands.Cog):
             except Exception as e:
                 print(f"[Vilog] Transcript error: {e}")
 
-        # Log embed
-        log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
-        if log_ch:
-            log_embed = ticket_ui.success_log_embed(
-                "vilog", nomor,
-                subtitle="Topup Robux via login berhasil diproses.",
-                member_value=f"{member.mention if member else ticket['user_id']}\n`{ticket['user_id']}`",
-                admin_value=f"{ctx.author.mention}\n`{ctx.author.id}`",
-                item=f"{ticket['boost']['robux']} Robux via Login (Vilog)",
-                total=_format_rp(ticket.get("nominal", 0) or 0),
-                payment="QRIS",
-                extra_fields=[
-                    ("Robux", f"{ticket['boost']['robux']} Robux", True),
-                ],
-                thumbnail_url=ticket_ui.avatar_url(member),
-            )
-            await log_ch.send(embed=log_embed)
-
+        # Log transaksi (flat text + auto-update garansi setelah rating)
+        from utils.db import log_transaction, set_transaction_log_message
+        from utils.config import TESTIMONI_CHANNEL_ID
+        item_str = f"{ticket['boost']['robux']} Robux via Login (Vilog)"
+        tx_id = None
         try:
-            from utils.db import log_transaction
-            log_transaction(
+            tx_id = log_transaction(
                 layanan="vilog",
                 nominal=ticket.get("nominal", 0) or 0,
-                item=f"{ticket['boost']['robux']} Robux via Vilog",
+                item=item_str,
                 admin_id=ctx.author.id,
                 user_id=ticket.get("user_id"),
                 closed_at=now,
                 durasi_detik=durasi_secs,
+                qty=1,
             )
         except Exception as e:
             print(f"[Vilog] Log transaksi error: {e}")
+
+        log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
+        if log_ch:
+            text = ticket_ui.success_log_text(
+                seller=ctx.author.mention,
+                buyer=member.mention if member else f"<@{ticket['user_id']}>",
+                product=item_str,
+                qty=1,
+                harga=ticket.get("nominal", 0) or 0,
+                rating=None,
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
+            )
+            try:
+                msg = await log_ch.send(text)
+                if tx_id:
+                    set_transaction_log_message(tx_id, log_ch.id, msg.id)
+            except Exception as e:
+                print(f"[Vilog] Gagal kirim log: {e}")
 
         # Stock Robux (global)
         try:

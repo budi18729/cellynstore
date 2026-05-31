@@ -19,7 +19,6 @@ from utils.backup import do_backup, do_restore
 from discord.ext import tasks
 from utils.db import get_conn
 from utils.store_hours import is_store_open
-from utils.counter import next_ticket_number
 from utils import ticket_ui
 
 
@@ -338,8 +337,6 @@ class Midman(commands.Cog):
         if not p2 or not adm:
             await ctx.send("Tiket belum di-setup penuh oleh admin. Tidak bisa dikonfirmasi.", ephemeral=False)
             return
-        fee_int = ticket.get("fee_final", 0)
-        fee_str_log = format_nominal(fee_int) if fee_int else "-"
         ticket_num = str(ticket.get("ticket_number", 0)).zfill(4)
         opened_at = ticket.get("opened_at")
         closed_at = ticket.get("closed_at")
@@ -359,48 +356,52 @@ class Midman(commands.Cog):
         opened_at.strftime("%d %b %Y, %H:%M UTC") if opened_at else "-"
         closed_at.strftime("%d %b %Y, %H:%M UTC") if closed_at else "-"
         ticket.get("verified_by")
-        nomor = ticket.get("ticket_number") or next_ticket_number()
-        log_embed = ticket_ui.success_log_embed(
-            "midman", nomor,
-            subtitle="Transaksi telah selesai dan aman. Kedua pihak telah menerima item masing-masing.",
-            admin_value=f"{adm.mention}\n`{adm.id}`",
-            item=f"{ticket.get('item_p1', '-')} ↔ {ticket.get('item_p2', '-')}",
-            payment="QRIS",
-            extra_fields=[
-                ("Pihak 1", f"{p1.mention}\n`{p1.id}`", True),
-                ("Pihak 2", f"{p2.mention if p2 else '-'}\n`{p2.id if p2 else '-'}`", True),
-                ("Fee", fee_str_log, False),
-            ],
-            thumbnail_url=ticket_ui.avatar_url(p1),
-        )
+        _midman_item = f"{ticket.get('item_p1', '-')} ↔ {ticket.get('item_p2', '-')}"
         await ctx.send("Admin telah mengkonfirmasi bahwa trade selesai dan kedua pihak telah menerima item masing-masing. Tiket ditutup dalam 5 detik.")
         await asyncio.sleep(5)
         transcript_file = await generate_transcript(ctx.channel, STORE_NAME)
+        # Log transaksi (flat text + auto-update garansi setelah rating)
+        from utils.db import log_transaction, set_transaction_log_message
+        from utils.config import TESTIMONI_CHANNEL_ID
+        opened_at_dt = datetime.datetime.fromisoformat(ticket["opened_at"]) if ticket.get("opened_at") else None
+        durasi = int((closed_at - opened_at_dt).total_seconds()) if opened_at_dt and closed_at else 0
+        tx_id = None
+        try:
+            tx_id = log_transaction(
+                layanan="midman",
+                nominal=ticket.get("fee_final", 0) or 0,
+                item=_midman_item,
+                admin_id=ctx.author.id,
+                user_id=ticket.get("pihak1_id"),
+                closed_at=closed_at,
+                durasi_detik=durasi,
+                qty=1,
+            )
+        except Exception:
+            pass
         log_ch = ctx.guild.get_channel(LOG_CHANNEL_ID)
         if log_ch:
-            await log_ch.send(embed=log_embed)
+            text = ticket_ui.success_log_text(
+                seller=p1.mention if p1 else "-",
+                buyer=p2.mention if p2 else "-",
+                product=_midman_item,
+                qty=1,
+                harga=ticket.get("fee_final", 0) or 0,
+                rating=None,
+                rating_channel_id=TESTIMONI_CHANNEL_ID,
+            )
+            try:
+                msg = await log_ch.send(text)
+                if tx_id:
+                    set_transaction_log_message(tx_id, log_ch.id, msg.id)
+            except Exception as e:
+                print(f"[Midman] Gagal kirim log: {e}")
         transcript_ch = ctx.guild.get_channel(TRANSCRIPT_CHANNEL_ID)
         if transcript_ch:
             await transcript_ch.send(
                 content=f"Transcript #{ticket_num} — {ctx.channel.name}",
                 file=transcript_file
             )
-        # Log transaksi
-        try:
-            from utils.db import log_transaction
-            opened_at_dt = datetime.datetime.fromisoformat(ticket["opened_at"]) if ticket.get("opened_at") else None
-            durasi = int((closed_at - opened_at_dt).total_seconds()) if opened_at_dt and closed_at else 0
-            log_transaction(
-                layanan="midman",
-                nominal=ticket.get("fee_final", 0) or 0,
-                item=f"{ticket.get('item_p1','-')} ↔ {ticket.get('item_p2','-')}",
-                admin_id=ctx.author.id,
-                user_id=ticket.get("pihak1_id"),
-                closed_at=closed_at,
-                durasi_detik=durasi
-            )
-        except Exception:
-            pass
         del self.active_tickets[ctx.channel.id]
         save_tickets(self.active_tickets)
         await ctx.channel.delete()
