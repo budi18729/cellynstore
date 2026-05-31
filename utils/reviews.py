@@ -289,3 +289,40 @@ def get_recent_reviews(limit: int = 5, layanan: str = None) -> list[dict]:
     rows = c.fetchall()
     conn.close()
     return [dict(r) for r in rows]
+
+
+def get_top_reviewers(limit: int = 10) -> list[dict]:
+    """Member yang paling banyak memberi rating, urut terbanyak.
+
+    Return list {user_id, count, avg_rating}. Dipakai leaderboard reviewer & badge.
+    """
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute(
+        """
+        SELECT user_id, COUNT(*) AS count, AVG(rating) AS avg_rating
+        FROM reviews
+        WHERE rating IS NOT NULL
+        GROUP BY user_id
+        ORDER BY count DESC, avg_rating DESC
+        LIMIT ?
+        """,
+        (limit,),
+    )
+    rows = c.fetchall()
+    conn.close()
+    return [
+        {"user_id": r["user_id"], "count": r["count"],
+         "avg_rating": round(r["avg_rating"], 2) if r["avg_rating"] is not None else 0.0}
+        for r in rows
+    ]
+
+
+def count_user_reviews(user_id: int) -> int:
+    """Jumlah rating yang sudah diberikan seorang member (untuk badge)."""
+    conn = get_conn()
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) AS n FROM reviews WHERE user_id=? AND rating IS NOT NULL", (user_id,))
+    row = c.fetchone()
+    conn.close()
+    return row["n"] or 0

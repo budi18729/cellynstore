@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-compile:
+  lint-compile-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,17 +17,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install ruff
-        run: pip install ruff
+      - name: Install tooling
+        run: pip install ruff pytest
 
       - name: Compile all Python (syntax check)
         run: python -m compileall -q cogs utils main.py admin.py
 
-      - name: Lint (syntax errors & undefined names)
-        # Gate ketat untuk error nyata yang bikin bot crash:
-        #   E9  = syntax error
-        #   F821 = undefined name
-        #   F811 = redefinisi (mis. import ganda)
-        # Catatan: unused-import (F401) & unused-var (F841) belum di-gate di sini
-        # supaya CI hijau; dibersihkan di PR cleanup terpisah.
-        run: ruff check --select E9,F821,F811 cogs utils main.py admin.py
+      - name: Lint (full pyflakes + syntax)
+        # Gate penuh:
+        #   E9 = syntax error, F = semua aturan pyflakes (undefined name,
+        #   import/var tak terpakai, redefinisi, dll). Repo sudah F-clean.
+        run: ruff check --select E9,F cogs utils main.py admin.py
+
+      - name: Unit tests
+        run: python -m pytest tests/ -q
