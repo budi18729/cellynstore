@@ -130,14 +130,17 @@ def harga(robux, rate):
     total = robux * rate
     return f"Rp {total:,}"
 
+ROBUX_EMOJI = "<:Robux:1480480351611654224>"
+
+
 def build_catalog_embed(rate):
     rate_str = f"Rp {rate:,}/Robux" if rate > 0 else "Belum diset"
     stock_available = get_robux_stock_available()
     stock_out_total = get_robux_out_total()
     categories = load_categories()
-    cat_list = "\n".join(f"• **{cat}**" for cat in categories) if categories else "Belum ada produk aktif."
+    cat_list = "\n".join(f"{ROBUX_EMOJI} **{cat}**" for cat in categories) if categories else "Belum ada produk aktif."
     embed = discord.Embed(
-        title=f"ROBUX STORE — {STORE_NAME}",
+        title=f"{ROBUX_EMOJI} ROBUX STORE — {STORE_NAME}",
         description=(
             f"Harga dihitung otomatis berdasarkan rate Robux terkini.\n"
             f"Rate: **{rate_str}**\n\n"
@@ -172,6 +175,7 @@ class CategoryButton(discord.ui.Button):
     def __init__(self, category, color):
         super().__init__(
             label=category,
+            emoji=ROBUX_EMOJI,
             style=discord.ButtonStyle.secondary,
             custom_id=f"robux_cat_{category}"
         )
@@ -186,6 +190,7 @@ class CategoryButton(discord.ui.Button):
             harga_str = harga(item["robux"], rate)
             options.append(discord.SelectOption(
                 label=with_price(item["name"], harga_str),
+                emoji=ROBUX_EMOJI,
                 description=f"{item['robux']} Robux",
                 value=str(item["id"]),
             ))
