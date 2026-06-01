@@ -172,20 +172,20 @@ def page_embeds():
           <td style="font-size:.78rem">{auto_info}</td>
           <td style="font-size:.78rem">{next_info}</td>
           <td style="white-space:nowrap">
-            <button class="btn btn-ghost btn-sm" onclick="loadSent('{s['message_id']}')">✏️ Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteSent('{s['message_id']}',this)">🗑</button>
+            <button class="btn btn-ghost btn-sm" onclick="loadSent('{s['message_id']}')"> Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteSent('{s['message_id']}',this)"></button>
           </td></tr>"""
 
     content = f"""
 <div class="page-header">
-  <h2 class="page-title">✉️ Embed Builder<small>Buat, kirim, dan kelola embed Discord</small></h2>
+  <h2 class="page-title">Embed Builder<small>Buat, kirim, dan kelola embed Discord</small></h2>
 </div>
 <div style="display:grid;grid-template-columns:1fr 360px;gap:1.25rem;align-items:start">
 
 <!-- FORM -->
 <div>
   <div class="card" style="margin-bottom:1rem">
-    <div class="card-header"><span class="card-title">📁 Template</span></div>
+    <div class="card-header"><span class="card-title">Template</span></div>
     <div class="card-body">
       <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
         <select id="tpl-select" style="flex:1;min-width:140px"><option value="">— Pilih template —</option>{tpl_opts}</select>
@@ -198,7 +198,7 @@ def page_embeds():
   </div>
 
   <div class="card">
-    <div class="card-header"><span class="card-title">🛠 Konten Embed</span></div>
+    <div class="card-header"><span class="card-title">Konten Embed</span></div>
     <div class="card-body">
       <div class="form-grid form-grid-2">
         <div class="form-group"><label>Title</label><input id="f-title" placeholder="Judul embed"></div>
@@ -276,15 +276,15 @@ def page_embeds():
         </div>
       </div>
       <div class="form-actions" style="margin-top:1rem">
-        <button class="btn btn-ghost" onclick="updatePreview()">🔄 Preview</button>
-        <button class="btn btn-primary" onclick="sendEmbed()">📨 Kirim</button>
-        <button class="btn btn-ghost" onclick="clearForm()">🗑 Reset</button>
+        <button class="btn btn-ghost" onclick="updatePreview()">Preview</button>
+        <button class="btn btn-primary" onclick="sendEmbed()">Kirim</button>
+        <button class="btn btn-ghost" onclick="clearForm()"> Reset</button>
       </div>
     </div>
   </div>
 
   <div class="card" style="margin-top:1rem">
-    <div class="card-header"><span class="card-title">📋 Embed Terkirim</span></div>
+    <div class="card-header"><span class="card-title">Embed Terkirim</span></div>
     <div class="card-body" style="padding:0">
       <table><thead><tr><th>#</th><th>Label</th><th>Channel</th><th>Message ID</th><th>Waktu</th><th>Auto Send</th><th>Next Send</th><th>Aksi</th></tr></thead>
       <tbody>{sent_rows or '<tr><td colspan="6" class="empty">Belum ada embed terkirim</td></tr>'}</tbody></table>
@@ -295,7 +295,7 @@ def page_embeds():
 <!-- PREVIEW -->
 <div style="position:sticky;top:1.5rem">
   <div class="card">
-    <div class="card-header"><span class="card-title">👁 Preview</span></div>
+    <div class="card-header"><span class="card-title">Preview</span></div>
     <div class="card-body" style="background:#313338;border-radius:0 0 12px 12px;min-height:120px">
       <div id="preview-area"><div style="color:#72767d;font-size:.82rem;text-align:center;padding:2rem 0">Isi form lalu klik Preview...</div></div>
     </div>
@@ -401,7 +401,7 @@ async function saveTemplate(){{
   const d=await r.json();if(d.ok){{toast('✅ Template tersimpan!');setTimeout(()=>location.reload(),1500);}}else toast('❌ '+d.error,true);
 }}
 async function deleteTemplate(){{const id=document.getElementById('tpl-select').value;if(!id)return toast('Pilih template dulu!',true);if(!confirm('Hapus template ini?'))return;const r=await fetch('/embeds/api/template/'+id,{{method:'DELETE'}});const d=await r.json();if(d.ok){{toast('✅ Dihapus!');setTimeout(()=>location.reload(),1500);}}else toast('❌ '+d.error,true);}}
-async function loadSent(mid){{const r=await fetch('/embeds/api/sent/'+mid);const d=await r.json();if(d.ok){{editingMessageId=mid;loadDataIntoForm(JSON.parse(d.embed_json));document.getElementById('f-label').value=d.label||'';document.getElementById('f-channel').value=d.channel_id||'';toast('📝 Loaded untuk edit');window.scrollTo({{top:0,behavior:'smooth'}});
+async function loadSent(mid){{const r=await fetch('/embeds/api/sent/'+mid);const d=await r.json();if(d.ok){{editingMessageId=mid;loadDataIntoForm(JSON.parse(d.embed_json));document.getElementById('f-label').value=d.label||'';document.getElementById('f-channel').value=d.channel_id||'';toast('Loaded untuk edit');window.scrollTo({{top:0,behavior:'smooth'}});
 if(d.auto_send){{document.getElementById('f-autosend').checked=true;
 document.getElementById('autosend-opts').style.display='';
 if(d.scheduled_time){{document.getElementById('f-mode').value='schedule';

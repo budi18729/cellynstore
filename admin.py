@@ -67,194 +67,194 @@ BASE = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cellyn Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
  :root{
-  --bg:#0b0d12;--surface:#12151c;--surface2:#151a24;--surface3:#1a2230;
-  --border:#262b35;--border2:#2f3643;
-  --gold:#c9a84c;--gold2:#e8c96a;--gold3:#9b7a2e;
-  --accent:#9cd6ff;--accent2:#5bb7ff;
-  --text:#eef0f6;--muted:#7c8798;--muted2:#9aa6b8;
-  --danger:#e06a6a;--success:#4dbb8a;--warning:#e3a24f;
-  --sidebar-w:252px;
+  --bg:#f5f7fa;--surface:#ffffff;--surface2:#f8fafc;--surface3:#eef1f6;
+  --border:#e4e8ee;--border2:#d3d9e2;--input-bg:#f8fafc;
+  --accent:#2563eb;--accent2:#1d4ed8;--accent-soft:#eff4ff;
+  --text:#0f172a;--text2:#334155;--muted:#64748b;--muted2:#475569;
+  --danger:#dc2626;--danger-soft:#fef2f2;
+  --success:#16a34a;--success-soft:#f0fdf4;
+  --warning:#d97706;--warning-soft:#fffbeb;
+  --shadow-sm:0 1px 2px rgba(15,23,42,.04);
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --sidebar-w:248px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
-  font-family:'Plus Jakarta Sans',sans-serif;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(201,168,76,.12), transparent 60%),
-    radial-gradient(1200px 600px at 100% 10%, rgba(92,188,255,.12), transparent 55%),
-    var(--bg);
-  color:var(--text);min-height:100vh;display:flex;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;display:flex;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
-a{color:var(--gold);text-decoration:none;}
+a{color:var(--accent);text-decoration:none;}
 
-/* ── SIDEBAR ── */
-.sidebar{width:var(--sidebar-w);min-height:100vh;background:linear-gradient(180deg, #12151c 0%, #0f1218 100%);
-  border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:200;transition:transform .25s ease;}
-.sidebar-logo{padding:1.6rem 1.35rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.85rem;}
-.sidebar-logo img{width:40px;height:40px;border-radius:10px;object-fit:cover;box-shadow:0 10px 24px rgba(0,0,0,.35);}
-.sidebar-logo-text{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;letter-spacing:.06em;line-height:1.1;}
-.sidebar-logo-text span{display:block;font-size:.65rem;font-weight:400;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;font-family:'Plus Jakarta Sans',sans-serif;}
-.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto;}
-.nav-section{padding:.35rem 1.25rem;font-size:.6rem;font-weight:600;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:.75rem;}
-.nav-item{display:flex;align-items:center;gap:.75rem;padding:.62rem 1.35rem;color:var(--muted2);font-size:.84rem;font-weight:500;
-  transition:all .18s;cursor:pointer;border-left:2px solid transparent;margin:2px 0;border-radius:0 10px 10px 0;}
-.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03);border-left-color:var(--border2);}
-.nav-item.active{color:var(--gold);background:linear-gradient(90deg,rgba(201,168,76,.14),rgba(255,255,255,0));border-left-color:var(--gold);box-shadow:inset 0 0 0 1px rgba(201,168,76,.15);}
-.nav-item svg{width:15px;height:15px;flex-shrink:0;opacity:.7;}
-.nav-item.active svg{opacity:1;}
-.sidebar-footer{padding:1rem 1.25rem;border-top:1px solid var(--border);}
-.nav-logout{display:flex;align-items:center;gap:.75rem;padding:.6rem .75rem;border-radius:8px;color:var(--danger);font-size:.82rem;
-  font-weight:500;transition:all .15s;cursor:pointer;background:rgba(224,85,85,.05);border:1px solid rgba(224,85,85,.15);}
-.nav-logout:hover{background:rgba(224,85,85,.12);color:var(--danger);}
-.nav-logout svg{width:15px;height:15px;}
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);min-height:100vh;background:var(--surface);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:200;transition:transform .22s ease;}
+.sidebar-logo{padding:1.25rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;}
+.sidebar-logo img{width:38px;height:38px;border-radius:9px;object-fit:cover;}
+.sidebar-logo-text{font-size:1rem;font-weight:700;letter-spacing:-.01em;line-height:1.15;color:var(--text);}
+.sidebar-logo-text span{display:block;font-size:.66rem;font-weight:500;color:var(--muted);letter-spacing:.04em;margin-top:1px;}
+.sidebar-nav{flex:1;padding:.75rem .65rem;overflow-y:auto;}
+.nav-section{padding:.5rem .6rem .3rem;font-size:.66rem;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:.5rem;}
+.nav-item{display:flex;align-items:center;gap:.7rem;padding:.55rem .65rem;color:var(--muted2);font-size:.86rem;font-weight:500;
+  transition:background .15s,color .15s;cursor:pointer;border-radius:8px;margin:1px 0;}
+.nav-item:hover{color:var(--text);background:var(--surface3);}
+.nav-item.active{color:var(--accent);background:var(--accent-soft);font-weight:600;}
+.nav-item svg{width:17px;height:17px;flex-shrink:0;stroke-width:2;}
+.sidebar-footer{padding:.75rem .9rem;border-top:1px solid var(--border);}
+.nav-logout{display:flex;align-items:center;gap:.7rem;padding:.55rem .65rem;border-radius:8px;color:var(--danger);font-size:.85rem;
+  font-weight:500;transition:background .15s;cursor:pointer;}
+.nav-logout:hover{background:var(--danger-soft);}
+.nav-logout svg{width:17px;height:17px;stroke-width:2;}
 
-/* ── TOPBAR MOBILE ── */
+/* TOPBAR MOBILE */
 .topbar{display:none;height:56px;background:var(--surface);border-bottom:1px solid var(--border);
   padding:0 1rem;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:150;}
-.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;}
-.topbar-logo span{color:var(--gold);}
+.topbar-logo{font-size:1rem;font-weight:700;color:var(--text);}
+.topbar-logo span{color:var(--accent);}
 .hamburger{background:none;border:none;color:var(--text);cursor:pointer;padding:.4rem;}
 .hamburger svg{width:22px;height:22px;}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:190;backdrop-filter:blur(2px);}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:190;}
 .sidebar-overlay.active{display:block;}
 
-/* ── MAIN CONTENT ── */
+/* MAIN */
 .main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;}
-.content{flex:1;padding:2.2rem;animation:fadeUp .4s ease both;}
+.content{flex:1;padding:2rem 2.25rem;max-width:1280px;width:100%;}
 
-/* ── PAGE HEADER ── */
-.page-header{margin-bottom:1.75rem;}
-.page-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;letter-spacing:.04em;color:var(--text);}
-.page-title small{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:500;color:var(--muted);margin-top:.25rem;letter-spacing:.08em;text-transform:uppercase;}
-.page-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;}
+/* PAGE HEADER */
+.page-header{margin-bottom:1.5rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.page-title,.page-header h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;color:var(--text);}
+.page-title small{display:block;font-size:.82rem;font-weight:400;color:var(--muted);margin-top:.2rem;letter-spacing:0;text-transform:none;}
+.page-header p,.text-muted{color:var(--muted);font-size:.85rem;margin-top:.2rem;}
+.page-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
 
-/* ── CARDS ── */
-.card{position:relative;background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.006)), var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:1.25rem;box-shadow:0 18px 44px rgba(0,0,0,.28);backdrop-filter:blur(8px);transition:border-color .25s, transform .25s, box-shadow .25s;}
-.card:hover{transform:translateY(-3px);box-shadow:0 26px 60px rgba(0,0,0,.4);border-color:var(--border2);}
-.card-header{padding:1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);}
-.card-title{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;gap:.55rem;}
-.card-title svg{width:15px;height:15px;color:var(--gold);}
+/* CARDS */
+.card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.15rem;box-shadow:var(--shadow);}
+.card-header{padding:.9rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:.75rem;}
+.card-title{font-size:.8rem;font-weight:600;letter-spacing:.01em;color:var(--text);display:flex;align-items:center;gap:.5rem;}
+.card-title svg{width:16px;height:16px;color:var(--accent);stroke-width:2;}
 .card-body{padding:1.25rem;}
 
-/* ── STAT CARDS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.15rem;margin-bottom:1.6rem;}
-.stat-card{position:relative;background:radial-gradient(120% 120% at 100% 0%, var(--glow,rgba(201,168,76,.10)), transparent 55%),linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.008)), var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.45rem;overflow:hidden;transition:border-color .25s, transform .25s, box-shadow .25s;}
-.stat-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 22px 50px rgba(0,0,0,.38);}
-.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--bar,linear-gradient(90deg,var(--gold),transparent));}
+/* STAT CARDS */
+.stats-grid,.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.stat-card{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.35rem;overflow:hidden;box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s;}
+.stat-card:hover{border-color:var(--border2);box-shadow:var(--shadow),0 4px 16px rgba(15,23,42,.06);}
 .stat-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;}
-.stat-card.ml{--glow:rgba(52,152,219,.14);--bar:linear-gradient(90deg,#3498DB,transparent);--ic-bg:rgba(52,152,219,.12);--ic-bd:rgba(52,152,219,.3);--ic-fg:#6cb8e8;}
-.stat-card.ff{--glow:rgba(255,107,53,.14);--bar:linear-gradient(90deg,#FF6B35,transparent);--ic-bg:rgba(255,107,53,.12);--ic-bd:rgba(255,107,53,.3);--ic-fg:#ff8c5e;}
-.stat-card.robux{--glow:rgba(233,30,99,.14);--bar:linear-gradient(90deg,#E91E63,transparent);--ic-bg:rgba(233,30,99,.12);--ic-bd:rgba(233,30,99,.3);--ic-fg:#f15c8a;}
-.stat-card.gp{--glow:rgba(155,89,182,.14);--bar:linear-gradient(90deg,#9B59B6,transparent);--ic-bg:rgba(155,89,182,.12);--ic-bd:rgba(155,89,182,.3);--ic-fg:#b97fd0;}
-.stat-card.gold{--glow:rgba(201,168,76,.16);--bar:linear-gradient(90deg,var(--gold),transparent);--ic-bg:rgba(201,168,76,.12);--ic-bd:rgba(201,168,76,.3);--ic-fg:var(--gold2);}
-.stat-card.green{--glow:rgba(77,187,138,.16);--bar:linear-gradient(90deg,var(--success),transparent);--ic-bg:rgba(77,187,138,.12);--ic-bd:rgba(77,187,138,.3);--ic-fg:#5dd4a0;}
-.qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;}
-.qa-card{display:flex;align-items:center;gap:.9rem;padding:1.1rem 1.2rem;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,.03), transparent), var(--surface);border:1px solid var(--border);transition:transform .2s, border-color .2s, box-shadow .2s;}
-.qa-card:hover{transform:translateY(-3px);border-color:var(--gold3);box-shadow:0 18px 40px rgba(0,0,0,.35);}
-.qa-ic{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.22);color:var(--gold2);flex-shrink:0;}
-.qa-ic svg{width:20px;height:20px;}
+.stat-card.ml{--ic-bg:#eff6ff;--ic-bd:#dbeafe;--ic-fg:#2563eb;}
+.stat-card.ff{--ic-bg:#fff7ed;--ic-bd:#ffedd5;--ic-fg:#ea580c;}
+.stat-card.robux{--ic-bg:#fdf2f8;--ic-bd:#fce7f3;--ic-fg:#db2777;}
+.stat-card.gp{--ic-bg:#f5f3ff;--ic-bd:#ede9fe;--ic-fg:#7c3aed;}
+.stat-card.gold{--ic-bg:#fffbeb;--ic-bd:#fef3c7;--ic-fg:#d97706;}
+.stat-card.green{--ic-bg:#f0fdf4;--ic-bd:#dcfce7;--ic-fg:#16a34a;}
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.85rem;}
+.qa-card{display:flex;align-items:center;gap:.85rem;padding:1rem 1.1rem;border-radius:12px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);transition:border-color .15s,box-shadow .15s;}
+.qa-card:hover{border-color:var(--accent);box-shadow:var(--shadow),0 4px 16px rgba(37,99,235,.1);}
+.qa-ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--accent-soft);color:var(--accent);flex-shrink:0;}
+.qa-ic svg{width:19px;height:19px;stroke-width:2;}
 .qa-tx{display:flex;flex-direction:column;}
-.qa-tt{font-size:.86rem;font-weight:600;color:var(--text);}
-.qa-sb{font-size:.7rem;color:var(--muted);margin-top:.1rem;}
-.stat-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:var(--ic-bg,rgba(201,168,76,.12));border:1px solid var(--ic-bd,rgba(201,168,76,.25));color:var(--ic-fg,var(--gold2));flex-shrink:0;box-shadow:0 8px 20px rgba(0,0,0,.25);}
-.stat-icon svg{width:22px;height:22px;}
-.stat-label{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.18em;font-weight:600;margin-top:1rem;}
-.stat-value{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;margin-top:.2rem;line-height:1;letter-spacing:.01em;}
-.stat-sub{font-size:.72rem;color:var(--muted);margin-top:.3rem;}
+.qa-tt{font-size:.88rem;font-weight:600;color:var(--text);}
+.qa-sb{font-size:.74rem;color:var(--muted);margin-top:.05rem;}
+.stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--ic-bg,var(--accent-soft));border:1px solid var(--ic-bd,#dbeafe);color:var(--ic-fg,var(--accent));flex-shrink:0;}
+.stat-icon svg{width:21px;height:21px;stroke-width:2;}
+.stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-top:.9rem;}
+.stat-value{font-size:1.85rem;font-weight:700;margin-top:.25rem;line-height:1;letter-spacing:-.02em;color:var(--text);}
+.stat-sub{font-size:.76rem;color:var(--muted);margin-top:.35rem;}
 
-/* ── TABLE ── */
-table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:.7rem 1.25rem;font-size:.67rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:600;}
-td{padding:.85rem 1.25rem;border-bottom:1px solid rgba(38,43,53,.6);font-size:.83rem;vertical-align:middle;}
+/* TABLE */
+table,.data-table{width:100%;border-collapse:collapse;}
+.table-wrapper{overflow-x:auto;}
+th{text-align:left;padding:.7rem 1.25rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid var(--border);font-weight:600;background:var(--surface2);}
+td{padding:.8rem 1.25rem;border-bottom:1px solid var(--border);font-size:.86rem;vertical-align:middle;color:var(--text2);}
 tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(201,168,76,.03);}
+tbody tr{transition:background .12s;}
+tbody tr:hover td{background:var(--surface2);}
 
-/* ── BADGE ── */
-.badge{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:4px;font-size:.67rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
-.badge-gamepass{background:rgba(124,106,255,.12);color:#a090ff;border:1px solid rgba(124,106,255,.25);}
-.badge-crate{background:rgba(255,107,157,.12);color:#ff8ab5;border:1px solid rgba(255,107,157,.25);}
-.badge-boost{background:rgba(201,168,76,.12);color:var(--gold2);border:1px solid rgba(201,168,76,.25);}
-.badge-limited{background:rgba(77,187,138,.12);color:#5dd4a0;border:1px solid rgba(77,187,138,.25);}
-.badge-ml{background:rgba(52,152,219,.12);color:#60aadb;border:1px solid rgba(52,152,219,.25);}
-.badge-ff{background:rgba(255,107,53,.12);color:#ff8860;border:1px solid rgba(255,107,53,.25);}
-.badge-aktif{background:rgba(77,187,138,.12);color:var(--success);border:1px solid rgba(77,187,138,.25);}
-.badge-nonaktif{background:rgba(224,85,85,.12);color:var(--danger);border:1px solid rgba(224,85,85,.25);}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:.22rem .55rem;border-radius:6px;font-size:.7rem;font-weight:600;letter-spacing:.02em;}
+.badge-gamepass{background:#f5f3ff;color:#7c3aed;border:1px solid #ede9fe;}
+.badge-crate{background:#fdf2f8;color:#db2777;border:1px solid #fce7f3;}
+.badge-boost{background:#fffbeb;color:#d97706;border:1px solid #fef3c7;}
+.badge-limited{background:#f0fdf4;color:#16a34a;border:1px solid #dcfce7;}
+.badge-ml{background:#eff6ff;color:#2563eb;border:1px solid #dbeafe;}
+.badge-ff{background:#fff7ed;color:#ea580c;border:1px solid #ffedd5;}
+.badge-aktif{background:var(--success-soft);color:var(--success);border:1px solid #dcfce7;}
+.badge-nonaktif{background:var(--danger-soft);color:var(--danger);border:1px solid #fee2e2;}
 
-/* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.58rem 1.05rem;border-radius:10px;
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;text-decoration:none;}
-.btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(0,0,0,.28);}
-.btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold3));color:#0a0c14;font-weight:600;}
-.btn-primary:hover{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#0a0c14;}
-.btn-danger{background:rgba(224,85,85,.1);color:var(--danger);border:1px solid rgba(224,85,85,.25);}
-.btn-danger:hover{background:rgba(224,85,85,.2);}
-.btn-ghost{background:var(--surface2);color:var(--muted2);border:1px solid var(--border);}
-.btn-ghost:hover{color:var(--text);border-color:var(--border2);}
-.btn-success{background:rgba(77,187,138,.1);color:var(--success);border:1px solid rgba(77,187,138,.25);}
-.btn-success:hover{background:rgba(77,187,138,.2);}
-.btn-warning{background:rgba(224,148,64,.1);color:var(--warning);border:1px solid rgba(224,148,64,.25);}
-.btn-warning:hover{background:rgba(224,148,64,.2);}
-.btn-sm{padding:.3rem .65rem;font-size:.73rem;}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.5rem .95rem;border-radius:8px;
+  font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid transparent;transition:background .15s,border-color .15s,color .15s;text-decoration:none;line-height:1.2;white-space:nowrap;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-danger{background:#fff;color:var(--danger);border-color:#fecaca;}
+.btn-danger:hover{background:var(--danger-soft);}
+.btn-ghost{background:var(--surface);color:var(--text2);border-color:var(--border2);}
+.btn-ghost:hover{background:var(--surface2);border-color:var(--muted);}
+.btn-success{background:#fff;color:var(--success);border-color:#bbf7d0;}
+.btn-success:hover{background:var(--success-soft);}
+.btn-warning,.btn-warn{background:#fff;color:var(--warning);border-color:#fde68a;}
+.btn-warning:hover,.btn-warn:hover{background:var(--warning-soft);}
+.btn-sm{padding:.32rem .6rem;font-size:.74rem;border-radius:6px;}
 
-/* ── FORMS ── */
+/* FORMS */
 .form-grid{display:grid;gap:1rem;}.form-grid-2{grid-template-columns:1fr 1fr;}
 .form-group{display:flex;flex-direction:column;gap:.4rem;}
-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;font-weight:600;}
-input,select,textarea{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
-  padding:.65rem .95rem;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:.84rem;
-  transition:border-color .15s,width .15s;width:100%;}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold3);background:rgba(201,168,76,.04);}
-select option{background:var(--surface2);}
+label{font-size:.76rem;color:var(--muted2);font-weight:600;letter-spacing:0;text-transform:none;}
+input,select,textarea{background:var(--surface);border:1px solid var(--border2);border-radius:8px;
+  padding:.55rem .8rem;color:var(--text);font-family:inherit;font-size:.86rem;
+  transition:border-color .15s,box-shadow .15s;width:100%;}
+input::placeholder,textarea::placeholder{color:#94a3b8;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
+select option{background:var(--surface);}
 textarea{resize:vertical;min-height:80px;}
-.form-actions{display:flex;gap:.75rem;margin-top:.5rem;}
+.form-actions{display:flex;gap:.6rem;margin-top:.5rem;flex-wrap:wrap;}
 
-/* ── RATE DISPLAY ── */
+/* RATE DISPLAY */
 .rate-display{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
   padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;}
-.rate-value{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--gold);}
+.rate-value{font-size:1.5rem;font-weight:700;color:var(--accent);letter-spacing:-.02em;}
 
-/* ── MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;
-  align-items:center;justify-content:center;backdrop-filter:blur(5px);padding:1rem;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1000;
+  align-items:center;justify-content:center;padding:1rem;}
 .modal-overlay.active{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;
-  padding:1.75rem;width:100%;max-width:480px;animation:modalIn .2s ease;}
-@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:1.6rem;width:100%;max-width:480px;box-shadow:0 20px 50px rgba(15,23,42,.18);animation:modalIn .18s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.97) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-title{font-size:1.1rem;font-weight:700;margin-bottom:1.35rem;color:var(--text);letter-spacing:-.01em;}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.5rem;color:var(--text);}
-
-/* ── FLASH ── */
+/* FLASH */
 .flash-list{list-style:none;margin-bottom:1.25rem;}
-.flash{padding:.7rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:.4rem;font-weight:500;}
-.flash-success{background:rgba(77,187,138,.1);border:1px solid rgba(77,187,138,.25);color:var(--success);}
-.flash-error{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);color:var(--danger);}
+.flash{padding:.7rem 1rem;border-radius:8px;font-size:.84rem;margin-bottom:.4rem;font-weight:500;}
+.flash-success{background:var(--success-soft);border:1px solid #bbf7d0;color:#15803d;}
+.flash-error{background:var(--danger-soft);border:1px solid #fecaca;color:#b91c1c;}
 
-/* ── MISC ── */
-.empty{text-align:center;padding:3rem;color:var(--muted);font-size:.83rem;}
-.note{margin-top:1rem;padding:.9rem 1.25rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border);font-size:.78rem;color:var(--muted);}
+/* MISC */
+.empty{text-align:center;padding:2.5rem;color:var(--muted);font-size:.85rem;}
+.note{margin-top:1rem;padding:.9rem 1.25rem;background:var(--surface2);border-radius:8px;border:1px solid var(--border);font-size:.8rem;color:var(--muted);}
 .inline-form{display:flex;gap:.5rem;align-items:center;}
 .inline-form input{width:auto;min-width:80px;}
-.divider{height:1px;background:var(--border);margin:1.25rem 0;}
-code{background:var(--surface3);padding:.1rem .4rem;border-radius:4px;font-size:.8rem;color:var(--muted2);}
+.divider{height:1px;background:var(--border);margin:1.15rem 0;}
+code{background:var(--surface3);padding:.12rem .4rem;border-radius:5px;font-size:.8rem;color:var(--text2);font-family:'SFMono-Regular',Consolas,monospace;}
 
-/* ── MOBILE ── */
+/* MOBILE */
 @media(max-width:768px){
-  .sidebar{transform:translateX(-100%);}
+  .sidebar{transform:translateX(-100%);box-shadow:0 0 40px rgba(15,23,42,.15);}
   .sidebar.open{transform:translateX(0);}
   .topbar{display:flex;}
   .main{margin-left:0;}
   .content{padding:1rem;}
   .form-grid-2{grid-template-columns:1fr;}
-  .stats-grid{grid-template-columns:1fr 1fr;}
+  .stats-grid,.stat-grid{grid-template-columns:1fr 1fr;}
   th,td{padding:.6rem .75rem;}
-  .page-title{font-size:1.4rem;}
-  table{font-size:.78rem;}
+  .page-title,.page-header h2{font-size:1.25rem;}
+  table{font-size:.8rem;}
 }
 @media(max-width:480px){
-  .stats-grid{grid-template-columns:1fr;}
+  .stats-grid,.stat-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -369,16 +369,12 @@ def login():
             return redirect(url_for("index"))
         error = "Password salah."
     content = f"""
-<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(201,168,76,.12), transparent 60%),
-    radial-gradient(1200px 600px at 100% 10%, rgba(92,188,255,.12), transparent 55%),
-    #0b0d12;">
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;background:var(--bg);">
   <div style="width:100%;max-width:380px;">
     <div style="text-align:center;margin-bottom:2rem;">
-      <img src="https://i.imgur.com/xp2F452.png" alt="Cellyn" style="width:72px;height:72px;border-radius:16px;margin-bottom:1rem;box-shadow:0 8px 32px rgba(201,168,76,.2);">
-      <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;letter-spacing:.04em;">Cellyn Admin</div>
-      <div style="color:var(--muted);font-size:.75rem;margin-top:.3rem;letter-spacing:.1em;text-transform:uppercase;">Store Management Panel</div>
+      <img src="https://i.imgur.com/xp2F452.png" alt="Cellyn" style="width:64px;height:64px;border-radius:14px;margin-bottom:1rem;box-shadow:var(--shadow);">
+      <div style="font-size:1.4rem;font-weight:700;letter-spacing:-.02em;color:var(--text);">Cellyn Admin</div>
+      <div style="color:var(--muted);font-size:.8rem;margin-top:.25rem;">Store Management Panel</div>
     </div>
     <div class="card">
       <div class="card-header"><span class="card-title">Login</span></div>
@@ -1065,8 +1061,8 @@ def page_reviews():
     <div class="stat-grid" style="margin-bottom:1.25rem;">
       <div class="stat-card robux">
         <div class="card-title">Rata-rata Rating</div>
-        <div style="font-size:1.8rem;font-weight:700;color:#FFC107;">{avg:.2f}/5</div>
-        <div style="color:#FFC107;font-size:1.1rem;">{_stars(avg)}</div>
+        <div style="font-size:1.8rem;font-weight:700;color:var(--warning);">{avg:.2f}/5</div>
+        <div style="color:var(--warning);font-size:1.1rem;">{_stars(avg)}</div>
       </div>
       <div class="stat-card ml">
         <div class="card-title">Total Ulasan</div>
@@ -1081,9 +1077,9 @@ def page_reviews():
         pct = round((cnt / total) * 100) if total else 0
         dist_rows += f"""
         <div style="display:flex;align-items:center;gap:.6rem;margin:.3rem 0;">
-          <span style="width:36px;color:#FFC107;">{s_}★</span>
-          <div style="flex:1;background:rgba(255,255,255,.06);border-radius:6px;height:14px;overflow:hidden;">
-            <div style="width:{pct}%;height:100%;background:linear-gradient(90deg,#FFC107,#FF8C00);"></div>
+          <span style="width:36px;color:var(--warning);">{s_}★</span>
+          <div style="flex:1;background:var(--surface3);border-radius:6px;height:14px;overflow:hidden;">
+            <div style="width:{pct}%;height:100%;background:var(--accent);"></div>
           </div>
           <span style="width:60px;text-align:right;color:var(--muted);">{cnt} ({pct}%)</span>
         </div>"""
@@ -1095,7 +1091,7 @@ def page_reviews():
         when = (r.get("rated_at") or "")[:10]
         review_rows += f"""
         <tr>
-          <td style="color:#FFC107;white-space:nowrap;">{_stars(r['rating'])}</td>
+          <td style="color:var(--warning);white-space:nowrap;">{_stars(r['rating'])}</td>
           <td><code>{r['user_id']}</code></td>
           <td>{lay}</td>
           <td>{txt}</td>
@@ -1112,7 +1108,7 @@ def page_reviews():
           <td style="white-space:nowrap;">{medal}</td>
           <td><code>{t['user_id']}</code></td>
           <td>{t['count']}</td>
-          <td style="color:#FFC107;">{t['avg_rating']:.1f}★</td>
+          <td style="color:var(--warning);">{t['avg_rating']:.1f}★</td>
         </tr>"""
     if not top_rows:
         top_rows = '<tr><td colspan="4" style="text-align:center;color:var(--muted);">Belum ada data.</td></tr>'
@@ -1280,11 +1276,11 @@ def page_stats():
 <!-- Charts -->
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
   <div class="card">
-    <div class="card-header"><span class="card-title">📈 Transaksi 7 Hari</span></div>
+    <div class="card-header"><span class="card-title">Transaksi 7 Hari</span></div>
     <div class="card-body"><canvas id="chart7" height="180"></canvas></div>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-title">📊 Transaksi 30 Hari</span></div>
+    <div class="card-header"><span class="card-title">Transaksi 30 Hari</span></div>
     <div class="card-body"><canvas id="chart30" height="180"></canvas></div>
   </div>
 </div>
@@ -1292,14 +1288,14 @@ def page_stats():
 <!-- Tabel bawah -->
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
   <div class="card">
-    <div class="card-header"><span class="card-title">🏆 Produk Terlaris</span></div>
+    <div class="card-header"><span class="card-title">Produk Terlaris</span></div>
     <table>
       <thead><tr><th>#</th><th>Item</th><th>Terjual</th></tr></thead>
       <tbody>{terlaris_html}</tbody>
     </table>
   </div>
   <div class="card">
-    <div class="card-header"><span class="card-title">🕐 Jam Tersibuk</span></div>
+    <div class="card-header"><span class="card-title">Jam Tersibuk</span></div>
     <table>
       <thead><tr><th>Jam</th><th>Transaksi</th></tr></thead>
       <tbody>{peak_html}</tbody>
@@ -1313,15 +1309,15 @@ const chartDefaults = {{
   responsive: true,
   plugins: {{ legend: {{ display: false }} }},
   scales: {{
-    x: {{ grid: {{ color: 'rgba(255,255,255,.04)' }}, ticks: {{ color: '#6a7a95', font: {{ size: 10 }} }} }},
-    y: {{ grid: {{ color: 'rgba(255,255,255,.04)' }}, ticks: {{ color: '#6a7a95', font: {{ size: 10 }} }}, beginAtZero: true }}
+    x: {{ grid: {{ color: 'rgba(15,23,42,.06)' }}, ticks: {{ color: '#64748b', font: {{ size: 10 }} }} }},
+    y: {{ grid: {{ color: 'rgba(15,23,42,.06)' }}, ticks: {{ color: '#64748b', font: {{ size: 10 }} }}, beginAtZero: true }}
   }}
 }};
 new Chart(document.getElementById('chart7'), {{
   type: 'bar',
   data: {{
     labels: {chart_labels},
-    datasets: [{{ data: {chart_total}, backgroundColor: 'rgba(124,92,191,.5)', borderColor: '#7c5cbf', borderWidth: 1, borderRadius: 4 }}]
+    datasets: [{{ data: {chart_total}, backgroundColor: 'rgba(37,99,235,.35)', borderColor: '#2563eb', borderWidth: 1, borderRadius: 4 }}]
   }},
   options: chartDefaults
 }});
@@ -1329,7 +1325,7 @@ new Chart(document.getElementById('chart30'), {{
   type: 'line',
   data: {{
     labels: {chart30_labels},
-    datasets: [{{ data: {chart30_total}, borderColor: '#4dbb8a', backgroundColor: 'rgba(77,187,138,.1)', borderWidth: 2, pointRadius: 2, fill: true, tension: .4 }}]
+    datasets: [{{ data: {chart30_total}, borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,.12)', borderWidth: 2, pointRadius: 2, fill: true, tension: .4 }}]
   }},
   options: chartDefaults
 }});
@@ -1359,7 +1355,7 @@ def page_lainnya():
         rows = ""
         for p in items:
             status = "Aktif" if p["active"] else "Nonaktif"
-            status_badge = f'<span style="color:{"#4dbb8a" if p["active"] else "#e74c3c"};font-size:.8rem;">{status}</span>'
+            status_badge = f'<span class="badge badge-{"aktif" if p["active"] else "nonaktif"}">{status}</span>'
             rows += f"""
             <tr>
               <td>{p["id"]}</td>
@@ -1390,20 +1386,20 @@ def page_lainnya():
 
 <!-- Tambah Produk -->
 <div class="card" style="margin-bottom:1.5rem;">
-  <div class="card-header"><span class="card-title">➕ Tambah Produk</span></div>
+  <div class="card-header"><span class="card-title">Tambah Produk</span></div>
   <div class="card-body">
     <form method="POST" action="/lainnya/add" style="display:grid;grid-template-columns:2fr 2fr 1fr 1fr auto;gap:.75rem;align-items:end;">
       <div>
-        <label style="font-size:.8rem;color:#6a7a95;display:block;margin-bottom:.3rem;">Kategori</label>
-        <input name="category" placeholder="Contoh: CLOUD PHONE" style="width:100%;padding:.5rem .75rem;background:#131622;border:1px solid #1e2435;border-radius:6px;color:#e2e8f0;font-size:.9rem;">
+        <label style="font-size:.76rem;color:var(--muted2);font-weight:600;display:block;margin-bottom:.35rem;">Kategori</label>
+        <input name="category" placeholder="Contoh: CLOUD PHONE" style="width:100%;padding:.55rem .8rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:.86rem;">
       </div>
       <div>
-        <label style="font-size:.8rem;color:#6a7a95;display:block;margin-bottom:.3rem;">Nama Item</label>
-        <input name="name" placeholder="Contoh: REDFINGER VIP 7DAY" style="width:100%;padding:.5rem .75rem;background:#131622;border:1px solid #1e2435;border-radius:6px;color:#e2e8f0;font-size:.9rem;">
+        <label style="font-size:.76rem;color:var(--muted2);font-weight:600;display:block;margin-bottom:.35rem;">Nama Item</label>
+        <input name="name" placeholder="Contoh: REDFINGER VIP 7DAY" style="width:100%;padding:.55rem .8rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:.86rem;">
       </div>
       <div>
-        <label style="font-size:.8rem;color:#6a7a95;display:block;margin-bottom:.3rem;">Harga (Rp)</label>
-        <input name="harga" type="number" placeholder="20500" style="width:100%;padding:.5rem .75rem;background:#131622;border:1px solid #1e2435;border-radius:6px;color:#e2e8f0;font-size:.9rem;">
+        <label style="font-size:.76rem;color:var(--muted2);font-weight:600;display:block;margin-bottom:.35rem;">Harga (Rp)</label>
+        <input name="harga" type="number" placeholder="20500" style="width:100%;padding:.55rem .8rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:.86rem;">
       </div>
       <button type="submit" class="btn-primary" style="padding:.5rem 1rem;height:fit-content;margin-top:auto;">Tambah</button>
     </form>
@@ -1474,20 +1470,20 @@ def lainnya_edit(pid):
   <div class="card-body">
     <form method="POST" style="display:flex;flex-direction:column;gap:1rem;">
       <div>
-        <label style="font-size:.8rem;color:#6a7a95;display:block;margin-bottom:.3rem;">Kategori</label>
-        <input name="category" value="{p["category"]}" style="width:100%;padding:.5rem .75rem;background:#131622;border:1px solid #1e2435;border-radius:6px;color:#e2e8f0;">
+        <label style="font-size:.76rem;color:var(--muted2);font-weight:600;display:block;margin-bottom:.35rem;">Kategori</label>
+        <input name="category" value="{p["category"]}" style="width:100%;padding:.55rem .8rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);">
       </div>
       <div>
-        <label style="font-size:.8rem;color:#6a7a95;display:block;margin-bottom:.3rem;">Nama Item</label>
-        <input name="name" value="{p["name"]}" style="width:100%;padding:.5rem .75rem;background:#131622;border:1px solid #1e2435;border-radius:6px;color:#e2e8f0;">
+        <label style="font-size:.76rem;color:var(--muted2);font-weight:600;display:block;margin-bottom:.35rem;">Nama Item</label>
+        <input name="name" value="{p["name"]}" style="width:100%;padding:.55rem .8rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);">
       </div>
       <div>
-        <label style="font-size:.8rem;color:#6a7a95;display:block;margin-bottom:.3rem;">Harga (Rp)</label>
-        <input name="harga" type="number" value="{p["harga"]}" style="width:100%;padding:.5rem .75rem;background:#131622;border:1px solid #1e2435;border-radius:6px;color:#e2e8f0;">
+        <label style="font-size:.76rem;color:var(--muted2);font-weight:600;display:block;margin-bottom:.35rem;">Harga (Rp)</label>
+        <input name="harga" type="number" value="{p["harga"]}" style="width:100%;padding:.55rem .8rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);">
       </div>
       <div style="display:flex;gap:.75rem;">
         <button type="submit" class="btn-primary">Simpan</button>
-        <a href="/lainnya" class="btn-sm" style="padding:.5rem 1rem;background:#1e2435;border-radius:6px;color:#e2e8f0;text-decoration:none;">Batal</a>
+        <a href="/lainnya" class="btn btn-ghost btn-sm" style="text-decoration:none;">Batal</a>
       </div>
     </form>
   </div>
@@ -1665,9 +1661,9 @@ def _service_info_widget(service_key, label):
     info["terms"].replace('"', '&quot;')
     info["payment_info"].replace('"', '&quot;')
     return f"""
-<div class="card" style="margin-bottom:24px;border-left:4px solid #7c5cbf">
+<div class="card" style="margin-bottom:24px;">
   <div class="card-header" style="display:flex;align-items:center;gap:10px">
-    <span style="font-size:18px">ℹ️</span>
+    <span style="font-size:18px"></span>
     <span style="font-weight:600">Info Layanan — {label}</span>
     <span style="font-size:12px;color:var(--muted);margin-left:4px">Ditampilkan ke member sebelum buka tiket</span>
   </div>
@@ -1675,19 +1671,19 @@ def _service_info_widget(service_key, label):
     <form method="POST" action="/service-info/save">
       <input type="hidden" name="service_key" value="{service_key}">
       <div style="margin-bottom:14px">
-        <label style="display:block;margin-bottom:6px;font-weight:500;color:var(--muted);font-size:13px">📋 DESKRIPSI PRODUK</label>
-        <textarea name="description" rows="3" style="width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font-size:14px;resize:vertical" placeholder="Jelaskan layanan ini secara singkat...">{info['description']}</textarea>
+        <label style="display:block;margin-bottom:6px;font-weight:500;color:var(--muted);font-size:13px">DESKRIPSI PRODUK</label>
+        <textarea name="description" rows="3" style="width:100%;background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);padding:10px;font-size:14px;resize:vertical" placeholder="Jelaskan layanan ini secara singkat...">{info['description']}</textarea>
       </div>
       <div style="margin-bottom:14px">
         <label style="display:block;margin-bottom:6px;font-weight:500;color:var(--muted);font-size:13px">📜 SYARAT & KETENTUAN</label>
-        <textarea name="terms" rows="4" style="width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font-size:14px;resize:vertical" placeholder="Tuliskan syarat & ketentuan layanan...">{info['terms']}</textarea>
+        <textarea name="terms" rows="4" style="width:100%;background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);padding:10px;font-size:14px;resize:vertical" placeholder="Tuliskan syarat & ketentuan layanan...">{info['terms']}</textarea>
       </div>
       <div style="margin-bottom:14px">
         <label style="display:block;margin-bottom:6px;font-weight:500;color:var(--muted);font-size:13px">💳 CARA PEMBAYARAN</label>
-        <textarea name="payment_info" rows="3" style="width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:10px;font-size:14px;resize:vertical" placeholder="Jelaskan cara pembayaran yang tersedia...">{info['payment_info']}</textarea>
+        <textarea name="payment_info" rows="3" style="width:100%;background:var(--input-bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);padding:10px;font-size:14px;resize:vertical" placeholder="Jelaskan cara pembayaran yang tersedia...">{info['payment_info']}</textarea>
       </div>
       <div style="display:flex;gap:10px;align-items:center">
-        <button type="submit" class="btn btn-primary" style="min-width:120px">💾 Simpan</button>
+        <button type="submit" class="btn btn-primary" style="min-width:120px">Simpan</button>
         <span style="font-size:12px;color:var(--muted)">Kosongkan semua field untuk menonaktifkan info embed.</span>
       </div>
     </form>
@@ -1758,7 +1754,7 @@ def page_service_info():
             + _service_info_widget("scaset", "SC TB / Aset Game")
         )
     content = f"""
-<div class="page-header"><h2>ℹ️ Info Layanan</h2><p class="text-muted">Kelola informasi yang ditampilkan ke member sebelum membuka tiket.</p></div>
+<div class="page-header"><h2>Info Layanan</h2><p class="text-muted">Kelola informasi yang ditampilkan ke member sebelum membuka tiket.</p></div>
 {widgets}
 """
     return render_page(content)
@@ -1773,7 +1769,7 @@ def page_autopost():
     
     tasks_html = ""
     for t in tasks:
-        status_color = "#4dbb8a" if t["is_active"] else "#e05555"
+        status_color = "var(--success)" if t["is_active"] else "var(--danger)"
         status_text = "Aktif" if t["is_active"] else "Mati"
         tasks_html += f"""
         <tr>
@@ -1813,7 +1809,7 @@ def page_autopost():
     
     content = f"""
     <div class="page-header">
-        <h2>📡 AutoPost</h2>
+        <h2>AutoPost</h2>
         <p class="text-muted">Kelola auto-post pesan ke channel Discord.</p>
     </div>
     
@@ -1908,7 +1904,7 @@ def autopost_edit(tid):
     
     content = f"""
     <div class="page-header">
-        <h2>✏️ Edit AutoPost #{tid}</h2>
+        <h2>Edit AutoPost #{tid}</h2>
     </div>
     
     <div class="card">
