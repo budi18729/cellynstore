@@ -43,7 +43,8 @@ MAX_RESULTS = 8             # batas produk yang ditampilkan
 MAX_SUGGEST = 5             # batas saran "did you mean"
 STRONG_THRESHOLD = 0.78     # skor minimal dianggap cocok kuat
 SUGGEST_THRESHOLD = 0.68    # skor minimal untuk masuk saran
-TOKEN_FUZZY_FLOOR = 0.6     # rasio fuzzy di bawah ini dianggap tidak cocok (0)
+TOKEN_FUZZY_FLOOR = 0.72    # rasio fuzzy di bawah ini dianggap tidak cocok (0)
+RELEVANCE_GAP = 0.18        # hasil yang skornya jauh di bawah skor terbaik dibuang
 VIEW_TIMEOUT = 180          # detik tombol aktif
 CACHE_TTL = 60              # detik cache indeks produk
 
@@ -211,25 +212,33 @@ def _get_index():
 def _token_match(qt: str, bt: str) -> float:
     if qt == bt:
         return 1.0
-    if len(qt) >= 3 and (qt in bt or bt in qt):
+    # Substring hanya dihitung untuk token cukup panjang (>=4) & saling memuat
+    # secara bermakna — cegah "ff" nyangkut di "offline", "g" di "g-drive", dst.
+    if len(qt) >= 4 and len(bt) >= 4 and (qt in bt or bt in qt):
         return 0.9
     r = difflib.SequenceMatcher(None, qt, bt).ratio()
     return r if r >= TOKEN_FUZZY_FLOOR else 0.0
 
 
 def _score(q_norm: str, core_tokens, entry) -> float:
-    score = 0.0
     name = entry["name_norm"]
     blob = entry["blob"]
     btokens = entry["blob_tokens"]
 
-    # Bonus substring keseluruhan query.
-    if q_norm and q_norm in name:
-        score = 1.0
-    elif q_norm and q_norm in blob:
-        score = 0.86
+    # Skor frasa: query utuh sebagai substring (di nama lebih kuat dari blob).
+    # Wajib panjang >=4 supaya query pendek ("ff") tidak nyangkut sembarangan.
+    phrase = 0.0
+    if len(q_norm) >= 4:
+        if q_norm in name:
+            phrase = 1.0
+        elif q_norm in blob:
+            phrase = 0.9
 
-    # Rata-rata kecocokan terbaik tiap token query terhadap token blob.
+    # Skor token: rata-rata kecocokan terbaik tiap token query, DAN catat berapa
+    # token yang benar-benar cocok kuat (>=0.9). Relevansi butuh minimal satu
+    # token kuat — bukan sekadar rata-rata fuzzy lemah yang kebetulan lewat.
+    token_avg = 0.0
+    strong_hits = 0
     if core_tokens:
         total = 0.0
         for qt in core_tokens:
@@ -241,9 +250,16 @@ def _score(q_norm: str, core_tokens, entry) -> float:
                 if best >= 1.0:
                     break
             total += best
-        score = max(score, total / len(core_tokens))
+            if best >= 0.9:
+                strong_hits += 1
+        token_avg = total / len(core_tokens)
 
-    return score
+    # Tanpa kecocokan kuat (frasa utuh / token exact-substring), anggap tidak
+    # relevan — inilah yang membuang "SUNTIK MEMBER" saat cari "ff".
+    if phrase == 0.0 and strong_hits == 0:
+        return 0.0
+
+    return max(phrase, token_avg)
 
 
 def search(raw_query: str):
@@ -265,9 +281,13 @@ def search(raw_query: str):
             scored.append((s, e))
     scored.sort(key=lambda x: (-x[0], x[1]["price"]))
 
-    strong = [e for s, e in scored if s >= STRONG_THRESHOLD]
+    strong = [(s, e) for s, e in scored if s >= STRONG_THRESHOLD]
     if strong:
-        return strong[:MAX_RESULTS], []
+        # Buang hasil yang skornya jauh di bawah yang terbaik supaya hasil tetap
+        # relevan & seragam (mis. cari "ff" tak ikut menarik kategori lain).
+        top = strong[0][0]
+        kept = [e for s, e in strong if top - s <= RELEVANCE_GAP]
+        return kept[:MAX_RESULTS], []
 
     suggestions = [e for s, e in scored if s >= SUGGEST_THRESHOLD]
     return [], suggestions[:MAX_SUGGEST]
@@ -301,7 +321,7 @@ def build_results_embed(results, query: str) -> discord.Embed:
             field_name += f"   {EM_STOCK} stok {items[0]['robux_stock']:,} R$"
         embed.add_field(name=field_name, value="\n".join(lines)[:1024], inline=False)
 
-    embed.set_footer(text=f"{EM_FOOT} {STORE_NAME} \u00b7 klik tombol di bawah untuk lanjut order")
+    embed.set_footer(text=f"{EM_FOOT} {STORE_NAME} \u00b7 pilih produk di bawah untuk buka tiket / lihat katalog")
     return embed
 
 
@@ -322,17 +342,31 @@ def _catalog_url(channel_id: int) -> str:
     return f"https://discord.com/channels/{GUILD_ID}/{channel_id}"
 
 
-class OpenLainnyaTicketButton(discord.ui.Button):
-    """Tombol untuk langsung membuka tiket produk Lainnya (reuse alur existing)."""
+class LainnyaVariantSelect(discord.ui.Select):
+    """Dropdown pilih varian produk Lainnya, lalu buka tiket varian terpilih.
 
-    def __init__(self, product_id: int):
-        super().__init__(label=f"{EM_TITLE} Buka Tiket", style=discord.ButtonStyle.success)
-        self.product_id = product_id
+    Memberi member kesempatan memilih durasi/varian (mis. Gemini 1 Bulan vs
+    1 Tahun) alih-alih langsung membuka varian pertama.
+    """
+
+    def __init__(self, lainnya_items):
+        options = []
+        for e in lainnya_items[:25]:  # batas Discord 25 opsi
+            label = e["name"][:100]
+            desc = e["price_text"][:100]
+            options.append(discord.SelectOption(
+                label=label, description=desc, value=str(e["product_id"])
+            ))
+        super().__init__(
+            placeholder="Pilih produk untuk buka tiket…",
+            min_values=1, max_values=1, options=options,
+        )
 
     async def callback(self, interaction: discord.Interaction):
         from cogs.lainnya import open_product_ticket
         try:
-            await open_product_ticket(interaction, self.product_id)
+            product_id = int(self.values[0])
+            await open_product_ticket(interaction, product_id)
         except Exception as e:
             print(f"[ProductSearch] open ticket error: {e}")
             if not interaction.response.is_done():
@@ -344,14 +378,14 @@ class OpenLainnyaTicketButton(discord.ui.Button):
 class SearchResultView(discord.ui.View):
     def __init__(self, results):
         super().__init__(timeout=VIEW_TIMEOUT)
-        # Tombol Buka Tiket untuk produk Lainnya teratas (jika ada di hasil).
-        top_lainnya = next(
-            (e for e in results if e["store"] == "lainnya" and e.get("product_id")),
-            None,
-        )
-        if top_lainnya:
-            self.add_item(OpenLainnyaTicketButton(top_lainnya["product_id"]))
-        # Tombol link ke katalog tiap toko yang muncul di hasil.
+        # Dropdown buka-tiket untuk SEMUA produk Lainnya di hasil (pilih varian).
+        lainnya_items = [
+            e for e in results if e["store"] == "lainnya" and e.get("product_id")
+        ]
+        if lainnya_items:
+            self.add_item(LainnyaVariantSelect(lainnya_items))
+        # Tombol link ke katalog tiap toko yang muncul di hasil (mis. ML/Robux
+        # yang alur tiketnya berbeda diarahkan ke katalognya).
         seen = set()
         for e in results:
             store = e["store"]
