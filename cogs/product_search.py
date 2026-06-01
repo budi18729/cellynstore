@@ -39,8 +39,9 @@ from cogs.lainnya import CATALOG_CHANNEL_ID as LAINNYA_CATALOG_CHANNEL_ID
 SEARCH_CHANNEL_ID = LAINNYA_AUTOREPLY_CHANNEL_ID
 COOLDOWN = 4                # detik per user, cegah spam
 MIN_LEN = 2                 # query minimal (huruf, setelah normalisasi)
-MAX_RESULTS = 8             # batas produk yang ditampilkan
+MAX_RESULTS = 25            # batas produk (=batas opsi dropdown Discord)
 MAX_SUGGEST = 5             # batas saran "did you mean"
+EMBED_LIST_MAX = 15         # batas item yang ditulis di teks embed (dropdown tetap memuat semua)
 STRONG_THRESHOLD = 0.78     # skor minimal dianggap cocok kuat
 SUGGEST_THRESHOLD = 0.68    # skor minimal untuk masuk saran
 TOKEN_FUZZY_FLOOR = 0.72    # rasio fuzzy di bawah ini dianggap tidak cocok (0)
@@ -310,12 +311,15 @@ def build_results_embed(results, query: str) -> discord.Embed:
     )
     for store, items in by_store.items():
         meta = STORE_META.get(store, {"label": store, "emoji": EM_BULLET})
+        shown = items[:EMBED_LIST_MAX]
         lines = []
-        for e in items:
+        for e in shown:
             line = f"{EM_BULLET} **{e['name']}**\n{EM_PRICE} {e['price_text']}"
             if e.get("extra"):
                 line += f"  \u00b7  {e['extra']}"
             lines.append(line)
+        if len(items) > len(shown):
+            lines.append(f"… dan {len(items) - len(shown)} varian lain (lihat dropdown)")
         field_name = f"{meta['emoji']}  {meta['label'].upper()}"
         if store == "robux" and items[0].get("robux_stock") is not None:
             field_name += f"   {EM_STOCK} stok {items[0]['robux_stock']:,} R$"
